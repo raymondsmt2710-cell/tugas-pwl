@@ -27,15 +27,17 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'full_name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
-            'profile_photo_path' => null,
+            'profile_photo' => null,
             'current_team_id' => null,
+            'role' => 'user',
+            'account_status' => 'active',
         ];
     }
 
@@ -62,7 +64,7 @@ class UserFactory extends Factory
             Team::factory()
                 ->state(fn (array $attributes, User $user) => [
                     'name' => $user->name.'\'s Team',
-                    'user_id' => $user->id,
+                    'user_id' => $user->id_user,
                     'personal_team' => true,
                 ])
                 ->when(is_callable($callback), $callback),

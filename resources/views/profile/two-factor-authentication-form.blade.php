@@ -79,9 +79,9 @@
         <div class="mt-5">
             @if (! $this->enabled)
                 <x-confirms-password wire:then="enableTwoFactorAuthentication">
-                    <x-button type="button" wire:loading.attr="disabled">
+                    <button type="button" class="btn-profile-submit" wire:loading.attr="disabled">
                         {{ __('Enable') }}
-                    </x-button>
+                    </button>
                 </x-confirms-password>
             @else
                 @if ($showingRecoveryCodes)
@@ -92,9 +92,9 @@
                     </x-confirms-password>
                 @elseif ($showingConfirmation)
                     <x-confirms-password wire:then="confirmTwoFactorAuthentication">
-                        <x-button type="button" class="me-3" wire:loading.attr="disabled">
+                        <button type="button" class="btn-profile-submit me-3" wire:loading.attr="disabled">
                             {{ __('Confirm') }}
-                        </x-button>
+                        </button>
                     </x-confirms-password>
                 @else
                     <x-confirms-password wire:then="showRecoveryCodes">

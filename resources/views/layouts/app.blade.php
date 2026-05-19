@@ -21,7 +21,19 @@
         <x-banner />
 
         <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
+            @auth
+                @livewire('navigation-menu')
+            @else
+                <nav style="background: #ffffff; border-bottom: 1px solid #f1f5f9; padding: 0 24px; font-family: 'Plus Jakarta Sans', sans-serif;">
+                    <div style="max-width: 1120px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 64px;">
+                        <a href="/" style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; color: #0f172a; text-decoration: none; letter-spacing: -0.02em;">{{ config('app.name', 'AutoPahala') }}</a>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <a href="{{ route('login') }}" style="padding: 8px 18px; border: 2px solid #e2e8f0; border-radius: 9999px; font-weight: 700; font-size: 13.5px; color: #475569; text-decoration: none; transition: all 0.2s ease;">Log in</a>
+                            <a href="{{ route('register') }}" style="padding: 8px 18px; background: #02a95c; border-radius: 9999px; font-weight: 700; font-size: 13.5px; color: #ffffff; text-decoration: none; white-space: nowrap; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(2,169,92,0.15);">Sign up</a>
+                        </div>
+                    </div>
+                </nav>
+            @endauth
 
             <!-- Page Heading -->
             @if (isset($header))

@@ -9,6 +9,7 @@ use App\Filament\Resources\Withdrawals\Schemas\WithdrawalForm;
 use App\Filament\Resources\Withdrawals\Tables\WithdrawalsTable;
 use App\Models\Withdrawal;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -18,7 +19,20 @@ class WithdrawalResource extends Resource
 {
     protected static ?string $model = Withdrawal::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-credit-card';
+
+    protected static ?string $navigationLabel = 'Kelola Penarikan Dana';
+
+    protected static ?string $modelLabel = 'Penarikan Dana';
+
+    protected static ?string $pluralModelLabel = 'Kelola Penarikan Dana';
+
+    protected static UnitEnum|string|null $navigationGroup = 'Donasi & Kampanye';
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->role === 'admin';
+    }
 
     public static function form(Schema $schema): Schema
     {

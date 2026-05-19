@@ -19,12 +19,24 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'username' => ['required', 'string', 'alpha_dash', 'max:255', Rule::unique('users', 'username')->ignore($user->getKey(), 'id_user')],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->getKey(), 'id_user')],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
+            'cover_photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'bio' => ['nullable', 'string', 'max:1000'],
+            'location' => ['nullable', 'string', 'max:255'],
+            'social_links' => ['nullable', 'array'],
+            'social_links.twitter' => ['nullable', 'string', 'max:255'],
+            'social_links.facebook' => ['nullable', 'string', 'max:255'],
+            'social_links.instagram' => ['nullable', 'string', 'max:255'],
         ])->validateWithBag('updateProfileInformation');
 
         if (isset($input['photo'])) {
             $user->updateProfilePhoto($input['photo']);
+        }
+
+        if (isset($input['cover_photo'])) {
+            $user->updateCoverPhoto($input['cover_photo']);
         }
 
         if ($input['email'] !== $user->email &&
@@ -33,7 +45,11 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         } else {
             $user->forceFill([
                 'name' => $input['name'],
+                'username' => $input['username'],
                 'email' => $input['email'],
+                'bio' => $input['bio'] ?? null,
+                'location' => $input['location'] ?? null,
+                'social_links' => $input['social_links'] ?? null,
             ])->save();
         }
     }
@@ -49,6 +65,9 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'name' => $input['name'],
             'email' => $input['email'],
             'email_verified_at' => null,
+            'bio' => $input['bio'] ?? null,
+            'location' => $input['location'] ?? null,
+            'social_links' => $input['social_links'] ?? null,
         ])->save();
 
         $user->sendEmailVerificationNotification();

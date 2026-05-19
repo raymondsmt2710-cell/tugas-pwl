@@ -9,6 +9,7 @@ use App\Filament\Resources\Donations\Schemas\DonationForm;
 use App\Filament\Resources\Donations\Tables\DonationsTable;
 use App\Models\Donation;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -18,7 +19,20 @@ class DonationResource extends Resource
 {
     protected static ?string $model = Donation::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-banknotes';
+
+    protected static ?string $navigationLabel = 'Kelola Donasi';
+
+    protected static ?string $modelLabel = 'Donasi';
+
+    protected static ?string $pluralModelLabel = 'Kelola Donasi';
+
+    protected static UnitEnum|string|null $navigationGroup = 'Donasi & Kampanye';
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->role === 'admin';
+    }
 
     public static function form(Schema $schema): Schema
     {
