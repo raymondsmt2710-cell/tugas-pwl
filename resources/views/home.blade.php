@@ -1,44 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autopahala</title>
+@extends('layouts.app')
 
-    @vite('resources/css/app.css')
-
-</head>
-<body class="bg-gray-50">
-
-    <!-- NAVBAR -->
-
-    <nav class="bg-white shadow-md">
-
-        <div class="max-w-7xl mx-auto px-8 py-5 flex justify-between items-center">
-
-            <h1 class="text-3xl font-bold text-green-600">
-                Autopahala
-            </h1>
-
-            <div class="space-x-6 font-semibold">
-
-                <a href="" class="hover:text-green-600">
-                    Home
-                </a>
-
-                <a href="" class="hover:text-green-600">
-                    Campaign
-                </a>
-
-                <a href="" class="hover:text-green-600">
-                    Login
-                </a>
-
-            </div>
-
-        </div>
-
-    </nav>
+@section('content')
 
     <!-- HERO -->
 
@@ -108,108 +70,69 @@
 
         <div class="grid md:grid-cols-3 gap-8">
 
-            <!-- CARD 1 -->
+            @foreach ($campaigns as $campaign)
 
-            <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+                @php
+                    $percentage = ($campaign['raised'] / $campaign['target']) * 100;
+                @endphp
 
-                <img
-            src="https://picsum.photos/600/400?random=1"
-            class="h-60 w-full object-cover"
-            >
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
 
-                <div class="p-6">
+                    <img
+                        src="{{ $campaign['image'] }}"
+                        alt="{{ $campaign['title'] }}"
+                        class="h-60 w-full object-cover"
+                    >
 
-                    <h3 class="text-2xl font-bold mb-3">
-                        Bantu Korban Banjir
-                    </h3>
+                    <div class="p-6">
 
-                    <p class="text-gray-600 mb-5">
-                        Mari bantu saudara kita yang terkena bencana banjir.
-                    </p>
+                        <span class="inline-block bg-green-100 text-green-700 text-sm font-semibold px-3 py-1 rounded-full mb-4">
+                            {{ $campaign['category'] }}
+                        </span>
 
-                    <button class="bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-xl">
-                        Donasi Sekarang
-                    </button>
+                        <h3 class="text-2xl font-bold mb-3">
+                            {{ $campaign['title'] }}
+                        </h3>
 
-                </div>
+                        <p class="text-gray-600 mb-5">
+                            {{ $campaign['description'] }}
+                        </p>
 
-            </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 mb-3">
 
-            <!-- CARD 2 -->
+                            <div
+                                class="bg-green-500 h-3 rounded-full"
+                                style="width: {{ min($percentage, 100) }}%"
+                            ></div>
 
-            <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+                        </div>
 
-                <img
-                src="https://picsum.photos/600/400?random=2"
-                class="h-60 w-full object-cover"
-                >
+                        <div class="flex justify-between text-sm mb-2">
 
-                <div class="p-6">
+                            <span class="font-semibold text-green-600">
+                                Rp {{ number_format($campaign['raised'], 0, ',', '.') }}
+                            </span>
 
-                    <h3 class="text-2xl font-bold mb-3">
-                        Pendidikan Anak
-                    </h3>
+                            <span class="text-gray-500">
+                                {{ round($percentage) }}%
+                            </span>
 
-                    <p class="text-gray-600 mb-5">
-                        Bantu pendidikan anak-anak kurang mampu.
-                    </p>
+                        </div>
 
-                    <button class="bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-xl">
-                        Donasi Sekarang
-                    </button>
+                        <p class="text-sm text-gray-500 mb-5">
+                            Target Rp {{ number_format($campaign['target'], 0, ',', '.') }}
+                            • {{ $campaign['donors'] }} donatur
+                        </p>
 
-                </div>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-xl w-full">
+                            Donasi Sekarang
+                        </button>
 
-            </div>
-
-            <!-- CARD 3 -->
-
-            <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
-
-            <img
-            src="https://picsum.photos/600/400?random=3"
-            class="h-60 w-full object-cover"
-            >
-
-               <div class="p-6">
-
-    <h3 class="text-2xl font-bold mb-3">
-        Bantu Korban Banjir
-    </h3>
-
-    <p class="text-gray-600 mb-5">
-        Mari bantu saudara kita yang terkena bencana banjir.
-    </p>
-
-    <!-- Progress -->
-
-    <div class="w-full bg-gray-200 rounded-full h-3 mb-3">
-
-        <div class="bg-green-500 h-3 rounded-full w-3/4"></div>
-
-    </div>
-
-    <div class="flex justify-between text-sm mb-5">
-
-        <span class="font-semibold text-green-600">
-            Rp 75.000.000
-        </span>
-
-        <span class="text-gray-500">
-            75%
-        </span>
-
-    </div>
-
-    <button class="bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-xl w-full">
-        Donasi Sekarang
-    </button>
-
-</div>
+                    </div>
 
                 </div>
 
-            </div>
+            @endforeach
 
         </div>
 
@@ -229,5 +152,4 @@
 
     </footer>
 
-</body>
-</html>
+@endsection 
