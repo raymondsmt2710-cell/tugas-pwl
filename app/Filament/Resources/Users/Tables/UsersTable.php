@@ -44,6 +44,7 @@ class UsersTable
                     ->label('Peran')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
+                        'super_admin' => 'primary',
                         'admin' => 'danger',
                         'user' => 'success',
                     })
@@ -76,6 +77,7 @@ class UsersTable
                 SelectFilter::make('role')
                     ->label('Saring Peran')
                     ->options([
+                        'super_admin' => 'Super Administrator',
                         'admin' => 'Administrator',
                         'user' => 'Pengguna Biasa',
                     ]),

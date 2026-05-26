@@ -53,8 +53,8 @@ class CampaignForm
                                     ])
                                     ->required()
                                     ->default('pending')
-                                    ->disabled(fn () => auth()->user()->role !== 'admin')
-                                    ->dehydrated(fn ($state) => auth()->user()->role === 'admin' || filled($state))
+                                    ->disabled(fn () => !auth()->user()->isAdmin())
+                                    ->dehydrated(fn ($state) => auth()->user()->isAdmin() || filled($state))
                                     ->helperText('Hanya administrator yang dapat mengubah status persetujuan kampanye.'),
                             ]),
                     ]),

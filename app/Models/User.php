@@ -58,6 +58,10 @@ class User extends Authenticatable implements FilamentUser
         'is_verified',
         'google_id',
         'github_id',
+        'provider',
+        'provider_id',
+        'avatar_url',
+        'email_verified_at',
     ];
 
     /**
@@ -209,6 +213,46 @@ class User extends Authenticatable implements FilamentUser
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['admin', 'super_admin']);
+    }
+
+    /**
+     * Check if the user is a super admin.
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
+    /**
+     * Check if the user is an admin (includes super_admin).
+     */
+    public function isAdmin(): bool
+    {
+        return in_array($this->role, ['admin', 'super_admin']);
+    }
+
+    /**
+     * Check if the user has a linked social provider.
+     */
+    public function hasProvider(string $provider): bool
+    {
+        return !empty($this->{$provider . '_id'});
+    }
+
+    /**
+     * Get the profile photo URL, falling back to OAuth avatar.
+     */
+    public function getProfilePhotoUrlAttribute(): string
+    {
+        if ($this->profile_photo) {
+            return \Illuminate\Support\Facades\Storage::disk($this->profilePhotoDisk())->url($this->profile_photo);
+        }
+
+        if ($this->avatar_url) {
+            return $this->avatar_url;
+        }
+
+        return $this->defaultProfilePhotoUrl();
     }
 }

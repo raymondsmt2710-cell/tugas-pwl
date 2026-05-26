@@ -43,7 +43,7 @@ return new class extends Migration
                 ->references('id_campaign')->on('campaigns')
                 ->onDelete('cascade');
             $table->foreign('id_user')
-                ->references('id')->on('users')
+                ->references('id_user')->on('users')
                 ->onDelete('set null');
         });
     }

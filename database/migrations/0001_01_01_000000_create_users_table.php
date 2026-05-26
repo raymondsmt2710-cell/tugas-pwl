@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('phone_number', 20)->nullable();
             $table->string('password');
-            $table->enum('role', ['admin', 'user'])->default('user');
+            $table->enum('role', ['super_admin', 'admin', 'user'])->default('user');
             $table->enum('account_status', ['active', 'suspended', 'pending'])->default('active');
             $table->string('profile_photo', 255)->nullable();
             $table->text('bio')->nullable();
@@ -32,6 +32,9 @@ return new class extends Migration
             $table->boolean('is_verified')->default(false);
             $table->string('google_id')->nullable();
             $table->string('github_id')->nullable();
+            $table->string('provider')->nullable();
+            $table->string('provider_id')->nullable();
+            $table->string('avatar_url', 2048)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
