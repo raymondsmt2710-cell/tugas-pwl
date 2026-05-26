@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Campaigns;
 use App\Filament\Resources\Campaigns\Pages\CreateCampaign;
 use App\Filament\Resources\Campaigns\Pages\EditCampaign;
 use App\Filament\Resources\Campaigns\Pages\ListCampaigns;
+use App\Filament\Resources\Campaigns\Pages\ViewCampaign;
 use App\Filament\Resources\Campaigns\Schemas\CampaignForm;
 use App\Filament\Resources\Campaigns\Tables\CampaignsTable;
 use App\Models\Campaign;
@@ -29,6 +30,17 @@ class CampaignResource extends Resource
     protected static ?string $pluralModelLabel = 'Kelola Kampanye';
 
     protected static UnitEnum|string|null $navigationGroup = 'Donasi & Kampanye';
+
+    public static function getNavigationBadge(): ?string
+    {
+        $count = Campaign::where('status', 'pending')->count();
+        return $count > 0 ? (string) $count : null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'warning';
+    }
 
     public static function getEloquentQuery(): Builder
     {
@@ -63,6 +75,7 @@ class CampaignResource extends Resource
         return [
             'index' => ListCampaigns::route('/'),
             'create' => CreateCampaign::route('/create'),
+            'view' => ViewCampaign::route('/{record}'),
             'edit' => EditCampaign::route('/{record}/edit'),
         ];
     }

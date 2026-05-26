@@ -45,17 +45,19 @@ class CampaignForm
                                     ->minValue(1000)
                                     ->maxLength(15),
                                 Select::make('status')
-                                    ->label('Status Persetujuan (Hanya Admin)')
+                                    ->label('Status Kampanye (Hanya Admin)')
                                     ->options([
-                                        'pending' => 'Menunggu Persetujuan (Pending)',
-                                        'approved' => 'Disetujui (Approved/Active)',
+                                        'draft' => 'Draft',
+                                        'pending' => 'Menunggu Review (Pending)',
+                                        'approved' => 'Disetujui (Approved)',
                                         'rejected' => 'Ditolak (Rejected)',
+                                        'completed' => 'Selesai (Completed)',
                                     ])
                                     ->required()
-                                    ->default('pending')
+                                    ->default('draft')
                                     ->disabled(fn () => !auth()->user()->isAdmin())
                                     ->dehydrated(fn ($state) => auth()->user()->isAdmin() || filled($state))
-                                    ->helperText('Hanya administrator yang dapat mengubah status persetujuan kampanye.'),
+                                    ->helperText('Hanya administrator yang dapat mengubah status kampanye.'),
                             ]),
                     ]),
 

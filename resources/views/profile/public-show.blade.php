@@ -213,7 +213,7 @@
                         <p class="empty-desc">When this creator starts a campaign, it will appear here for you to support.</p>
                         @auth
                             @if(auth()->id() === $user->getKey())
-                                <a href="/admin/campaigns/create" class="btn-create"><i class="fas fa-plus"></i> Create Campaign</a>
+                                <a href="{{ url('/campaigns/create') }}" class="btn-create"><i class="fas fa-plus"></i> Create Campaign</a>
                             @endif
                         @endauth
                     </div>
