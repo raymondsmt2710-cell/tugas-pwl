@@ -18,9 +18,19 @@ class CampaignPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Campaign $campaign): bool
+    public function view(?User $user, Campaign $campaign): bool
     {
-        return $user->isAdmin() || $campaign->user_id === $user->id_user;
+        // Approved campaigns are publicly visible
+        if ($campaign->isApproved() || $campaign->isCompleted()) {
+            return true;
+        }
+
+        // Non-public campaigns visible only to owner or admin
+        if (!$user) {
+            return false;
+        }
+
+        return $user->isAdmin() || $campaign->id_user === $user->id_user;
     }
 
     /**
@@ -28,7 +38,7 @@ class CampaignPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        return $user->account_status === 'active';
     }
 
     /**
@@ -36,7 +46,13 @@ class CampaignPolicy
      */
     public function update(User $user, Campaign $campaign): bool
     {
-        return $user->isAdmin() || $campaign->user_id === $user->id_user;
+        // Admin can always update
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        // Owner can only update draft or rejected campaigns
+        return $campaign->id_user === $user->id_user && $campaign->isEditable();
     }
 
     /**
@@ -44,7 +60,30 @@ class CampaignPolicy
      */
     public function delete(User $user, Campaign $campaign): bool
     {
-        return $user->isAdmin() || ($campaign->user_id === $user->id_user && $campaign->status === 'pending');
+        // Admin can always delete
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        // Owner can only delete draft or rejected campaigns
+        return $campaign->id_user === $user->id_user && $campaign->isDeletable();
+    }
+
+    /**
+     * Determine whether the user can submit the campaign for review.
+     */
+    public function submit(User $user, Campaign $campaign): bool
+    {
+        return $campaign->id_user === $user->id_user
+            && ($campaign->isDraft() || $campaign->isRejected());
+    }
+
+    /**
+     * Determine whether the user can approve/reject the campaign.
+     */
+    public function moderate(User $user, Campaign $campaign): bool
+    {
+        return $user->isAdmin();
     }
 
     /**
@@ -60,6 +99,6 @@ class CampaignPolicy
      */
     public function forceDelete(User $user, Campaign $campaign): bool
     {
-        return $user->isAdmin();
+        return $user->isSuperAdmin();
     }
 }

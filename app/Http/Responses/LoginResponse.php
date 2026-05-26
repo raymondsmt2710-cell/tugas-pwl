@@ -15,11 +15,6 @@ class LoginResponse implements LoginResponseContract
      */
     public function toResponse($request): RedirectResponse
     {
-        // Bypass the session's 'intended' URL and force redirection to the correct dashboard
-        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
-            return redirect('/admin');
-        }
-
         return redirect('/dashboard');
     }
 }

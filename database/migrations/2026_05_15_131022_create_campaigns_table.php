@@ -33,7 +33,7 @@ return new class extends Migration
             // Status
             $table->enum('campaign_status', ['draft', 'active', 'finished', 'closed', 'suspended'])->default('draft');
             $table->enum('verification_status', ['draft', 'pending', 'active', 'rejected', 'expired'])->default('draft');
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending'); // Menjaga kompatibilitas branch feature
+            $table->enum('status', ['draft', 'pending', 'approved', 'rejected', 'completed'])->default('draft');
             
             // Tanggal
             $table->dateTime('start_date')->nullable();

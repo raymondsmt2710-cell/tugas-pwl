@@ -202,10 +202,6 @@ class SocialiteController extends Controller
      */
     protected function redirectBasedOnRole(User $user)
     {
-        if (in_array($user->role, ['admin', 'super_admin'])) {
-            return redirect('/admin');
-        }
-
         return redirect('/dashboard');
     }
 }
