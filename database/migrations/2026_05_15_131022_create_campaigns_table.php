@@ -6,32 +6,63 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('campaigns', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users', 'id_user')->cascadeOnDelete();
-            $table->string('title');
-            $table->string('slug')->unique();
-            $table->text('description');
+            $table->id('id_campaign');
+            $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('id_category');
+            
+            // Judul & Deskripsi
+            $table->string('title', 255);
+            $table->string('slug', 255)->unique();
+            $table->string('short_description', 500);
+            $table->longText('description');
+            
+            // Nilai Donasi
             $table->decimal('target_amount', 15, 2);
-            $table->decimal('current_amount', 15, 2)->default(0);
-            $table->string('banner_image')->nullable();
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->decimal('minimum_donation', 15, 2)->default(0);
+            $table->decimal('collected_amount', 15, 2)->default(0);
+            $table->decimal('withdrawal_amount', 15, 2)->default(0);
+            $table->decimal('available_balance', 15, 2)->default(0);
+            
+            // Media (Menggabungkan banner_image dari feature branch sebagai image)
+            $table->string('banner_image')->nullable(); // Menjaga kompabilitas branch feature
+            $table->string('video_url', 500)->nullable();
+            
+            // Status
+            $table->enum('campaign_status', ['draft', 'active', 'finished', 'closed', 'suspended'])->default('draft');
+            $table->enum('verification_status', ['draft', 'pending', 'active', 'rejected', 'expired'])->default('draft');
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending'); // Menjaga kompatibilitas branch feature
+            
+            // Tanggal
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date');
+            
+            // Timestamps & Soft Deletes
             $table->timestamps();
-            $table->softDeletes();
+            $table->softDeletes('deleted_at');
+            
+            // Indexes
+            $table->index('id_user');
+            $table->index('id_category');
+            $table->index('campaign_status');
+            $table->index('verification_status');
+            
+            // Foreign Keys
+            // Jika tabel users milikmu pakai primary key 'id_user' (dari branch feature), sesuaikan di sini:
+            $table->foreign('id_user')
+                ->references('id_user')->on('users') 
+                ->onDelete('cascade');
+
+            $table->foreign('id_category')
+                ->references('id_category')->on('categories')
+                ->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('campaigns');
     }
 };
-
