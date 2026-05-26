@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Campaign;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class CampaignPolicy
 {
@@ -13,7 +12,7 @@ class CampaignPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +20,7 @@ class CampaignPolicy
      */
     public function view(User $user, Campaign $campaign): bool
     {
-        return false;
+        return $user->role === 'admin' || $campaign->user_id === $user->id_user;
     }
 
     /**
@@ -29,7 +28,7 @@ class CampaignPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +36,7 @@ class CampaignPolicy
      */
     public function update(User $user, Campaign $campaign): bool
     {
-        return false;
+        return $user->role === 'admin' || $campaign->user_id === $user->id_user;
     }
 
     /**
@@ -45,7 +44,7 @@ class CampaignPolicy
      */
     public function delete(User $user, Campaign $campaign): bool
     {
-        return false;
+        return $user->role === 'admin' || ($campaign->user_id === $user->id_user && $campaign->status === 'pending');
     }
 
     /**
@@ -53,7 +52,7 @@ class CampaignPolicy
      */
     public function restore(User $user, Campaign $campaign): bool
     {
-        return false;
+        return $user->role === 'admin';
     }
 
     /**
@@ -61,6 +60,7 @@ class CampaignPolicy
      */
     public function forceDelete(User $user, Campaign $campaign): bool
     {
-        return false;
+        return $user->role === 'admin';
     }
 }
+

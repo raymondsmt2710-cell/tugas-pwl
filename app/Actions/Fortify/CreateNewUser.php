@@ -26,9 +26,14 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
+        $username = \Illuminate\Support\Str::slug($input['name']);
+        $count = User::where('username', 'LIKE', "{$username}%")->count();
+        $finalUsername = $count ? "{$username}-{$count}" : $username;
+
         return User::create([
             'name' => $input['name'],
             'email' => $input['email'],
+            'username' => $finalUsername,
             'password' => Hash::make($input['password']),
         ]);
     }

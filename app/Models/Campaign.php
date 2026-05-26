@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Campaign extends Model
 {
@@ -40,9 +41,12 @@ class Campaign extends Model
         'end_date' => 'datetime',
     ];
 
-    public function user()
+    /**
+     * Get the user that owns the campaign (Custom Foreign Key dari branch feature/auth-profile)
+     */
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id_user');
     }
 
     public function category()

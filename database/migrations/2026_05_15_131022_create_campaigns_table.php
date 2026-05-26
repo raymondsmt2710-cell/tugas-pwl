@@ -26,18 +26,20 @@ return new class extends Migration
             $table->decimal('withdrawal_amount', 15, 2)->default(0);
             $table->decimal('available_balance', 15, 2)->default(0);
             
+            // Media (Menggabungkan banner_image dari feature branch sebagai image)
+            $table->string('banner_image')->nullable(); // Menjaga kompabilitas branch feature
+            $table->string('video_url', 500)->nullable();
+            
             // Status
             $table->enum('campaign_status', ['draft', 'active', 'finished', 'closed', 'suspended'])->default('draft');
             $table->enum('verification_status', ['draft', 'pending', 'active', 'rejected', 'expired'])->default('draft');
-            
-            // Media
-            $table->string('video_url', 500)->nullable();
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending'); // Menjaga kompatibilitas branch feature
             
             // Tanggal
             $table->dateTime('start_date')->nullable();
             $table->dateTime('end_date');
             
-            // Timestamps
+            // Timestamps & Soft Deletes
             $table->timestamps();
             $table->softDeletes('deleted_at');
             
@@ -48,9 +50,11 @@ return new class extends Migration
             $table->index('verification_status');
             
             // Foreign Keys
+            // Jika tabel users milikmu pakai primary key 'id_user' (dari branch feature), sesuaikan di sini:
             $table->foreign('id_user')
-                ->references('id')->on('users')
+                ->references('id_user')->on('users') 
                 ->onDelete('cascade');
+
             $table->foreign('id_category')
                 ->references('id_category')->on('categories')
                 ->onDelete('cascade');
