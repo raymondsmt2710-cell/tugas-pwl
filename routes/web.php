@@ -31,8 +31,12 @@ Route::view('/faq', 'faq', [
 | OAuth / Socialite Routes (from branch: main)
 |--------------------------------------------------------------------------
 */
-Route::get('/auth/{provider}', [SocialiteController::class, 'redirectToProvider'])->name('social.login');
-Route::get('/auth/{provider}/callback', [SocialiteController::class, 'handleProviderCallback']);
+Route::get('/auth/{provider}', [SocialiteController::class, 'redirectToProvider'])
+    ->where('provider', 'google')
+    ->name('social.login');
+
+Route::get('/auth/{provider}/callback', [SocialiteController::class, 'handleProviderCallback'])
+    ->where('provider', 'google');
 
 
 /*
@@ -46,8 +50,8 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        // Admin langsung diarahkan ke panel Filament
-        if (auth()->user()->role === 'admin') {
+        // Admin & Super Admin langsung diarahkan ke panel Filament
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
             return redirect('/admin');
         }
 

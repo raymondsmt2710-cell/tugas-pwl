@@ -34,7 +34,7 @@ class CampaignResource extends Resource
     {
         $query = parent::getEloquentQuery();
 
-        if (auth()->user()->role !== 'admin') {
+        if (!auth()->user()->isAdmin()) {
             $query->where('user_id', auth()->id());
         }
 

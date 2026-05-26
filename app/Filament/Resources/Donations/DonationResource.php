@@ -31,7 +31,7 @@ class DonationResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()->role === 'admin';
+        return auth()->user()->isAdmin();
     }
 
     public static function form(Schema $schema): Schema

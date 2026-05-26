@@ -52,6 +52,7 @@ class UserForm
                                 Select::make('role')
                                     ->label('Peran / Hak Akses')
                                     ->options([
+                                        'super_admin' => 'Super Administrator',
                                         'admin' => 'Administrator',
                                         'user' => 'Pengguna Biasa',
                                     ])
