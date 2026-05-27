@@ -54,9 +54,9 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    // Dashboard
+    // Dashboard - redirect to home
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return redirect('/');
     })->name('dashboard');
 
     // Campaign Management
@@ -70,6 +70,12 @@ Route::middleware([
 
     // Donation History (authenticated)
     Route::get('/my-donations', [DonationController::class, 'history'])->name('donations.history');
+
+    // Withdrawal Management
+    Route::get('/withdrawals/create', [\App\Http\Controllers\WithdrawalController::class, 'create'])->name('withdrawals.create');
+    Route::post('/withdrawals', [\App\Http\Controllers\WithdrawalController::class, 'store'])->name('withdrawals.store');
+    Route::get('/withdrawals/history', [\App\Http\Controllers\WithdrawalController::class, 'history'])->name('withdrawals.history');
+    Route::post('/withdrawals/{withdrawal}/cancel', [\App\Http\Controllers\WithdrawalController::class, 'cancel'])->name('withdrawals.cancel');
 });
 
 

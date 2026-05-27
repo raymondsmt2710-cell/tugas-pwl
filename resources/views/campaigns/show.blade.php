@@ -152,6 +152,20 @@
                             </div>
                         </div>
 
+                        {{-- Owner: Withdrawal --}}
+                        @auth
+                            @if (auth()->user()->id_user === $campaign->id_user && $campaign->available_balance > 0)
+                                <div class="mt-5 pt-5 border-t border-gray-100">
+                                    <p class="text-xs font-medium text-gray-500 mb-2">Saldo Tersedia</p>
+                                    <p class="text-lg font-bold text-gray-900 mb-3">Rp {{ number_format($campaign->available_balance, 0, ',', '.') }}</p>
+                                    <a href="{{ route('withdrawals.create', ['campaign' => $campaign->id_campaign]) }}"
+                                       class="block w-full text-center py-2.5 px-4 rounded-xl border-2 border-indigo-600 text-indigo-600 font-semibold text-sm hover:bg-indigo-50 transition">
+                                        Tarik Dana
+                                    </a>
+                                </div>
+                            @endif
+                        @endauth
+
                         {{-- Share --}}
                         <div class="mt-5 pt-5 border-t border-gray-100">
                             <p class="text-xs font-medium text-gray-500 mb-2">Bagikan Kampanye</p>

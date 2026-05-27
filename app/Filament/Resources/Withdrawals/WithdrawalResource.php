@@ -29,6 +29,17 @@ class WithdrawalResource extends Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Donasi & Kampanye';
 
+    public static function getNavigationBadge(): ?string
+    {
+        $count = Withdrawal::whereIn('status', ['pending', 'under_review'])->count();
+        return $count > 0 ? (string) $count : null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'warning';
+    }
+
     public static function canViewAny(): bool
     {
         return auth()->user()->isAdmin();

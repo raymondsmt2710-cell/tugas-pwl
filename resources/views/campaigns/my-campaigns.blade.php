@@ -108,6 +108,10 @@
                                             <a href="{{ route('campaigns.show', $campaign->slug) }}" class="text-xs font-medium text-blue-600 hover:text-blue-800">Lihat</a>
                                         @endif
 
+                                        @if ($campaign->isApproved() && $campaign->available_balance > 0)
+                                            <a href="{{ route('withdrawals.create', ['campaign' => $campaign->id_campaign]) }}" class="text-xs font-medium text-indigo-600 hover:text-indigo-800">Tarik Dana (Rp {{ number_format($campaign->available_balance, 0, ',', '.') }})</a>
+                                        @endif
+
                                         @if ($campaign->isEditable())
                                             <a href="{{ route('campaign.edit', $campaign) }}" class="text-xs font-medium text-gray-600 hover:text-gray-800">Edit</a>
                                         @endif
