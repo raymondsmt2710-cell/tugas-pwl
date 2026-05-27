@@ -2,43 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Campaign;
+use App\Models\Category;
+use App\Models\Donation;
+use App\Models\User;
+
 class HomeController extends Controller
 {
     public function index()
     {
-        $campaigns = [
-            [
-                'title' => 'Bantu Korban Banjir Medan',
-                'description' => 'Mari bantu saudara kita yang terkena bencana banjir.',
-                'category' => 'Bencana',
-                'image' => 'https://picsum.photos/600/400?random=1',
-                'raised' => 75000000,
-                'target' => 100000000,
-                'donors' => 210,
-            ],
-            [
-                'title' => 'Pendidikan Anak',
-                'description' => 'Bantu pendidikan anak-anak kurang mampu.',
-                'category' => 'Pendidikan',
-                'image' => 'https://picsum.photos/600/400?random=2',
-                'raised' => 45000000,
-                'target' => 80000000,
-                'donors' => 156,
-            ],
-            [
-                'title' => 'Bantu Biaya Pengobatan',
-                'description' => 'Bantu biaya pengobatan pasien yang membutuhkan.',
-                'category' => 'Kesehatan',
-                'image' => 'https://picsum.photos/600/400?random=3',
-                'raised' => 30000000,
-                'target' => 50000000,
-                'donors' => 98,
-            ],
-        ];
+        $categories = Category::all();
+
+        // Stats
+        $totalCampaigns = Campaign::where('status', 'approved')->count();
+        $totalDonors = Donation::where('payment_status', 'paid')->distinct('donor_email')->count('donor_email');
+        $totalRaised = Donation::where('payment_status', 'paid')->sum('donation_amount');
 
         return view('home', [
-            'title' => 'Autopahala',
-            'campaigns' => $campaigns,
+            'title' => 'Autopahala - Platform Crowdfunding',
+            'categories' => $categories,
+            'totalCampaigns' => $totalCampaigns,
+            'totalDonors' => $totalDonors,
+            'totalRaised' => $totalRaised,
         ]);
     }
 }
