@@ -122,7 +122,7 @@
                                 <a href="javascript:void(0)" class="btn-follow" id="btn-follow-toggle"><i class="fas fa-user-plus"></i> <span class="text">Follow</span></a>
                                 <button class="btn-share" id="btn-share-profile" title="Share Profile"><i class="fas fa-share-alt"></i></button>
                             @else
-                                <a href="{{ route('profile.show') }}" class="btn-edit"><i class="fas fa-cog"></i> Edit Profile</a>
+                                <a href="{{ route('profile.show') }}" class="btn-edit"><i class="fas fa-cog"></i>Settings</a>
                             @endif
                         @else
                             <a href="{{ route('login') }}" class="btn-follow"><i class="fas fa-user-plus"></i> Follow</a>
@@ -136,8 +136,11 @@
         <div class="profile-tabs">
             <div class="profile-tabs-inner">
                 <a href="javascript:void(0)" class="profile-tab active" data-tab="campaigns">Campaigns</a>
-                <a href="javascript:void(0)" class="profile-tab" data-tab="donations">Donations</a>
-                <a href="javascript:void(0)" class="profile-tab" data-tab="liked">Liked</a>
+                @if($isOwner)
+                    <a href="javascript:void(0)" class="profile-tab" data-tab="donations">Donations</a>
+                    <a href="javascript:void(0)" class="profile-tab" data-tab="liked">Liked</a>
+                    <a href="javascript:void(0)" class="profile-tab" data-tab="comments">Comments</a>
+                @endif
                 <a href="javascript:void(0)" class="profile-tab" data-tab="updates">Updates</a>
                 <a href="javascript:void(0)" class="profile-tab" data-tab="about">About</a>
             </div>
@@ -182,11 +185,11 @@
                 <div class="card">
                     <div class="stats-header">
                         <div class="stats-header-label">Donations Collected</div>
-                        <div class="stats-header-value">Rp 0</div>
+                        <div class="stats-header-value">Rp {{ number_format($totalDonationsReceived, 0, ',', '.') }}</div>
                     </div>
                     <div class="stats-grid">
                         <div class="stats-item">
-                            <div class="stats-number">0</div>
+                            <div class="stats-number">{{ $campaignCount }}</div>
                             <div class="stats-label">Campaign</div>
                         </div>
                         <div class="stats-item">
@@ -205,41 +208,132 @@
             <div class="profile-main-content">
                 <!-- Tab Pane: Campaigns -->
                 <div id="tab-content-campaigns" class="tab-pane">
-                    <div class="empty-state">
-                        <div class="empty-icon">
-                            <i class="fas fa-hand-holding-heart"></i>
+                    @if($campaigns->isEmpty())
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-hand-holding-heart"></i>
+                            </div>
+                            <h3 class="empty-title">No active campaigns</h3>
+                            <p class="empty-desc">When this creator starts a campaign, it will appear here for you to support.</p>
+                            @auth
+                                @if(auth()->user()->id_user === $user->id_user)
+                                    <a href="{{ url('/campaigns/create') }}" class="btn-create"><i class="fas fa-plus"></i> Create Campaign</a>
+                                @endif
+                            @endauth
                         </div>
-                        <h3 class="empty-title">No active campaigns</h3>
-                        <p class="empty-desc">When this creator starts a campaign, it will appear here for you to support.</p>
+                    @else
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+                            @foreach($campaigns as $campaign)
+                                <a href="{{ route('campaigns.show', $campaign->slug) }}" class="card" style="text-decoration: none; color: inherit; transition: transform 0.2s, box-shadow 0.2s;">
+                                    @if($campaign->banner_image)
+                                        <img src="{{ asset('storage/' . $campaign->banner_image) }}" alt="{{ $campaign->title }}" style="width: 100%; height: 160px; object-fit: cover; border-radius: 12px 12px 0 0;">
+                                    @endif
+                                    <div class="card-body" style="padding: 16px;">
+                                        <span style="font-size: 11px; font-weight: 600; color: #6366f1; background: #eef2ff; padding: 3px 8px; border-radius: 20px;">{{ $campaign->category->name ?? 'Umum' }}</span>
+                                        <h3 style="font-size: 15px; font-weight: 700; margin: 10px 0 6px; color: #111827;">{{ $campaign->title }}</h3>
+                                        <div style="background: #f3f4f6; border-radius: 8px; height: 6px; margin: 12px 0 8px; overflow: hidden;">
+                                            <div style="background: #10b981; height: 100%; width: {{ min(100, $campaign->progress_percentage) }}%; border-radius: 8px;"></div>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; font-size: 12px; color: #6b7280;">
+                                            <span><strong style="color: #111827;">Rp {{ number_format($campaign->collected_amount, 0, ',', '.') }}</strong></span>
+                                            <span>{{ $campaign->donor_count }} donatur</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
                         @auth
-                            @if(auth()->id() === $user->getKey())
-                                <a href="{{ url('/campaigns/create') }}" class="btn-create"><i class="fas fa-plus"></i> Create Campaign</a>
+                            @if(auth()->user()->id_user === $user->id_user)
+                                <div style="margin-top: 20px; text-align: center;">
+                                    <a href="{{ url('/campaigns/create') }}" class="btn-create"><i class="fas fa-plus"></i> Create Campaign</a>
+                                </div>
                             @endif
                         @endauth
-                    </div>
+                    @endif
                 </div>
 
                 <!-- Tab Pane: Donations -->
-                <div id="tab-content-donations" class="tab-pane" style="display: none;">
-                    <div class="empty-state">
-                        <div class="empty-icon" style="background: #ecfdf5; color: #02a95c;">
-                            <i class="fas fa-hand-holding-dollar"></i>
-                        </div>
-                        <h3 class="empty-title">No donations made</h3>
-                        <p class="empty-desc">This creator hasn't supported or made any donations publicly yet.</p>
+                <!-- Tab Pane: Donations (owner only) -->
+                @if($isOwner)
+                    <div id="tab-content-donations" class="tab-pane" style="display: none;">
+                        @if($donations->isEmpty())
+                            <div class="empty-state">
+                                <div class="empty-icon" style="background: #ecfdf5; color: #02a95c;">
+                                    <i class="fas fa-hand-holding-dollar"></i>
+                                </div>
+                                <h3 class="empty-title">Belum ada donasi</h3>
+                                <p class="empty-desc">Donasi yang Anda berikan akan muncul di sini.</p>
+                            </div>
+                        @else
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                @foreach($donations as $donation)
+                                    <a href="{{ url('/donations/' . $donation->order_id . '/track') }}"
+                                       class="card" style="padding: 16px; text-decoration: none; color: inherit; cursor: pointer;">
+                                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                            <div style="flex: 1; min-width: 0;">
+                                                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                                    <p style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">
+                                                        {{ $donation->campaign->title ?? 'Kampanye Dihapus' }}
+                                                    </p>
+                                                    <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px;
+                                                        @switch($donation->payment_status)
+                                                            @case('paid') background: #ecfdf5; color: #059669; @break
+                                                            @case('pending') background: #fef9c3; color: #a16207; @break
+                                                            @case('expired') background: #f3f4f6; color: #6b7280; @break
+                                                            @default background: #fef2f2; color: #dc2626;
+                                                        @endswitch
+                                                    ">
+                                                        @switch($donation->payment_status)
+                                                            @case('paid') Berhasil @break
+                                                            @case('pending') Pending @break
+                                                            @case('expired') Kedaluwarsa @break
+                                                            @default Gagal
+                                                        @endswitch
+                                                    </span>
+                                                    @if($donation->is_anonymous)
+                                                        <span style="font-size: 10px; background: #f3f4f6; color: #6b7280; padding: 2px 6px; border-radius: 4px;">Anonim</span>
+                                                    @endif
+                                                </div>
+                                                <p style="font-size: 12px; color: #6b7280; margin: 4px 0 0;">
+                                                    {{ $donation->created_at->format('d M Y, H:i') }} • {{ $donation->order_id }}
+                                                </p>
+                                            </div>
+                                            <div style="text-align: right; margin-left: 12px;">
+                                                <span style="font-size: 14px; font-weight: 700; color: #059669;">{{ $donation->formatted_amount }}</span>
+                                                <p style="font-size: 11px; color: #6366f1; margin: 2px 0 0; font-weight: 500;">Detail →</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                @endforeach
+                            </div>
+                            <div style="margin-top: 16px; text-align: center;">
+                                <a href="{{ url('/my-donations') }}" style="font-size: 13px; font-weight: 600; color: #6366f1; text-decoration: none;">Lihat Semua Riwayat →</a>
+                            </div>
+                        @endif
                     </div>
-                </div>
 
-                <!-- Tab Pane: Liked -->
-                <div id="tab-content-liked" class="tab-pane" style="display: none;">
-                    <div class="empty-state">
-                        <div class="empty-icon" style="background: #fff1f2; color: #f43f5e;">
-                            <i class="fas fa-heart"></i>
+                    <!-- Tab Pane: Liked (owner only) -->
+                    <div id="tab-content-liked" class="tab-pane" style="display: none;">
+                        <div class="empty-state">
+                            <div class="empty-icon" style="background: #fff1f2; color: #f43f5e;">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h3 class="empty-title">Kampanye yang Disukai</h3>
+                            <p class="empty-desc">Kampanye yang Anda sukai akan muncul di sini.</p>
                         </div>
-                        <h3 class="empty-title">No liked campaigns</h3>
-                        <p class="empty-desc">Campaigns liked by this creator will show up here to spread hope.</p>
                     </div>
-                </div>
+
+                    <!-- Tab Pane: Comments (owner only) -->
+                    <div id="tab-content-comments" class="tab-pane" style="display: none;">
+                        <div class="empty-state">
+                            <div class="empty-icon" style="background: #eff6ff; color: #3b82f6;">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <h3 class="empty-title">Komentar Saya</h3>
+                            <p class="empty-desc">Komentar yang Anda berikan di kampanye akan muncul di sini.</p>
+                        </div>
+                    </div>
+                @endif
 
                 <!-- Tab Pane: Updates -->
                 <div id="tab-content-updates" class="tab-pane" style="display: none;">

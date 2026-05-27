@@ -95,7 +95,7 @@ class CampaignController extends Controller
         }
 
         $donations = $campaign->donations()
-            ->where('payment_status', 'success')
+            ->where('payment_status', 'paid')
             ->latest()
             ->take(10)
             ->get();
