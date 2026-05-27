@@ -76,7 +76,7 @@
                                 @foreach ($donations as $donation)
                                     <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
                                         <div>
-                                            <p class="text-sm font-medium text-gray-900">{{ $donation->donor_name }}</p>
+                                            <p class="text-sm font-medium text-gray-900">{{ $donation->display_name }}</p>
                                             <p class="text-xs text-gray-500">{{ $donation->created_at->diffForHumans() }}</p>
                                         </div>
                                         <span class="text-sm font-semibold text-green-600">
@@ -107,10 +107,10 @@
 
                         {{-- Stats --}}
                         <div class="grid grid-cols-2 gap-3 mb-5">
-                            <div class="text-center p-3 bg-gray-50 rounded-xl">
+                            <a href="{{ route('donation.donors', $campaign->slug) }}" class="text-center p-3 bg-gray-50 rounded-xl hover:bg-indigo-50 hover:border-indigo-100 border border-transparent transition-colors">
                                 <p class="text-lg font-bold text-gray-900">{{ $campaign->donor_count }}</p>
-                                <p class="text-xs text-gray-500">Donatur</p>
-                            </div>
+                                <p class="text-xs text-gray-500">Donatur →</p>
+                            </a>
                             <div class="text-center p-3 bg-gray-50 rounded-xl">
                                 <p class="text-lg font-bold text-gray-900">{{ $campaign->days_remaining }}</p>
                                 <p class="text-xs text-gray-500">Hari Lagi</p>

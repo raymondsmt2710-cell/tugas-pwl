@@ -209,6 +209,22 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
+     * Get campaigns owned by this user.
+     */
+    public function campaigns(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Campaign::class, 'id_user', 'id_user');
+    }
+
+    /**
+     * Get donations made by this user.
+     */
+    public function donations(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Donation::class, 'id_user', 'id_user');
+    }
+
+    /**
      * Determine if the user can access the Filament panel.
      */
     public function canAccessPanel(Panel $panel): bool

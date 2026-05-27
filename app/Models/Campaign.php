@@ -109,7 +109,7 @@ class Campaign extends Model
 
     public function getDonorCountAttribute(): int
     {
-        return $this->donations()->where('payment_status', 'success')->count();
+        return $this->donations()->where('payment_status', 'paid')->count();
     }
 
     /*
