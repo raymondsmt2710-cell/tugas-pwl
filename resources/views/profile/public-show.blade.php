@@ -138,6 +138,7 @@
                 <a href="javascript:void(0)" class="profile-tab active" data-tab="campaigns">Campaigns</a>
                 @if($isOwner)
                     <a href="javascript:void(0)" class="profile-tab" data-tab="donations">Donations</a>
+                    <a href="javascript:void(0)" class="profile-tab" data-tab="withdrawals">Withdrawals</a>
                     <a href="javascript:void(0)" class="profile-tab" data-tab="liked">Liked</a>
                     <a href="javascript:void(0)" class="profile-tab" data-tab="comments">Comments</a>
                 @endif
@@ -308,6 +309,62 @@
                             </div>
                             <div style="margin-top: 16px; text-align: center;">
                                 <a href="{{ url('/my-donations') }}" style="font-size: 13px; font-weight: 600; color: #6366f1; text-decoration: none;">Lihat Semua Riwayat →</a>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Tab Pane: Withdrawals (owner only) -->
+                    @php
+                        $myWithdrawals = \App\Models\Withdrawal::byUser($user->id_user)->with('campaign')->latest()->take(10)->get();
+                    @endphp
+                    <div id="tab-content-withdrawals" class="tab-pane" style="display: none;">
+                        @if($myWithdrawals->isEmpty())
+                            <div class="empty-state">
+                                <div class="empty-icon" style="background: #eff6ff; color: #3b82f6;">
+                                    <i class="fas fa-money-bill-transfer"></i>
+                                </div>
+                                <h3 class="empty-title">Belum ada penarikan</h3>
+                                <p class="empty-desc">Riwayat penarikan dana Anda akan muncul di sini.</p>
+                                <a href="{{ url('/withdrawals/create') }}" class="btn-create"><i class="fas fa-plus"></i> Tarik Dana</a>
+                            </div>
+                        @else
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                @foreach($myWithdrawals as $withdrawal)
+                                    <div class="card" style="padding: 16px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                            <div style="flex: 1; min-width: 0;">
+                                                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                                    <p style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">
+                                                        {{ $withdrawal->campaign->title ?? '-' }}
+                                                    </p>
+                                                    <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px;
+                                                        @switch($withdrawal->status)
+                                                            @case('paid') background: #ecfdf5; color: #059669; @break
+                                                            @case('approved') background: #eff6ff; color: #2563eb; @break
+                                                            @case('pending') @case('under_review') background: #fef9c3; color: #a16207; @break
+                                                            @default background: #fef2f2; color: #dc2626;
+                                                        @endswitch
+                                                    ">{{ $withdrawal->status_label }}</span>
+                                                </div>
+                                                <p style="font-size: 12px; color: #6b7280; margin: 4px 0 0;">
+                                                    {{ $withdrawal->created_at->format('d M Y, H:i') }} •
+                                                    {{ $withdrawal->bank_name }} - {{ $withdrawal->account_number }}
+                                                </p>
+                                                @if($withdrawal->admin_notes)
+                                                    <p style="font-size: 11px; color: #6b7280; margin-top: 4px; background: #f9fafb; padding: 4px 8px; border-radius: 6px; display: inline-block;">
+                                                        Admin: {{ $withdrawal->admin_notes }}
+                                                    </p>
+                                                @endif
+                                            </div>
+                                            <span style="font-size: 14px; font-weight: 700; color: #111827; margin-left: 12px;">
+                                                {{ $withdrawal->formatted_amount }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div style="margin-top: 16px; text-align: center;">
+                                <a href="{{ url('/withdrawals/history') }}" style="font-size: 13px; font-weight: 600; color: #6366f1; text-decoration: none;">Lihat Semua Riwayat →</a>
                             </div>
                         @endif
                     </div>

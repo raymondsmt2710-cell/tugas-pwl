@@ -15,6 +15,6 @@ class LoginResponse implements LoginResponseContract
      */
     public function toResponse($request): RedirectResponse
     {
-        return redirect('/dashboard');
+        return redirect('/');
     }
 }

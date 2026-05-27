@@ -8,6 +8,7 @@
     @php
         $myDonations = auth()->user()->donations()->with('campaign')->latest()->take(10)->get();
         $myCampaigns = auth()->user()->campaigns()->with('category')->latest()->take(5)->get();
+        $myWithdrawals = \App\Models\Withdrawal::byUser(auth()->user()->id_user)->with('campaign')->latest()->take(10)->get();
     @endphp
 
     <div class="py-8">
@@ -21,6 +22,9 @@
                     </button>
                     <button class="profile-tab-btn px-6 py-3.5 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent whitespace-nowrap" data-tab="campaigns">
                         Kampanye Saya
+                    </button>
+                    <button class="profile-tab-btn px-6 py-3.5 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent whitespace-nowrap" data-tab="withdrawals">
+                        Penarikan Dana
                     </button>
                     <button class="profile-tab-btn px-6 py-3.5 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent whitespace-nowrap" data-tab="liked">
                         Liked
@@ -144,6 +148,58 @@
                             <div class="p-12 text-center">
                                 <p class="text-sm text-gray-500">Belum ada kampanye.</p>
                                 <a href="{{ url('/campaigns/create') }}" class="mt-3 inline-block text-sm font-medium text-indigo-600 hover:text-indigo-800">Buat Kampanye Pertama</a>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+
+            {{-- Tab: Penarikan Dana --}}
+            <div id="tab-withdrawals" class="profile-tab-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Penarikan Dana</h3>
+                            <p class="text-sm text-gray-500 mt-0.5">Riwayat permintaan penarikan dana Anda.</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <a href="{{ url('/withdrawals/history') }}" class="text-sm font-medium text-gray-600 hover:text-gray-800">Semua →</a>
+                            <a href="{{ url('/withdrawals/create') }}" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition">
+                                + Tarik Dana
+                            </a>
+                        </div>
+                    </div>
+                    <div class="divide-y divide-gray-50">
+                        @forelse ($myWithdrawals as $withdrawal)
+                            <div class="px-6 py-4 flex items-center justify-between">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    @switch($withdrawal->status)
+                                        @case('paid') <div class="w-2.5 h-2.5 rounded-full bg-green-500 shrink-0"></div> @break
+                                        @case('approved') <div class="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0"></div> @break
+                                        @case('pending') @case('under_review') <div class="w-2.5 h-2.5 rounded-full bg-yellow-500 shrink-0"></div> @break
+                                        @default <div class="w-2.5 h-2.5 rounded-full bg-red-500 shrink-0"></div>
+                                    @endswitch
+                                    <div class="min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 truncate">{{ $withdrawal->campaign->title ?? '-' }}</p>
+                                        <div class="flex items-center gap-2 mt-0.5">
+                                            <span class="text-xs text-gray-500">{{ $withdrawal->created_at->format('d M Y') }}</span>
+                                            <span class="text-[10px] px-1.5 py-0.5 rounded font-medium
+                                                @switch($withdrawal->status)
+                                                    @case('paid') bg-green-50 text-green-700 @break
+                                                    @case('approved') bg-blue-50 text-blue-700 @break
+                                                    @case('pending') @case('under_review') bg-yellow-50 text-yellow-700 @break
+                                                    @default bg-red-50 text-red-700
+                                                @endswitch
+                                            ">{{ $withdrawal->status_label }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="text-sm font-bold text-gray-900 shrink-0">{{ $withdrawal->formatted_amount }}</span>
+                            </div>
+                        @empty
+                            <div class="p-12 text-center">
+                                <p class="text-sm text-gray-500">Belum ada penarikan dana.</p>
+                                <a href="{{ url('/withdrawals/create') }}" class="mt-3 inline-block text-sm font-medium text-indigo-600 hover:text-indigo-800">Tarik Dana Sekarang</a>
                             </div>
                         @endforelse
                     </div>

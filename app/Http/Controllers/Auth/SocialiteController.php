@@ -202,6 +202,6 @@ class SocialiteController extends Controller
      */
     protected function redirectBasedOnRole(User $user)
     {
-        return redirect('/dashboard');
+        return redirect('/');
     }
 }
