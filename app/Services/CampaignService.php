@@ -170,6 +170,8 @@ class CampaignService
             'verification_status' => 'active',
         ]);
 
+        $campaign->user->notify(new \App\Notifications\CampaignStatusChanged($campaign, 'approved'));
+
         return $campaign->fresh();
     }
 
@@ -184,6 +186,8 @@ class CampaignService
             'verification_status' => 'rejected',
         ]);
 
+        $campaign->user->notify(new \App\Notifications\CampaignStatusChanged($campaign, 'rejected'));
+
         return $campaign->fresh();
     }
 
@@ -197,6 +201,8 @@ class CampaignService
             'campaign_status' => 'finished',
             'verification_status' => 'active',
         ]);
+
+        $campaign->user->notify(new \App\Notifications\CampaignStatusChanged($campaign, 'completed'));
 
         return $campaign->fresh();
     }

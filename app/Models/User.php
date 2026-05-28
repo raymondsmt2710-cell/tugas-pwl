@@ -226,6 +226,52 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     }
 
     /**
+     * Users that this user is following.
+     */
+    public function following(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'following_id', 'id_user', 'id_user')
+            ->withTimestamps();
+    }
+
+    /**
+     * Users that follow this user.
+     */
+    public function followers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id', 'id_user', 'id_user')
+            ->withTimestamps();
+    }
+
+    /**
+     * Check if this user is following another user.
+     */
+    public function isFollowing(User $user): bool
+    {
+        return $this->following()->where('following_id', $user->id_user)->exists();
+    }
+
+    /**
+     * Follow a user.
+     */
+    public function follow(User $user): void
+    {
+        if ($this->id_user === $user->id_user) return;
+        if (!$this->isFollowing($user)) {
+            $this->following()->attach($user->id_user);
+            $user->notify(new \App\Notifications\NewFollower($this));
+        }
+    }
+
+    /**
+     * Unfollow a user.
+     */
+    public function unfollow(User $user): void
+    {
+        $this->following()->detach($user->id_user);
+    }
+
+    /**
      * Determine if the user can access the Filament panel.
      */
     public function canAccessPanel(Panel $panel): bool

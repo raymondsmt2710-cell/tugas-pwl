@@ -39,6 +39,9 @@ class ProfileController extends Controller
         // Stats
         $totalDonationsReceived = $user->campaigns()->sum('collected_amount');
         $campaignCount = $user->campaigns()->count();
+        $followersCount = $user->followers()->count();
+        $followingCount = $user->following()->count();
+        $isFollowing = auth()->check() ? auth()->user()->isFollowing($user) : false;
 
         return view('profile.public-show', [
             'user' => $user,
@@ -46,6 +49,9 @@ class ProfileController extends Controller
             'donations' => $donations,
             'totalDonationsReceived' => $totalDonationsReceived,
             'campaignCount' => $campaignCount,
+            'followersCount' => $followersCount,
+            'followingCount' => $followingCount,
+            'isFollowing' => $isFollowing,
             'isOwner' => $isOwner,
         ]);
     }
