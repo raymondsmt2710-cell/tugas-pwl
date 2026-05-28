@@ -119,14 +119,7 @@
                     <div class="profile-actions">
                         @auth
                             @if(auth()->user()->id_user !== $user->id_user)
-                                <form action="{{ route('follow.toggle', $user) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @if($isFollowing)
-                                        <button type="submit" class="btn-follow following"><i class="fas fa-check"></i> <span class="text">Following</span></button>
-                                    @else
-                                        <button type="submit" class="btn-follow"><i class="fas fa-user-plus"></i> <span class="text">Follow</span></button>
-                                    @endif
-                                </form>
+                                @livewire('follow-button', ['user' => $user])
                                 <button class="btn-share" id="btn-share-profile" title="Share Profile"><i class="fas fa-share-alt"></i></button>
                             @else
                                 <a href="{{ route('profile.show') }}" class="btn-edit"><i class="fas fa-cog"></i>Settings</a>
