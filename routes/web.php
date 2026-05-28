@@ -96,6 +96,7 @@ Route::get('/donations/{orderId}/track', [DonationController::class, 'track'])->
 | Public Campaign Routes
 |--------------------------------------------------------------------------
 */
+Route::get('/search', [\App\Http\Controllers\SearchController::class, 'index'])->name('search');
 Route::get('/campaigns', [CampaignController::class, 'index'])->name('campaigns.index');
 Route::get('/campaigns/{slug}', [CampaignController::class, 'show'])->name('campaigns.show');
 
