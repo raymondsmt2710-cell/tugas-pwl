@@ -22,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Custom mail from for all emails
+        \Illuminate\Support\Facades\Mail::alwaysFrom('tubespwlkel999@gmail.com', 'AutoPahala');
     }
 }

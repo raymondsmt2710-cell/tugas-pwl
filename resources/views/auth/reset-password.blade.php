@@ -1,36 +1,50 @@
 <x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
-
-        <x-validation-errors class="mb-4" />
-
-        <form method="POST" action="{{ route('password.update') }}">
-            @csrf
-
-            <input type="hidden" name="token" value="{{ $request->route('token') }}">
-
-            <div class="block">
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
+    <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div class="sm:mx-auto sm:w-full sm:max-w-md">
+            <div class="text-center">
+                <a href="/" class="text-2xl font-bold text-gray-900">Auto<span class="text-indigo-600">pahala</span></a>
             </div>
+            <h2 class="mt-6 text-center text-2xl font-bold text-gray-900">Reset Password</h2>
+            <p class="mt-2 text-center text-sm text-gray-500">
+                Masukkan password baru untuk akun Anda.
+            </p>
+        </div>
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            </div>
+        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+            <div class="bg-white py-8 px-6 shadow-sm sm:rounded-2xl border border-gray-100">
 
-            <div class="mt-4">
-                <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-            </div>
+                <x-validation-errors class="mb-4" />
 
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Reset Password') }}
-                </x-button>
+                <form method="POST" action="{{ route('password.update') }}" class="space-y-5">
+                    @csrf
+
+                    <input type="hidden" name="token" value="{{ $request->route('token') }}">
+
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Alamat Email</label>
+                        <input id="email" type="email" name="email" value="{{ old('email', $request->email) }}" required autofocus
+                               class="w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">Password Baru</label>
+                        <input id="password" type="password" name="password" required autocomplete="new-password"
+                               class="w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                               placeholder="Minimal 8 karakter">
+                    </div>
+
+                    <div>
+                        <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">Konfirmasi Password</label>
+                        <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password"
+                               class="w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                               placeholder="Ulangi password baru">
+                    </div>
+
+                    <button type="submit" class="w-full py-3 px-4 rounded-xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 shadow-sm transition">
+                        Reset Password
+                    </button>
+                </form>
             </div>
-        </form>
-    </x-authentication-card>
+        </div>
+    </div>
 </x-guest-layout>
