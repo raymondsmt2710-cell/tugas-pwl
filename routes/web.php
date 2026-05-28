@@ -15,6 +15,11 @@ use App\Http\Controllers\ProfileController;
 */
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Email Verified Success Page
+Route::get('/email/verified', function () {
+    return view('auth.email-verified');
+})->middleware('auth')->name('email.verified');
+
 Route::view('/about', 'about', ['title' => 'About - Autopahala'])->name('about');
 Route::view('/contact', 'contact', ['title' => 'Contact - Autopahala'])->name('contact');
 Route::view('/faq', 'faq', ['title' => 'FAQ - Autopahala'])->name('faq');

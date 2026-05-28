@@ -4,3 +4,17 @@
 [x-cloak] {
     display: none;
 }
+
+/* Fix Jetstream/Livewire modal z-index above sticky navbar */
+[x-data] [x-show].fixed {
+    z-index: 9999 !important;
+}
+
+.fixed.inset-0 {
+    z-index: 9999 !important;
+}
+
+/* Hide modal overlay background */
+.fixed.inset-0 > .absolute.inset-0.bg-gray-500 {
+    display: none !important;
+}

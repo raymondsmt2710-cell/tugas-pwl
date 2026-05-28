@@ -33,16 +33,17 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * Store a withdrawal request.
+     * Store a withdrawal request (password verified).
      */
     public function store(StoreWithdrawalRequest $request)
     {
+        $user = auth()->user();
         $campaign = Campaign::findOrFail($request->id_campaign);
 
         try {
-            $withdrawal = $this->withdrawalService->requestWithdrawal(
+            $this->withdrawalService->requestWithdrawal(
                 $campaign,
-                auth()->user(),
+                $user,
                 $request->validated()
             );
 
