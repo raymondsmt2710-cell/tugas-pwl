@@ -7,8 +7,8 @@
             {{-- Desktop: Search + Nav Links --}}
             <div class="hidden md:flex items-center gap-6">
                 {{-- Inline Search --}}
-                <form action="{{ url('/campaigns') }}" method="GET" class="relative">
-                    <input type="text" name="search" placeholder="Cari kampanye..."
+                <form action="{{ url('/search') }}" method="GET" class="relative">
+                    <input type="text" name="q" placeholder="Cari kampanye atau user..."
                            class="w-44 xl:w-56 rounded-lg border-gray-200 bg-gray-50 pl-9 pr-3 py-1.5 text-sm focus:border-indigo-500 focus:ring-indigo-500 focus:bg-white transition">
                     <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
                 </form>
@@ -73,8 +73,8 @@
     <div x-show="mobileOpen" x-transition class="md:hidden border-t border-gray-100 bg-white">
         <div class="px-4 py-3 space-y-1">
             {{-- Mobile Search --}}
-            <form action="{{ url('/campaigns') }}" method="GET" class="mb-3">
-                <input type="text" name="search" placeholder="Cari kampanye..."
+            <form action="{{ url('/search') }}" method="GET" class="mb-3">
+                <input type="text" name="q" placeholder="Cari kampanye atau user..."
                        class="w-full rounded-lg border-gray-200 bg-gray-50 text-sm focus:border-indigo-500 focus:ring-indigo-500">
             </form>
 
