@@ -5,19 +5,66 @@
 
                 {{-- Main Content --}}
                 <div class="lg:col-span-2 space-y-6">
-                    {{-- Banner Image --}}
-                    <div class="rounded-2xl overflow-hidden bg-gray-100 shadow-sm">
-                        @if ($campaign->banner_image)
-                            <img src="{{ asset('storage/' . $campaign->banner_image) }}" alt="{{ $campaign->title }}"
-                                 class="w-full h-64 sm:h-80 object-cover">
-                        @else
-                            <div class="w-full h-64 sm:h-80 flex items-center justify-center">
-                                <svg class="w-16 h-16 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909"/>
-                                </svg>
+                    {{-- Image Slider (Banner + Gallery) --}}
+                    @php
+                        $slides = collect();
+                        if ($campaign->banner_image) {
+                            $slides->push(asset('storage/' . $campaign->banner_image));
+                        }
+                        if ($campaign->galleries) {
+                            foreach ($campaign->galleries as $g) {
+                                $slides->push(asset('storage/' . $g->image_path));
+                            }
+                        }
+                    @endphp
+
+                    @if($slides->count() > 0)
+                        <div class="rounded-2xl overflow-hidden bg-gray-100 shadow-sm relative" x-data="{ current: 0, total: {{ $slides->count() }} }">
+                            {{-- Slides --}}
+                            <div class="relative h-64 sm:h-80">
+                                @foreach($slides as $index => $src)
+                                    <img x-show="current === {{ $index }}"
+                                         x-transition:enter="transition ease-out duration-300"
+                                         x-transition:enter-start="opacity-0"
+                                         x-transition:enter-end="opacity-100"
+                                         src="{{ $src }}" alt="Slide {{ $index + 1 }}"
+                                         class="absolute inset-0 w-full h-full object-cover">
+                                @endforeach
                             </div>
-                        @endif
-                    </div>
+
+                            {{-- Navigation Arrows --}}
+                            @if($slides->count() > 1)
+                                <button @click="current = current > 0 ? current - 1 : total - 1"
+                                        class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-700 hover:bg-white shadow-md transition">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
+                                </button>
+                                <button @click="current = current < total - 1 ? current + 1 : 0"
+                                        class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-700 hover:bg-white shadow-md transition">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+                                </button>
+
+                                {{-- Dots --}}
+                                <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
+                                    @foreach($slides as $index => $src)
+                                        <button @click="current = {{ $index }}"
+                                                :class="current === {{ $index }} ? 'bg-white w-6' : 'bg-white/50 w-2'"
+                                                class="h-2 rounded-full transition-all duration-200"></button>
+                                    @endforeach
+                                </div>
+
+                                {{-- Counter --}}
+                                <div class="absolute top-3 right-3 bg-black/50 text-white text-xs font-medium px-2.5 py-1 rounded-full backdrop-blur">
+                                    <span x-text="current + 1"></span> / {{ $slides->count() }}
+                                </div>
+                            @endif
+                        </div>
+                    @else
+                        <div class="rounded-2xl overflow-hidden bg-gray-100 shadow-sm h-64 sm:h-80 flex items-center justify-center">
+                            <svg class="w-16 h-16 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909"/>
+                            </svg>
+                        </div>
+                    @endif
 
                     {{-- Title & Meta --}}
                     <div>
@@ -31,19 +78,6 @@
                         <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ $campaign->title }}</h1>
                         <p class="mt-2 text-gray-600">{{ $campaign->short_description }}</p>
                     </div>
-
-                    {{-- Gallery --}}
-                    @if ($campaign->galleries && $campaign->galleries->count() > 0)
-                        <div>
-                            <h2 class="text-lg font-semibold text-gray-900 mb-3">Galeri</h2>
-                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                                @foreach ($campaign->galleries as $gallery)
-                                    <img src="{{ asset('storage/' . $gallery->image_path) }}" alt="{{ $gallery->caption ?? 'Gallery' }}"
-                                         class="w-full h-32 object-cover rounded-lg">
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
 
                     {{-- Description --}}
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
