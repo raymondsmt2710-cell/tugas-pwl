@@ -118,8 +118,15 @@
                     <!-- Action Buttons -->
                     <div class="profile-actions">
                         @auth
-                            @if(auth()->id() !== $user->getKey())
-                                <a href="javascript:void(0)" class="btn-follow" id="btn-follow-toggle"><i class="fas fa-user-plus"></i> <span class="text">Follow</span></a>
+                            @if(auth()->user()->id_user !== $user->id_user)
+                                <form action="{{ route('follow.toggle', $user) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @if($isFollowing)
+                                        <button type="submit" class="btn-follow following"><i class="fas fa-check"></i> <span class="text">Following</span></button>
+                                    @else
+                                        <button type="submit" class="btn-follow"><i class="fas fa-user-plus"></i> <span class="text">Follow</span></button>
+                                    @endif
+                                </form>
                                 <button class="btn-share" id="btn-share-profile" title="Share Profile"><i class="fas fa-share-alt"></i></button>
                             @else
                                 <a href="{{ route('profile.show') }}" class="btn-edit"><i class="fas fa-cog"></i>Settings</a>
@@ -194,11 +201,11 @@
                             <div class="stats-label">Campaign</div>
                         </div>
                         <div class="stats-item">
-                            <div class="stats-number" id="followers-count">0</div>
+                            <div class="stats-number" id="followers-count">{{ $followersCount }}</div>
                             <div class="stats-label">Followers</div>
                         </div>
                         <div class="stats-item">
-                            <div class="stats-number" id="following-count">0</div>
+                            <div class="stats-number" id="following-count">{{ $followingCount }}</div>
                             <div class="stats-label">Following</div>
                         </div>
                     </div>

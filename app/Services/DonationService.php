@@ -245,6 +245,9 @@ class DonationService
             'available_balance' => $campaign->collected_amount - $campaign->withdrawal_amount,
         ]);
 
+        // Notify campaign owner
+        $campaign->user->notify(new \App\Notifications\DonationReceived($donation));
+
         Log::info("Campaign [{$campaign->id_campaign}] balance credited +{$donation->donation_amount}");
     }
 }

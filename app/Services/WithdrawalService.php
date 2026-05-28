@@ -75,6 +75,8 @@ class WithdrawalService
             'reviewed_at' => now(),
         ]);
 
+        $withdrawal->user->notify(new \App\Notifications\WithdrawalStatusChanged($withdrawal, 'under_review'));
+
         return $withdrawal->fresh();
     }
 
@@ -89,6 +91,8 @@ class WithdrawalService
             'reviewed_at' => now(),
         ]);
 
+        $withdrawal->user->notify(new \App\Notifications\WithdrawalStatusChanged($withdrawal, 'approved'));
+
         return $withdrawal->fresh();
     }
 
@@ -102,6 +106,8 @@ class WithdrawalService
             'admin_notes' => $adminNotes,
             'reviewed_at' => now(),
         ]);
+
+        $withdrawal->user->notify(new \App\Notifications\WithdrawalStatusChanged($withdrawal, 'rejected'));
 
         return $withdrawal->fresh();
     }
@@ -124,6 +130,8 @@ class WithdrawalService
             $campaign->update([
                 'available_balance' => $campaign->collected_amount - $campaign->withdrawal_amount,
             ]);
+
+            $withdrawal->user->notify(new \App\Notifications\WithdrawalStatusChanged($withdrawal, 'paid'));
 
             Log::info("Withdrawal [{$withdrawal->id_withdrawal}] paid, campaign balance updated", [
                 'campaign' => $campaign->id_campaign,
