@@ -218,6 +218,34 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     }
 
     /**
+     * Get user settings (creates default if not exists).
+     */
+    public function settings(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(UserSetting::class, 'user_id', 'id_user');
+    }
+
+    /**
+     * Get or create user settings.
+     */
+    public function getSettings(): UserSetting
+    {
+        $settings = UserSetting::firstOrCreate(
+            ['user_id' => $this->id_user],
+            [
+                'show_profile_publicly' => true,
+                'show_followers_count' => true,
+                'show_following_count' => true,
+                'notify_donation_received' => true,
+                'notify_campaign_approved' => true,
+                'notify_withdrawal_approved' => true,
+            ]
+        );
+
+        return $settings;
+    }
+
+    /**
      * Get donations made by this user.
      */
     public function donations(): \Illuminate\Database\Eloquent\Relations\HasMany

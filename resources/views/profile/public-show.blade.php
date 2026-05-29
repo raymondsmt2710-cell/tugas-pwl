@@ -194,11 +194,11 @@
                             <div class="stats-label">Campaign</div>
                         </div>
                         <div class="stats-item">
-                            <div class="stats-number" id="followers-count">{{ $followersCount }}</div>
+                            <div class="stats-number" id="followers-count">{{ $followersCount !== null ? $followersCount : '—' }}</div>
                             <div class="stats-label">Followers</div>
                         </div>
                         <div class="stats-item">
-                            <div class="stats-number" id="following-count">{{ $followingCount }}</div>
+                            <div class="stats-number" id="following-count">{{ $followingCount !== null ? $followingCount : '—' }}</div>
                             <div class="stats-label">Following</div>
                         </div>
                     </div>
