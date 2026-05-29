@@ -35,6 +35,11 @@ class FortifyServiceProvider extends ServiceProvider
             \Laravel\Fortify\Contracts\VerifyEmailResponse::class,
             \App\Http\Responses\VerifiedResponse::class
         );
+
+        $this->app->singleton(
+            \Laravel\Fortify\Contracts\PasswordResetResponse::class,
+            \App\Http\Responses\PasswordResetResponse::class
+        );
     }
 
     /**
