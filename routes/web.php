@@ -111,6 +111,7 @@ Route::get('/donations/{orderId}/track', [DonationController::class, 'track'])->
 |--------------------------------------------------------------------------
 */
 Route::get('/search', [\App\Http\Controllers\SearchController::class, 'index'])->name('search');
+Route::get('/leaderboard', [\App\Http\Controllers\LeaderboardController::class, 'index'])->name('leaderboard');
 Route::get('/campaigns', [CampaignController::class, 'index'])->name('campaigns.index');
 Route::get('/campaigns/{slug}', [CampaignController::class, 'show'])->name('campaigns.show');
 

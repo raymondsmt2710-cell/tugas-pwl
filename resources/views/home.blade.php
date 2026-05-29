@@ -144,6 +144,89 @@
         </div>
     </section>
 
+    {{-- Leaderboard Preview --}}
+    <section class="py-16 bg-gray-50 border-y border-gray-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <h2 class="text-2xl font-bold text-gray-900 text-center">Leaderboard</h2>
+            <p class="mt-2 text-sm text-gray-500 text-center mb-10">Mereka yang paling banyak berkontribusi</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {{-- Top Donors --}}
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4 text-center">🏆 Top Donatur</h3>
+                    <div class="space-y-3">
+                        @forelse($topDonors as $i => $item)
+                            @php $medals = ['🥇', '🥈', '🥉']; @endphp
+                            <a href="{{ url('/@' . $item['username']) }}" class="flex items-center gap-3 bg-white rounded-xl p-3 border border-gray-100 hover:border-indigo-200 hover:shadow-sm transition">
+                                <span class="text-lg">{{ $medals[$i] }}</span>
+                                <img src="{{ $item['avatar'] }}" class="w-9 h-9 rounded-full object-cover border border-gray-200">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-gray-900 truncate">{{ $item['user_name'] }}</p>
+                                    <p class="text-xs text-gray-500">{{ $item['donation_count'] }} donasi</p>
+                                </div>
+                                <span class="text-xs font-bold text-green-600">Rp {{ number_format($item['total_amount'] / 1000, 0) }}rb</span>
+                            </a>
+                        @empty
+                            <p class="text-center text-sm text-gray-400 py-4">Belum ada data</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                {{-- Top Campaigns --}}
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4 text-center">📈 Top Kampanye</h3>
+                    <div class="space-y-3">
+                        @forelse($topCampaigns as $i => $item)
+                            @php $medals = ['🥇', '🥈', '🥉']; @endphp
+                            <a href="{{ url('/campaigns/' . $item['slug']) }}" class="flex items-center gap-3 bg-white rounded-xl p-3 border border-gray-100 hover:border-indigo-200 hover:shadow-sm transition">
+                                <span class="text-lg">{{ $medals[$i] }}</span>
+                                @if($item['banner_image'])
+                                    <img src="{{ asset('storage/' . $item['banner_image']) }}" class="w-9 h-9 rounded-lg object-cover">
+                                @else
+                                    <div class="w-9 h-9 rounded-lg bg-gray-100"></div>
+                                @endif
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-gray-900 truncate">{{ $item['title'] }}</p>
+                                    <p class="text-xs text-gray-500">{{ $item['donor_count'] }} donatur</p>
+                                </div>
+                                <span class="text-xs font-bold text-green-600">{{ number_format($item['progress'], 0) }}%</span>
+                            </a>
+                        @empty
+                            <p class="text-center text-sm text-gray-400 py-4">Belum ada data</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                {{-- Top Creators --}}
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4 text-center">⭐ Top Penggalang</h3>
+                    <div class="space-y-3">
+                        @forelse($topCreators as $i => $item)
+                            @php $medals = ['🥇', '🥈', '🥉']; @endphp
+                            <a href="{{ url('/@' . $item['username']) }}" class="flex items-center gap-3 bg-white rounded-xl p-3 border border-gray-100 hover:border-indigo-200 hover:shadow-sm transition">
+                                <span class="text-lg">{{ $medals[$i] }}</span>
+                                <img src="{{ $item['avatar'] }}" class="w-9 h-9 rounded-full object-cover border border-gray-200">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-gray-900 truncate">{{ $item['user_name'] }}</p>
+                                    <p class="text-xs text-gray-500">{{ $item['campaign_count'] }} kampanye</p>
+                                </div>
+                                <span class="text-xs font-bold text-green-600">Rp {{ number_format($item['total_raised'] / 1000, 0) }}rb</span>
+                            </a>
+                        @empty
+                            <p class="text-center text-sm text-gray-400 py-4">Belum ada data</p>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <a href="{{ url('/leaderboard') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition">
+                    Lihat Leaderboard Lengkap →
+                </a>
+            </div>
+        </div>
+    </section>
+
     {{-- FAQ --}}
     <section id="faq" class="py-16 bg-gray-50 border-y border-gray-100">
         <div class="max-w-2xl mx-auto px-4 sm:px-6">
