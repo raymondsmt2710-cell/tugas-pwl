@@ -24,6 +24,15 @@ Route::view('/about', 'about', ['title' => 'About - Autopahala'])->name('about')
 Route::view('/contact', 'contact', ['title' => 'Contact - Autopahala'])->name('contact');
 Route::view('/faq', 'faq', ['title' => 'FAQ - Autopahala'])->name('faq');
 
+/*
+|--------------------------------------------------------------------------
+| Admin Login Route
+|--------------------------------------------------------------------------
+*/
+Route::get('/admin/login', function () {
+    return view('admin.login');
+})->name('admin.login');
+
 
 /*
 |--------------------------------------------------------------------------
