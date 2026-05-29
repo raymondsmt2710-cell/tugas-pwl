@@ -14,9 +14,6 @@
                 </form>
 
                 {{-- Nav Links --}}
-                @auth
-                    <a href="{{ route('dashboard') }}" class="text-sm {{ request()->routeIs('dashboard') ? 'text-indigo-600 font-semibold' : 'text-gray-600 hover:text-gray-900' }}">Dashboard</a>
-                @endauth
                 <a href="{{ url('/campaigns') }}" class="text-sm text-gray-600 hover:text-gray-900">Kampanye</a>
                 <a href="{{ url('/#categories') }}" class="text-sm text-gray-600 hover:text-gray-900">Kategori</a>
                 <a href="{{ url('/#how-it-works') }}" class="text-sm text-gray-600 hover:text-gray-900">Cara Kerja</a>
