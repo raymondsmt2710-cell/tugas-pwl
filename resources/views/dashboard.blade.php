@@ -11,10 +11,6 @@
     // Bergabung Sejak
     $joinDate = $user->created_at ? $user->created_at->translatedFormat('F Y') : 'Mei 2026';
 
-    // Impact Points Formula (Total Donasi / 1000)
-    $impactPoints = (int) ($totalDonation / 1000);
-    $formattedImpactPoints = number_format($impactPoints, 0, ',', '.');
-
     // Campaigns (actual from DB)
     $myCampaigns = $user->campaigns()->latest()->take(3)->get();
 
@@ -76,8 +72,8 @@
             </a>
         </div>
 
-        {{-- Statistik Utama – 4 kartu bersih --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        {{-- Statistik Utama – 3 card--}}
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
             {{-- Total Donasi --}}
             <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
                 <div class="flex items-center gap-3">
@@ -122,21 +118,6 @@
                     </div>
                 </div>
             </div>
-
-            {{-- Impact Points --}}
-            <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-                <div class="flex items-center gap-3">
-                    <div class="p-2 rounded-lg bg-emerald-50 text-emerald-600">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499c.15-.427.65-.427.8 0l1.96 5.895a.75.75 0 0 0 .714.53h6.19c.45 0 .638.583.275.856l-5.01 3.64a.75.75 0 0 0-.273.84l1.96 5.896c.15.426-.339.782-.698.542l-5.01-3.64a.75.75 0 0 0-.88 0l-5.01 3.64c-.359.24-.849-.116-.698-.542l1.96-5.895a.75.75 0 0 0-.273-.84l-5.01-3.64c-.363-.273-.175-.856.275-.856h6.19a.75.75 0 0 0 .714-.53l1.96-5.895Z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Impact Points</p>
-                        <p class="text-lg font-bold text-gray-900">{{ $totalDonation > 0 ? $formattedImpactPoints : '0' }}</p>
-                    </div>
-                </div>
-            </div>
         </div>
 
         {{-- Konten Utama: 3 Kolom --}}
@@ -145,67 +126,77 @@
             {{-- Kolom 1: Kampanye & Tersimpan --}}
             <div class="space-y-8">
                 {{-- My Campaigns --}}
-                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-sm font-bold text-gray-800 uppercase tracking-wide">Kampanye Saya</h2>
-                        <a href="{{ route('campaigns.my') }}" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700">Lihat semua</a>
-                    </div>
-
-                    @if ($myCampaigns->count() > 0)
-                        <div class="space-y-5">
-                            @foreach ($myCampaigns as $camp)
-                                <div class="flex gap-3">
-                                    <img src="{{ $camp->banner_image_url ?? 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' }}" alt="{{ $camp->title }}" class="w-14 h-14 rounded-lg object-cover shrink-0 bg-gray-100 border border-gray-200">
-                                    <div class="flex-1 min-w-0">
-                                        <h4 class="text-sm font-semibold text-gray-900 truncate">
-                                            <a href="{{ route('campaigns.show', $camp->slug) }}" class="hover:text-emerald-600">{{ $camp->title }}</a>
-                                        </h4>
-                                        <div class="w-full bg-gray-100 rounded-full h-1.5 mt-2 overflow-hidden">
-                                            <div class="bg-emerald-500 h-1.5 rounded-full" style="width: {{ $camp->progress_percentage }}%"></div>
-                                        </div>
-                                        <div class="flex justify-between text-xs text-gray-500 mt-1">
-                                            <span>Rp {{ number_format($camp->collected_amount, 0, ',', '.') }}</span>
-                                            <span class="font-semibold text-emerald-600">{{ round($camp->progress_percentage) }}%</span>
-                                        </div>
-                                        <div class="flex gap-2 text-xs text-gray-400 mt-0.5">
-                                            <span>{{ $camp->donor_count }} Donasi</span>
-                                            <span>·</span>
-                                            <span>{{ $camp->days_remaining }} Hari lagi</span>
-                                        </div>
-                                    </div>
-                                    <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 capitalize">{{ $camp->status == 'approved' ? 'Aktif' : $camp->status }}</span>
-                                </div>
-                            @endforeach
+                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm min-h-[320px] flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-sm font-bold text-gray-800 uppercase tracking-wide">Kampanye Saya</h2>
+                            <a href="{{ route('campaigns.my') }}" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700">Lihat semua</a>
                         </div>
-                    @else
-                        <div class="text-center py-8">
-                            <div class="mx-auto w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-300 border border-gray-200 mb-3">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
-                                </svg>
+
+                        @if ($myCampaigns->count() > 0)
+                            <div class="space-y-5">
+                                @foreach ($myCampaigns as $camp)
+                                    <div class="flex gap-3">
+                                        <img src="{{ $camp->banner_image_url ?? 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' }}" alt="{{ $camp->title }}" class="w-14 h-14 rounded-lg object-cover shrink-0 bg-gray-100 border border-gray-200">
+                                        <div class="flex-1 min-w-0">
+                                            <h4 class="text-sm font-semibold text-gray-900 truncate">
+                                                <a href="{{ route('campaigns.show', $camp->slug) }}" class="hover:text-emerald-600">{{ $camp->title }}</a>
+                                            </h4>
+                                            <div class="w-full bg-gray-100 rounded-full h-1.5 mt-2 overflow-hidden">
+                                                <div class="bg-emerald-500 h-1.5 rounded-full" style="width: {{ $camp->progress_percentage }}%"></div>
+                                            </div>
+                                            <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                                <span>Rp {{ number_format($camp->collected_amount, 0, ',', '.') }}</span>
+                                                <span class="font-semibold text-emerald-600">{{ round($camp->progress_percentage) }}%</span>
+                                            </div>
+                                            <div class="flex gap-2 text-xs text-gray-400 mt-0.5">
+                                                <span>{{ $camp->donor_count }} Donasi</span>
+                                                <span>·</span>
+                                                <span>{{ $camp->days_remaining }} Hari lagi</span>
+                                            </div>
+                                        </div>
+                                        <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 capitalize shrink-0">{{ $camp->status == 'approved' ? 'Aktif' : $camp->status }}</span>
+                                    </div>
+                                @endforeach
                             </div>
-                            <p class="text-sm font-medium text-gray-700">Belum ada kampanye</p>
-                            <p class="text-xs text-gray-500 mt-1">Buat kampanye pertamamu dan mulailah menggalang dana.</p>
-                            <a href="{{ route('campaign.create') }}" class="mt-3 inline-block px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-sm font-semibold hover:bg-emerald-100 transition border border-emerald-200">Buat Kampanye</a>
+                        @else
+                            <div class="text-center py-4">
+                                <div class="mx-auto w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-300 border border-gray-200 mb-3">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
+                                    </svg>
+                                </div>
+                                <p class="text-sm font-medium text-gray-700">Belum ada kampanye</p>
+                                <p class="text-xs text-gray-500 mt-1">Buat kampanye pertamamu dan mulailah menggalang dana.</p>
+                            </div>
+                        @endif
+                    </div>
+                    @if ($myCampaigns->count() == 0)
+                        <div class="mt-2 text-center">
+                            <a href="{{ route('campaign.create') }}" class="w-full inline-block text-center px-4 py-2 bg-emerald-50 text-emerald-600 rounded-lg text-sm font-semibold hover:bg-emerald-100 transition border border-emerald-200">Buat Kampanye</a>
                         </div>
                     @endif
                 </div>
 
                 {{-- Saved Campaigns --}}
-                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-sm font-bold text-gray-800 uppercase tracking-wide">Disimpan</h2>
-                        <a href="#" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700">Lihat semua</a>
-                    </div>
-                    <div class="text-center py-8">
-                        <div class="mx-auto w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-300 border border-gray-200 mb-3">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                            </svg>
+                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm min-h-[320px] flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-sm font-bold text-gray-800 uppercase tracking-wide">Disimpan</h2>
+                            <a href="#" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700">Lihat semua</a>
                         </div>
-                        <p class="text-sm font-medium text-gray-700">Belum ada yang disimpan</p>
-                        <p class="text-xs text-gray-500 mt-1">Simpan kampanye favoritmu untuk dipantau nanti.</p>
-                        <a href="{{ url('/campaigns') }}" class="mt-3 inline-block px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-sm font-semibold hover:bg-emerald-100 transition border border-emerald-200">Jelajahi Kampanye</a>
+                        <div class="text-center py-4">
+                            <div class="mx-auto w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-300 border border-gray-200 mb-3">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                                </svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-700">Belum ada yang disimpan</p>
+                            <p class="text-xs text-gray-500 mt-1">Simpan kampanye favoritmu untuk dipantau nanti.</p>
+                        </div>
+                    </div>
+                    <div class="mt-2 text-center">
+                        <a href="{{ url('/campaigns') }}" class="w-full inline-block text-center px-4 py-2 bg-emerald-50 text-emerald-600 rounded-lg text-sm font-semibold hover:bg-emerald-100 transition border border-emerald-200">Jelajahi Kampanye</a>
                     </div>
                 </div>
             </div>
@@ -213,46 +204,52 @@
             {{-- Kolom 2: Donasi & Pengikut --}}
             <div class="space-y-8">
                 {{-- Donation History --}}
-                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-sm font-bold text-gray-800 uppercase tracking-wide">Riwayat Donasi</h2>
-                        <a href="{{ route('donations.history') }}" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700">Lihat semua</a>
-                    </div>
+                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm min-h-[320px] flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-sm font-bold text-gray-800 uppercase tracking-wide">Riwayat Donasi</h2>
+                            <a href="{{ route('donations.history') }}" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700">Lihat semua</a>
+                        </div>
 
-                    @if ($donationHistory->count() > 0)
-                        <div class="divide-y divide-gray-100">
-                            @foreach ($donationHistory as $donation)
-                                <div class="flex items-center justify-between py-3 first:pt-0 last:pb-0">
-                                    <div class="flex items-center gap-3 min-w-0">
-                                        <img src="{{ $donation->campaign->banner_image_url ?? 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80' }}" alt="" class="w-10 h-10 rounded-lg object-cover border border-gray-100">
-                                        <div class="min-w-0">
-                                            <p class="text-sm font-medium text-gray-900 truncate">{{ $donation->campaign->title }}</p>
-                                            <p class="text-xs text-gray-400">{{ $donation->paid_at ? $donation->paid_at->translatedFormat('d M Y') : $donation->created_at->translatedFormat('d M Y') }}</p>
+                        @if ($donationHistory->count() > 0)
+                            <div class="divide-y divide-gray-100">
+                                @foreach ($donationHistory as $donation)
+                                    <div class="flex items-center justify-between py-3 first:pt-0 last:pb-0">
+                                        <div class="flex items-center gap-3 min-w-0">
+                                            <img src="{{ $donation->campaign->banner_image_url ?? 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80' }}" alt="" class="w-10 h-10 rounded-lg object-cover border border-gray-100">
+                                            <div class="min-w-0">
+                                                <p class="text-sm font-medium text-gray-900 truncate">{{ $donation->campaign->title }}</p>
+                                                <p class="text-xs text-gray-400">{{ $donation->paid_at ? $donation->paid_at->translatedFormat('d M Y') : $donation->created_at->translatedFormat('d M Y') }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-sm font-semibold text-gray-900">Rp {{ number_format($donation->donation_amount, 0, ',', '.') }}</p>
+                                            <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 capitalize">{{ $donation->isPaid() ? 'Selesai' : $donation->payment_status }}</span>
                                         </div>
                                     </div>
-                                    <div class="text-right">
-                                        <p class="text-sm font-semibold text-gray-900">Rp {{ number_format($donation->donation_amount, 0, ',', '.') }}</p>
-                                        <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 capitalize">{{ $donation->isPaid() ? 'Selesai' : $donation->payment_status }}</span>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="text-center py-8">
-                            <div class="mx-auto w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-300 border border-gray-200 mb-3">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                                </svg>
+                                @endforeach
                             </div>
-                            <p class="text-sm font-medium text-gray-700">Belum ada donasi</p>
-                            <p class="text-xs text-gray-500 mt-1">Mulailah berdonasi untuk mendukung kampanye yang berarti.</p>
-                            <a href="{{ url('/campaigns') }}" class="mt-3 inline-block px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-sm font-semibold hover:bg-emerald-100 transition border border-emerald-200">Donasi Sekarang</a>
+                        @else
+                            <div class="text-center py-4">
+                                <div class="mx-auto w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-300 border border-gray-200 mb-3">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                                    </svg>
+                                </div>
+                                <p class="text-sm font-medium text-gray-700">Belum ada donasi</p>
+                                <p class="text-xs text-gray-500 mt-1">Mulailah berdonasi untuk mendukung kampanye yang berarti.</p>
+                            </div>
+                        @endif
+                    </div>
+                    @if ($donationHistory->count() == 0)
+                        <div class="mt-2 text-center">
+                            <a href="{{ url('/campaigns') }}" class="w-full inline-block text-center px-4 py-2 bg-emerald-50 text-emerald-600 rounded-lg text-sm font-semibold hover:bg-emerald-100 transition border border-emerald-200">Donasi Sekarang</a>
                         </div>
                     @endif
                 </div>
 
                 {{-- Followers & Following --}}
-                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm space-y-6">
+                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm min-h-[320px] flex flex-col justify-between space-y-6">
                     <div>
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wide">Followers</h3>
@@ -271,7 +268,7 @@
                             <p class="text-sm text-gray-400">Belum ada pengikut.</p>
                         @endif
                     </div>
-                    <div>
+                    <div class="pt-4 border-t border-gray-100 flex-1 flex flex-col justify-center">
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wide">Mengikuti</h3>
                             <a href="#" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700">Lihat semua</a>
@@ -295,84 +292,88 @@
             {{-- Kolom 3: Penarikan & Notifikasi --}}
             <div class="space-y-8">
                 {{-- Withdraw History --}}
-                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-sm font-bold text-gray-800 uppercase tracking-wide">Penarikan Dana</h2>
-                        <a href="{{ route('withdrawals.history') }}" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700">Lihat semua</a>
-                    </div>
+                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm min-h-[320px] flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-sm font-bold text-gray-800 uppercase tracking-wide">Penarikan Dana</h2>
+                            <a href="{{ route('withdrawals.history') }}" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700">Lihat semua</a>
+                        </div>
 
-                    @if ($withdrawals->count() > 0)
-                        <div class="divide-y divide-gray-100">
-                            @foreach ($withdrawals as $withdrawal)
-                                <div class="flex items-center justify-between py-3 first:pt-0 last:pb-0">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.683 0-5.302.22-7.858.647V21m16.5 0H3" />
-                                            </svg>
+                        @if ($withdrawals->count() > 0)
+                            <div class="divide-y divide-gray-100">
+                                @foreach ($withdrawals as $withdrawal)
+                                    <div class="flex items-center justify-between py-3 first:pt-0 last:pb-0">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.683 0-5.302.22-7.858.647V21m16.5 0H3" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-900">Ke {{ $withdrawal->bank_name }}</p>
+                                                <p class="text-xs text-gray-400">{{ $withdrawal->created_at->translatedFormat('d M Y') }}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-900">Ke {{ $withdrawal->bank_name }}</p>
-                                            <p class="text-xs text-gray-400">{{ $withdrawal->created_at->translatedFormat('d M Y') }}</p>
+                                        <div class="text-right">
+                                            <p class="text-sm font-semibold text-gray-900">Rp {{ number_format($withdrawal->amount, 0, ',', '.') }}</p>
+                                            <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 capitalize">{{ $withdrawal->status_label }}</span>
                                         </div>
                                     </div>
-                                    <div class="text-right">
-                                        <p class="text-sm font-semibold text-gray-900">Rp {{ number_format($withdrawal->amount, 0, ',', '.') }}</p>
-                                        <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 capitalize">{{ $withdrawal->status_label }}</span>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="text-center py-8">
-                            <div class="mx-auto w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-300 border border-gray-200 mb-3">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-1.972-.659-1.172-.879-1.172-2.303 0-3.182 1.171-.879 3.07-.879 4.242 0L15 8.25M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
+                                @endforeach
                             </div>
-                            <p class="text-sm font-medium text-gray-700">Belum ada penarikan</p>
-                            <p class="text-xs text-gray-500 mt-1">Dana yang berhasil dikumpulkan akan muncul di sini saat dicairkan.</p>
-                        </div>
-                    @endif
+                        @else
+                            <div class="text-center py-8">
+                                <div class="mx-auto w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-300 border border-gray-200 mb-3">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-1.972-.659-1.172-.879-1.172-2.303 0-3.182 1.171-.879 3.07-.879 4.242 0L15 8.25M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </div>
+                                <p class="text-sm font-medium text-gray-700">Belum ada penarikan</p>
+                                <p class="text-xs text-gray-500 mt-1">Dana yang berhasil dikumpulkan akan muncul di sini saat dicairkan.</p>
+                            </div>
+                        @endif
+                    </div>
                 </div>
 
                 {{-- Notifications --}}
-                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-sm font-bold text-gray-800 uppercase tracking-wide">Notifikasi</h2>
-                        <a href="{{ route('notifications.index') }}" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700">Lihat semua</a>
-                    </div>
+                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm min-h-[320px] flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-sm font-bold text-gray-800 uppercase tracking-wide">Notifikasi</h2>
+                            <a href="{{ route('notifications.index') }}" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700">Lihat semua</a>
+                        </div>
 
-                    @if ($notifications->count() > 0)
-                        <div class="divide-y divide-gray-100">
-                            @foreach ($notifications as $notification)
-                                <div class="flex items-start gap-3 py-3 first:pt-0 last:pb-0">
-                                    <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200 shrink-0">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
-                                        </svg>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm text-gray-700">{!! e($notification->data['message'] ?? 'Notifikasi baru') !!}</p>
-                                        <span class="text-xs text-gray-400">{{ $notification->created_at->diffForHumans() }}</span>
-                                    </div>
+                        @if ($notifications->count() > 0)
+                            <div class="divide-y divide-gray-100">
+                                @foreach ($notifications as $notification)
+                                    <div class="flex items-start gap-3 py-3 first:pt-0 last:pb-0">
+                                        <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200 shrink-0">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm text-gray-700">{!! e($notification->data['message'] ?? 'Notifikasi baru') !!}</p>
+                                            <span class="text-xs text-gray-400">{{ $notification->created_at->diffForHumans() }}</span>
+                                        </div>
                                     @if(is_null($notification->read_at))
-                                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" title="Belum dibaca"></span>
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="text-center py-8">
-                            <div class="mx-auto w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-300 border border-gray-200 mb-3">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
-                                </svg>
+                                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" title="Belum dibaca"></span>
+                                        @endif
+                                    </div>
+                                @endforeach
                             </div>
-                            <p class="text-sm font-medium text-gray-700">Tidak ada notifikasi</p>
-                            <p class="text-xs text-gray-500 mt-1">Semua aktivitas terbaru akan muncul di sini.</p>
-                        </div>
-                    @endif
+                        @else
+                            <div class="text-center py-8">
+                                <div class="mx-auto w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-300 border border-gray-200 mb-3">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                                    </svg>
+                                </div>
+                                <p class="text-sm font-medium text-gray-700">Tidak ada notifikasi</p>
+                                <p class="text-xs text-gray-500 mt-1">Semua aktivitas terbaru akan muncul di sini.</p>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
