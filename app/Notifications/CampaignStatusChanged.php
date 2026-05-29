@@ -18,7 +18,30 @@ class CampaignStatusChanged extends Notification implements ShouldQueue
 
     public function via($notifiable): array
     {
-        return ['database'];
+        $channels = ['database'];
+
+        $settings = $notifiable->getSettings();
+        if ($settings->notify_campaign_approved) {
+            $channels[] = 'mail';
+        }
+
+        return $channels;
+    }
+
+    public function toMail($notifiable)
+    {
+        $statusLabels = [
+            'approved' => 'Disetujui',
+            'rejected' => 'Ditolak',
+            'completed' => 'Selesai',
+        ];
+
+        return (new \Illuminate\Notifications\Messages\MailMessage)
+            ->subject('Status Kampanye Diperbarui - AutoPahala')
+            ->greeting('Halo ' . $notifiable->full_name . '!')
+            ->line('Kampanye "' . $this->campaign->title . '" telah ' . ($statusLabels[$this->newStatus] ?? 'diperbarui') . '.')
+            ->action('Lihat Kampanye', url('/campaigns/' . $this->campaign->slug))
+            ->line('Terima kasih telah menggunakan AutoPahala.');
     }
 
     public function toArray($notifiable): array

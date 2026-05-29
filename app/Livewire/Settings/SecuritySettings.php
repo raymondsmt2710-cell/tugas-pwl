@@ -36,8 +36,18 @@ class SecuritySettings extends Component
 
     public function sendResetLink(): void
     {
-        Password::sendResetLink(['email' => auth()->user()->email]);
-        $this->resetSent = true;
+        $email = auth()->user()->email;
+
+        // Send reset link
+        Password::sendResetLink(['email' => $email]);
+
+        // Logout so user can access the reset password page from email
+        auth()->guard('web')->logout();
+        session()->invalidate();
+        session()->regenerateToken();
+
+        session()->flash('status', 'Link reset password telah dikirim ke ' . $email . '. Silakan cek email Anda.');
+        $this->redirect('/login');
     }
 
     public function render()
