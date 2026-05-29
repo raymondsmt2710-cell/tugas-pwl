@@ -64,6 +64,11 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
+    // Settings
+    Route::get('/settings', function () {
+        return view('settings');
+    })->name('settings');
+
     // Campaign Management
     Route::get('/my-campaigns', [CampaignController::class, 'myCampaigns'])->name('campaigns.my');
     Route::get('/campaigns/create', [CampaignController::class, 'create'])->name('campaign.create');

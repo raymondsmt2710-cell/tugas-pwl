@@ -10,6 +10,15 @@ class ProfileController extends Controller
     public function show($username)
     {
         $user = User::where('username', $username)->firstOrFail();
+        $settings = $user->getSettings();
+
+        // Determine if the viewer is the profile owner
+        $isOwner = auth()->check() && auth()->user()->id_user === $user->id_user;
+
+        // If profile is private and viewer is not the owner, show private page
+        if (!$settings->show_profile_publicly && !$isOwner) {
+            return view('profile.private', ['user' => $user]);
+        }
 
         // Get user's approved/active campaigns
         $campaigns = $user->campaigns()
@@ -18,12 +27,7 @@ class ProfileController extends Controller
             ->latest()
             ->get();
 
-        // Determine if the viewer is the profile owner
-        $isOwner = auth()->check() && auth()->user()->id_user === $user->id_user;
-
-        // Get donations:
-        // - Owner sees ALL their donations (including anonymous, all statuses)
-        // - Public visitors only see paid, non-anonymous donations
+        // Get donations
         $donationsQuery = $user->donations()
             ->with('campaign')
             ->latest()
@@ -39,8 +43,11 @@ class ProfileController extends Controller
         // Stats
         $totalDonationsReceived = $user->campaigns()->sum('collected_amount');
         $campaignCount = $user->campaigns()->count();
-        $followersCount = $user->followers()->count();
-        $followingCount = $user->following()->count();
+
+        // Respect privacy settings for follower/following counts
+        $followersCount = $settings->show_followers_count || $isOwner ? $user->followers()->count() : null;
+        $followingCount = $settings->show_following_count || $isOwner ? $user->following()->count() : null;
+
         $isFollowing = auth()->check() ? auth()->user()->isFollowing($user) : false;
 
         return view('profile.public-show', [
