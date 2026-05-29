@@ -59,9 +59,9 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    // Dashboard - redirect to home
+    // Dashboard
     Route::get('/dashboard', function () {
-        return redirect('/');
+        return view('dashboard');
     })->name('dashboard');
 
     // Campaign Management

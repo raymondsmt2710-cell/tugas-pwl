@@ -226,6 +226,14 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     }
 
     /**
+     * Get withdrawals requested by this user.
+     */
+    public function withdrawals(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Withdrawal::class, 'id_user', 'id_user');
+    }
+
+    /**
      * Users that this user is following.
      */
     public function following(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
