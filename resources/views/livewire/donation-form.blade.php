@@ -56,4 +56,36 @@
             </button>
         </div>
     </form>
+
+    {{-- Midtrans Snap.js --}}
+    <script src="{{ $snapJsUrl }}" data-client-key="{{ $clientKey }}"></script>
+
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+            Livewire.on('open-snap', (params) => {
+                const token = params.token || (params[0] && params[0].token);
+                const orderId = params.orderId || (params[0] && params[0].orderId);
+
+                if (!token) {
+                    console.error('Snap token not received');
+                    return;
+                }
+
+                window.snap.pay(token, {
+                    onSuccess: function(result) {
+                        window.location.href = '/donations/' + orderId + '/finish';
+                    },
+                    onPending: function(result) {
+                        window.location.href = '/donations/' + orderId + '/finish';
+                    },
+                    onError: function(result) {
+                        window.location.href = '/donations/' + orderId + '/finish';
+                    },
+                    onClose: function() {
+                        // User closed popup
+                    }
+                });
+            });
+        });
+    </script>
 </div>

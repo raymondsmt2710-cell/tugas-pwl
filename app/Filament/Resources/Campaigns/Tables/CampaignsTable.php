@@ -56,7 +56,9 @@ class CampaignsTable
                         'approved' => 'success',
                         'pending' => 'warning',
                         'rejected' => 'danger',
-                        'completed' => 'info',
+                        'goal_reached' => 'info',
+                        'closed' => 'gray',
+                        'archived' => 'gray',
                         default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
@@ -64,7 +66,9 @@ class CampaignsTable
                         'pending' => 'Menunggu Review',
                         'approved' => 'Aktif',
                         'rejected' => 'Ditolak',
-                        'completed' => 'Selesai',
+                        'goal_reached' => '🏆 Goal Reached',
+                        'closed' => 'Ditutup',
+                        'archived' => 'Diarsipkan',
                         default => $state,
                     })
                     ->sortable(),
@@ -85,9 +89,11 @@ class CampaignsTable
                     ->options([
                         'draft' => 'Draft',
                         'pending' => 'Menunggu Review',
-                        'approved' => 'Disetujui / Aktif',
+                        'approved' => 'Aktif',
+                        'goal_reached' => 'Goal Reached',
+                        'closed' => 'Ditutup',
                         'rejected' => 'Ditolak',
-                        'completed' => 'Selesai',
+                        'archived' => 'Diarsipkan',
                     ]),
             ])
             ->recordActions([
@@ -131,22 +137,55 @@ class CampaignsTable
                             ->send();
                     }),
 
-                // Complete Action
-                Action::make('complete')
-                    ->label('Selesaikan')
-                    ->icon('heroicon-o-flag')
-                    ->color('info')
+                // Close Action (admin direct close or approve close request)
+                Action::make('close')
+                    ->label(fn (Campaign $record): string => $record->campaign_status === 'pending_close' ? 'Setujui Tutup' : 'Tutup')
+                    ->icon('heroicon-o-lock-closed')
+                    ->color('warning')
                     ->requiresConfirmation()
-                    ->modalHeading('Selesaikan Kampanye')
-                    ->modalDescription(fn (Campaign $record): string => "Tandai kampanye \"{$record->title}\" sebagai selesai? Kampanye tidak akan menerima donasi lagi.")
-                    ->modalSubmitActionLabel('Ya, Selesaikan')
-                    ->visible(fn (Campaign $record): bool => $record->status === 'approved' && auth()->user()->isAdmin())
+                    ->modalHeading('Tutup Kampanye')
+                    ->modalDescription(fn (Campaign $record): string => $record->campaign_status === 'pending_close'
+                        ? "Penggalang dana mengajukan penutupan kampanye \"{$record->title}\". Setujui?"
+                        : "Tutup kampanye \"{$record->title}\"? Kampanye tidak akan menerima donasi lagi.")
+                    ->modalSubmitActionLabel('Ya, Tutup')
+                    ->visible(fn (Campaign $record): bool => (in_array($record->status, ['approved', 'goal_reached']) || $record->campaign_status === 'pending_close') && auth()->user()->isAdmin())
                     ->action(function (Campaign $record): void {
-                        app(CampaignService::class)->complete($record);
+                        app(CampaignService::class)->close($record);
 
                         \Filament\Notifications\Notification::make()
-                            ->title('Kampanye Diselesaikan')
-                            ->body("Kampanye \"{$record->title}\" telah ditandai selesai.")
+                            ->title('Kampanye Ditutup')
+                            ->success()
+                            ->send();
+                    }),
+
+                // Reopen Action
+                Action::make('reopen')
+                    ->label('Buka Kembali')
+                    ->icon('heroicon-o-lock-open')
+                    ->color('info')
+                    ->requiresConfirmation()
+                    ->visible(fn (Campaign $record): bool => $record->status === 'closed' && auth()->user()->isAdmin())
+                    ->action(function (Campaign $record): void {
+                        app(CampaignService::class)->reopen($record);
+
+                        \Filament\Notifications\Notification::make()
+                            ->title('Kampanye Dibuka Kembali')
+                            ->success()
+                            ->send();
+                    }),
+
+                // Archive Action
+                Action::make('archive')
+                    ->label('Arsipkan')
+                    ->icon('heroicon-o-archive-box')
+                    ->color('gray')
+                    ->requiresConfirmation()
+                    ->visible(fn (Campaign $record): bool => $record->status === 'closed' && auth()->user()->isAdmin())
+                    ->action(function (Campaign $record): void {
+                        app(CampaignService::class)->archive($record);
+
+                        \Filament\Notifications\Notification::make()
+                            ->title('Kampanye Diarsipkan')
                             ->info()
                             ->send();
                     }),

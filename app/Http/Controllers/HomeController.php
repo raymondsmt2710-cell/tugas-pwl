@@ -14,7 +14,7 @@ class HomeController extends Controller
         $categories = Category::all();
 
         // Stats
-        $totalCampaigns = Campaign::where('status', 'approved')->count();
+        $totalCampaigns = Campaign::whereIn('status', ['approved', 'goal_reached'])->count();
         $totalDonors = Donation::where('payment_status', 'paid')->distinct('donor_email')->count('donor_email');
         $totalRaised = Donation::where('payment_status', 'paid')->sum('donation_amount');
 

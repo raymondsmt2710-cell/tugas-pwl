@@ -70,21 +70,18 @@ Route::middleware([
     })->name('settings');
 
     // Campaign Management
-    Route::get('/my-campaigns', [CampaignController::class, 'myCampaigns'])->name('campaigns.my');
     Route::get('/campaigns/create', [CampaignController::class, 'create'])->name('campaign.create');
     Route::post('/campaigns', [CampaignController::class, 'store'])->name('campaign.store');
     Route::get('/campaigns/{campaign}/edit', [CampaignController::class, 'edit'])->name('campaign.edit');
     Route::put('/campaigns/{campaign}', [CampaignController::class, 'update'])->name('campaign.update');
     Route::delete('/campaigns/{campaign}', [CampaignController::class, 'destroy'])->name('campaign.destroy');
     Route::post('/campaigns/{campaign}/submit', [CampaignController::class, 'submit'])->name('campaign.submit');
-
-    // Donation History (authenticated)
-    Route::get('/my-donations', [DonationController::class, 'history'])->name('donations.history');
+    Route::post('/campaigns/{campaign}/close', [CampaignController::class, 'close'])->name('campaign.close');
+    Route::post('/campaigns/{campaign}/cancel-close', [CampaignController::class, 'cancelClose'])->name('campaign.cancel-close');
 
     // Withdrawal Management
     Route::get('/withdrawals/create', [\App\Http\Controllers\WithdrawalController::class, 'create'])->name('withdrawals.create');
     Route::post('/withdrawals', [\App\Http\Controllers\WithdrawalController::class, 'store'])->name('withdrawals.store');
-    Route::get('/withdrawals/history', [\App\Http\Controllers\WithdrawalController::class, 'history'])->name('withdrawals.history');
     Route::post('/withdrawals/{withdrawal}/cancel', [\App\Http\Controllers\WithdrawalController::class, 'cancel'])->name('withdrawals.cancel');
 
     // Notifications
@@ -106,6 +103,7 @@ Route::middleware([
 Route::get('/campaigns/{slug}/donate', [DonationController::class, 'create'])->name('donation.create');
 Route::post('/campaigns/{slug}/donate', [DonationController::class, 'store'])->name('donation.store');
 Route::get('/campaigns/{slug}/donors', [DonationController::class, 'donors'])->name('donation.donors');
+Route::get('/campaigns/{slug}/withdrawals', [\App\Http\Controllers\CampaignWithdrawalController::class, 'index'])->name('campaign.withdrawals');
 Route::get('/donations/{orderId}/finish', [DonationController::class, 'finish'])->name('donation.finish');
 Route::get('/donations/{orderId}/track', [DonationController::class, 'track'])->name('donation.track');
 

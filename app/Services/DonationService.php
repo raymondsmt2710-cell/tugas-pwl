@@ -245,6 +245,14 @@ class DonationService
             'available_balance' => $campaign->collected_amount - $campaign->withdrawal_amount,
         ]);
 
+        // Check if goal reached for the first time
+        if ($campaign->hasReachedGoal() && !$campaign->goal_reached_at) {
+            $campaign->update([
+                'status' => 'goal_reached',
+                'goal_reached_at' => now(),
+            ]);
+        }
+
         // Notify campaign owner
         $campaign->user->notify(new \App\Notifications\DonationReceived($donation));
 
