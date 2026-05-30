@@ -9,7 +9,7 @@ class FeaturedCampaigns extends Component
 {
     public function render()
     {
-        $campaigns = Campaign::where('status', 'approved')
+        $campaigns = Campaign::whereIn('status', ['approved', 'goal_reached'])
             ->where('end_date', '>', now())
             ->with(['category', 'user'])
             ->latest()

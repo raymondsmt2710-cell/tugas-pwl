@@ -192,17 +192,75 @@ class CampaignService
     }
 
     /**
-     * Mark a campaign as completed.
+     * Mark a campaign as completed (closed).
      */
     public function complete(Campaign $campaign): Campaign
     {
         $campaign->update([
-            'status' => 'completed',
-            'campaign_status' => 'finished',
-            'verification_status' => 'active',
+            'status' => 'closed',
+            'campaign_status' => 'closed',
+            'closed_at' => now(),
+            'closed_by' => auth()->user()?->id_user,
         ]);
 
-        $campaign->user->notify(new \App\Notifications\CampaignStatusChanged($campaign, 'completed'));
+        $campaign->user->notify(new \App\Notifications\CampaignStatusChanged($campaign, 'closed'));
+
+        return $campaign->fresh();
+    }
+
+    /**
+     * Close a campaign (creator or admin action).
+     */
+    public function close(Campaign $campaign, ?int $closedBy = null): Campaign
+    {
+        $campaign->update([
+            'status' => 'closed',
+            'campaign_status' => 'closed',
+            'closed_at' => now(),
+            'closed_by' => $closedBy ?? auth()->user()?->id_user,
+        ]);
+
+        return $campaign->fresh();
+    }
+
+    /**
+     * Request campaign closure (creator action — needs admin approval).
+     */
+    public function requestClose(Campaign $campaign): Campaign
+    {
+        $campaign->update([
+            'campaign_status' => 'pending_close',
+        ]);
+
+        return $campaign->fresh();
+    }
+
+    /**
+     * Reopen a closed campaign (admin action).
+     */
+    public function reopen(Campaign $campaign): Campaign
+    {
+        $previousStatus = $campaign->hasReachedGoal() ? 'goal_reached' : 'approved';
+
+        $campaign->update([
+            'status' => $previousStatus,
+            'campaign_status' => 'active',
+            'closed_at' => null,
+            'closed_by' => null,
+        ]);
+
+        return $campaign->fresh();
+    }
+
+    /**
+     * Archive a campaign (admin action).
+     */
+    public function archive(Campaign $campaign): Campaign
+    {
+        $campaign->update([
+            'status' => 'archived',
+            'campaign_status' => 'closed',
+        ]);
 
         return $campaign->fresh();
     }

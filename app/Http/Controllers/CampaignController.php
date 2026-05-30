@@ -154,4 +154,32 @@ class CampaignController extends Controller
         return redirect()->route('campaigns.my')
             ->with('success', 'Kampanye berhasil diajukan untuk review. Menunggu persetujuan admin.');
     }
+
+    /**
+     * Request campaign closure (creator action — needs admin approval).
+     */
+    public function close(Campaign $campaign)
+    {
+        if ($campaign->id_user !== auth()->user()->id_user) {
+            abort(403);
+        }
+
+        $this->campaignService->requestClose($campaign);
+
+        return back()->with('success', 'Permintaan penutupan kampanye telah diajukan. Menunggu persetujuan admin.');
+    }
+
+    /**
+     * Cancel close request (creator action).
+     */
+    public function cancelClose(Campaign $campaign)
+    {
+        if ($campaign->id_user !== auth()->user()->id_user) {
+            abort(403);
+        }
+
+        $campaign->update(['campaign_status' => 'active']);
+
+        return back()->with('success', 'Permintaan penutupan dibatalkan.');
+    }
 }

@@ -72,6 +72,11 @@
                             <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">
                                 {{ $campaign->category->name ?? 'Umum' }}
                             </span>
+                            @if($campaign->isGoalReached() || $campaign->hasReachedGoal())
+                                <span class="text-xs font-medium text-green-700 bg-green-100 px-2.5 py-1 rounded-full">
+                                    🏆 Goal Reached
+                                </span>
+                            @endif
                             <span class="text-xs text-gray-400">•</span>
                             <span class="text-xs text-gray-500">{{ $campaign->created_at->format('d M Y') }}</span>
                         </div>
@@ -121,6 +126,56 @@
                             </div>
                         @endif
                     </div>
+
+                    {{-- Financial Summary --}}
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                        <h2 class="text-lg font-semibold text-gray-900 mb-4">Ringkasan Keuangan</h2>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="bg-gray-50 rounded-lg p-3 text-center">
+                                <p class="text-xs text-gray-500">Target</p>
+                                <p class="text-sm font-bold text-gray-900">Rp {{ number_format($campaign->target_amount, 0, ',', '.') }}</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-3 text-center">
+                                <p class="text-xs text-gray-500">Terkumpul</p>
+                                <p class="text-sm font-bold text-green-600">Rp {{ number_format($campaign->collected_amount, 0, ',', '.') }}</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-3 text-center">
+                                <p class="text-xs text-gray-500">Ditarik</p>
+                                <p class="text-sm font-bold text-gray-900">Rp {{ number_format($campaign->withdrawal_amount, 0, ',', '.') }}</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-3 text-center">
+                                <p class="text-xs text-gray-500">Sisa Saldo</p>
+                                <p class="text-sm font-bold text-gray-900">Rp {{ number_format($campaign->available_balance, 0, ',', '.') }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Withdrawal History Preview --}}
+                    @php
+                        $recentWithdrawals = $campaign->withdrawals ?? \App\Models\Withdrawal::forCampaign($campaign->id_campaign)->where('status', 'paid')->latest('paid_at')->take(3)->get();
+                    @endphp
+                    @if($recentWithdrawals->count() > 0)
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="text-lg font-semibold text-gray-900">Riwayat Penarikan</h2>
+                                <a href="{{ route('campaign.withdrawals', $campaign->slug) }}" class="text-xs font-medium text-indigo-600 hover:text-indigo-800">Lihat Semua →</a>
+                            </div>
+                            <div class="space-y-3">
+                                @foreach($recentWithdrawals as $w)
+                                    <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900">Rp {{ number_format($w->amount, 0, ',', '.') }}</p>
+                                            <p class="text-xs text-gray-500">{{ $w->paid_at?->format('d M Y') ?? $w->created_at->format('d M Y') }}</p>
+                                            @if($w->notes)
+                                                <p class="text-xs text-gray-400 mt-0.5">{{ $w->notes }}</p>
+                                            @endif
+                                        </div>
+                                        <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-green-50 text-green-700">Dibayar</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
                 {{-- Sidebar --}}
@@ -169,15 +224,15 @@
 
                         {{-- Campaign Info --}}
                         <div class="mt-5 pt-5 border-t border-gray-100 space-y-3">
-                            <div class="flex items-center gap-3">
+                            <a href="{{ url('/@' . $campaign->user->username) }}" class="flex items-center gap-3 hover:bg-gray-50 -mx-2 px-2 py-1 rounded-lg transition">
                                 <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
                                     <img src="{{ $campaign->user->profile_photo_url }}" alt="{{ $campaign->user->full_name }}" class="w-full h-full object-cover">
                                 </div>
                                 <div>
-                                    <p class="text-sm font-medium text-gray-900">{{ $campaign->user->full_name }}</p>
+                                    <p class="text-sm font-medium text-gray-900 hover:text-indigo-600">{{ $campaign->user->full_name }}</p>
                                     <p class="text-xs text-gray-500">Penggalang Dana</p>
                                 </div>
-                            </div>
+                            </a>
                             <div class="flex items-center gap-2 text-xs text-gray-500">
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/>

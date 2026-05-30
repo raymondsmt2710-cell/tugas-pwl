@@ -34,6 +34,9 @@ class Campaign extends Model
         'status',
         'start_date',
         'end_date',
+        'goal_reached_at',
+        'closed_at',
+        'closed_by',
     ];
 
     protected $casts = [
@@ -44,6 +47,8 @@ class Campaign extends Model
         'available_balance' => 'decimal:2',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
+        'goal_reached_at' => 'datetime',
+        'closed_at' => 'datetime',
     ];
 
     /*
@@ -90,7 +95,8 @@ class Campaign extends Model
             return 0;
         }
 
-        return min(100, ($this->collected_amount / $this->target_amount) * 100);
+        // Do NOT cap at 100% — allow overfunding display
+        return ($this->collected_amount / $this->target_amount) * 100;
     }
 
     public function getBannerImageUrlAttribute(): ?string
@@ -133,19 +139,33 @@ class Campaign extends Model
         return $this->status === 'approved';
     }
 
+    public function isGoalReached(): bool
+    {
+        return $this->status === 'goal_reached';
+    }
+
+    public function isClosed(): bool
+    {
+        return $this->status === 'closed';
+    }
+
     public function isRejected(): bool
     {
         return $this->status === 'rejected';
     }
 
+    public function isArchived(): bool
+    {
+        return $this->status === 'archived';
+    }
+
     public function isCompleted(): bool
     {
-        return $this->status === 'completed';
+        return in_array($this->status, ['closed', 'archived']);
     }
 
     /**
      * Check if the campaign is editable by its owner.
-     * Only draft and rejected campaigns can be edited.
      */
     public function isEditable(): bool
     {
@@ -154,7 +174,6 @@ class Campaign extends Model
 
     /**
      * Check if the campaign is deletable by its owner.
-     * Only draft and rejected campaigns can be deleted.
      */
     public function isDeletable(): bool
     {
@@ -163,12 +182,21 @@ class Campaign extends Model
 
     /**
      * Check if the campaign can accept donations.
+     * Approved and Goal Reached campaigns can still receive donations.
+     * Only Closed/Rejected/Archived/Draft/Pending cannot.
      */
     public function canAcceptDonations(): bool
     {
-        return $this->status === 'approved'
-            && $this->end_date->isFuture()
-            && $this->collected_amount < $this->target_amount;
+        return in_array($this->status, ['approved', 'goal_reached'])
+            && $this->end_date->isFuture();
+    }
+
+    /**
+     * Check if goal has been reached (amount >= target).
+     */
+    public function hasReachedGoal(): bool
+    {
+        return $this->collected_amount >= $this->target_amount;
     }
 
     /*
@@ -179,7 +207,7 @@ class Campaign extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('status', 'approved')
+        return $query->whereIn('status', ['approved', 'goal_reached'])
                      ->where('end_date', '>', now());
     }
 
@@ -190,7 +218,7 @@ class Campaign extends Model
 
     public function scopeApproved($query)
     {
-        return $query->where('status', 'approved');
+        return $query->whereIn('status', ['approved', 'goal_reached']);
     }
 
     public function scopePending($query)

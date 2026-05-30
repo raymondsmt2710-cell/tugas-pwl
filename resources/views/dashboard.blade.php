@@ -325,6 +325,19 @@
                                                 @csrf
                                                 <button class="w-full py-1.5 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700">Ajukan</button>
                                             </form>
+                                        @elseif(in_array($c->status, ['approved', 'goal_reached']))
+                                            <a href="{{ route('campaigns.show', $c->slug) }}" class="flex-1 py-1.5 border border-gray-300 text-gray-700 rounded-lg text-center font-semibold hover:bg-white">Lihat</a>
+                                            @if($c->campaign_status !== 'pending_close')
+                                                <form action="{{ route('campaign.close', $c->id_campaign) }}" method="POST" class="flex-1" onsubmit="return confirm('Ajukan penutupan kampanye? Admin akan meninjau permintaan Anda.')">
+                                                    @csrf
+                                                    <button class="w-full py-1.5 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600">Ajukan Tutup</button>
+                                                </form>
+                                            @else
+                                                <form action="{{ route('campaign.cancel-close', $c->id_campaign) }}" method="POST" class="flex-1" onsubmit="return confirm('Batalkan permintaan penutupan?')">
+                                                    @csrf
+                                                    <button class="w-full py-1.5 bg-gray-500 text-white rounded-lg font-semibold hover:bg-gray-600">Batalkan Tutup</button>
+                                                </form>
+                                            @endif
                                         @else
                                             <a href="{{ route('campaigns.show', $c->slug) }}" class="w-full py-1.5 border border-gray-300 text-gray-700 rounded-lg text-center font-semibold hover:bg-white">Lihat</a>
                                         @endif

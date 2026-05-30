@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Campaign;
 use App\Services\DonationService;
+use App\Services\MidtransService;
 use Livewire\Component;
 
 class DonationForm extends Component
@@ -14,6 +15,10 @@ class DonationForm extends Component
     public string $donor_email = '';
     public string $donor_message = '';
     public bool $is_anonymous = false;
+
+    // Snap token for popup
+    public ?string $snapToken = null;
+    public ?string $orderId = null;
 
     public function mount(string $slug): void
     {
@@ -45,20 +50,33 @@ class DonationForm extends Component
     {
         $this->validate();
 
-        $service = app(DonationService::class);
-        $result = $service->createDonation($this->campaign, [
-            'donation_amount' => $this->donation_amount,
-            'donor_name' => $this->donor_name,
-            'donor_email' => $this->donor_email,
-            'donor_message' => $this->donor_message,
-            'is_anonymous' => $this->is_anonymous,
-        ], auth()->user());
+        try {
+            $service = app(DonationService::class);
+            $result = $service->createDonation($this->campaign, [
+                'donation_amount' => $this->donation_amount,
+                'donor_name' => $this->donor_name,
+                'donor_email' => $this->donor_email,
+                'donor_message' => $this->donor_message,
+                'is_anonymous' => $this->is_anonymous,
+            ], auth()->user());
 
-        $this->redirect($result['redirect_url']);
+            $this->snapToken = $result['snap_token'];
+            $this->orderId = $result['donation']->order_id;
+
+            // Dispatch browser event to trigger Snap popup
+            $this->dispatch('open-snap', token: $this->snapToken, orderId: $this->orderId);
+        } catch (\Exception $e) {
+            $this->addError('donation_amount', 'Gagal memproses pembayaran: ' . $e->getMessage());
+        }
     }
 
     public function render()
     {
-        return view('livewire.donation-form');
+        $midtrans = app(MidtransService::class);
+
+        return view('livewire.donation-form', [
+            'snapJsUrl' => $midtrans->getSnapJsUrl(),
+            'clientKey' => $midtrans->getClientKey(),
+        ]);
     }
 }
