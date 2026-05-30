@@ -20,6 +20,9 @@ class UpdateProfileInformationForm extends JetstreamUpdateProfileInformationForm
     {
         parent::mount();
 
+        $this->state['name'] = $this->user->name;
+        $this->state['location'] = $this->user->location;
+
         if (empty($this->state['social_links'])) {
             $this->state['social_links'] = [
                 'twitter' => '',
