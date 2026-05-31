@@ -17,18 +17,18 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update(User $user, array $input): void
     {
-        Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'alpha_dash', 'max:255', Rule::unique('users', 'username')->ignore($user->getKey(), 'id_user')],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->getKey(), 'id_user')],
+        $input = Validator::make($input, [
+            'name' => ['sometimes', 'required', 'string', 'max:255'],
+            'username' => ['sometimes', 'required', 'string', 'alpha_dash', 'max:255', Rule::unique('users', 'username')->ignore($user->getKey(), 'id_user')],
+            'email' => ['sometimes', 'required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->getKey(), 'id_user')],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
             'cover_photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:2048'],
-            'bio' => ['nullable', 'string', 'max:1000'],
-            'location' => ['nullable', 'string', 'max:255'],
-            'social_links' => ['nullable', 'array'],
-            'social_links.twitter' => ['nullable', 'string', 'max:255'],
-            'social_links.facebook' => ['nullable', 'string', 'max:255'],
-            'social_links.instagram' => ['nullable', 'string', 'max:255'],
+            'bio' => ['sometimes', 'nullable', 'string', 'max:1000'],
+            'location' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'social_links' => ['sometimes', 'nullable', 'array'],
+            'social_links.twitter' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'social_links.facebook' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'social_links.instagram' => ['sometimes', 'nullable', 'string', 'max:255'],
         ])->validateWithBag('updateProfileInformation');
 
         if (isset($input['photo'])) {
@@ -39,17 +39,19 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $user->updateCoverPhoto($input['cover_photo']);
         }
 
-        if ($input['email'] !== $user->email &&
+        $email = $input['email'] ?? $user->email;
+
+        if ($email !== $user->email &&
             $user instanceof MustVerifyEmail) {
             $this->updateVerifiedUser($user, $input);
         } else {
             $user->forceFill([
-                'name' => $input['name'],
-                'username' => $input['username'],
-                'email' => $input['email'],
-                'bio' => $input['bio'] ?? null,
-                'location' => $input['location'] ?? null,
-                'social_links' => $input['social_links'] ?? null,
+                'name' => $input['name'] ?? $user->name,
+                'username' => $input['username'] ?? $user->username,
+                'email' => $email,
+                'bio' => $input['bio'] ?? $user->bio,
+                'location' => $input['location'] ?? $user->location,
+                'social_links' => array_key_exists('social_links', $input) ? $input['social_links'] : $user->social_links,
             ])->save();
         }
     }
@@ -62,12 +64,12 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     protected function updateVerifiedUser(User $user, array $input): void
     {
         $user->forceFill([
-            'name' => $input['name'],
-            'email' => $input['email'],
+            'name' => $input['name'] ?? $user->name,
+            'email' => $input['email'] ?? $user->email,
             'email_verified_at' => null,
-            'bio' => $input['bio'] ?? null,
-            'location' => $input['location'] ?? null,
-            'social_links' => $input['social_links'] ?? null,
+            'bio' => $input['bio'] ?? $user->bio,
+            'location' => $input['location'] ?? $user->location,
+            'social_links' => array_key_exists('social_links', $input) ? $input['social_links'] : $user->social_links,
         ])->save();
 
         $user->sendEmailVerificationNotification();
