@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
@@ -9,16 +11,33 @@ class NotificationBell extends Component
 {
     public bool $showDropdown = false;
 
+    private function user(): ?User
+    {
+        return Auth::user();
+    }
+
     #[Computed]
     public function unreadCount(): int
     {
-        return auth()->user()->unreadNotifications()->count();
+        $user = $this->user();
+
+        if (! $user) {
+            return 0;
+        }
+
+        return $user->unreadNotifications()->count();
     }
 
     #[Computed]
     public function notifications()
     {
-        return auth()->user()->notifications()->take(5)->get();
+        $user = $this->user();
+
+        if (! $user) {
+            return collect();
+        }
+
+        return $user->notifications()->take(5)->get();
     }
 
     public function toggleDropdown(): void
@@ -28,16 +47,27 @@ class NotificationBell extends Component
 
     public function markAsRead(string $id): void
     {
-        $notification = auth()->user()->notifications()->find($id);
+        $user = $this->user();
+        if (! $user) {
+            return;
+        }
+
+        $notification = $user->notifications()->find($id);
         if ($notification) {
             $notification->markAsRead();
         }
+
         $this->redirect(url('/notifications'));
     }
 
     public function markAllAsRead(): void
     {
-        auth()->user()->unreadNotifications->markAsRead();
+        $user = $this->user();
+        if (! $user) {
+            return;
+        }
+
+        $user->unreadNotifications->markAsRead();
         $this->showDropdown = false;
     }
 
