@@ -343,7 +343,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
      * Get the profile photo URL, falling back to OAuth avatar.
      */
     public function getProfilePhotoUrlAttribute(): string
-    {
+    {   
         if ($this->profile_photo) {
             return \Illuminate\Support\Facades\Storage::disk($this->profilePhotoDisk())->url($this->profile_photo);
         }

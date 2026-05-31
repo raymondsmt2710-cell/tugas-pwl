@@ -147,6 +147,13 @@
             </div>
         </div>
 
+        <!-- Email Verification Alert (only for profile owner) -->
+        @if($isOwner)
+            <div class="profile-content">
+                <x-email-verification-alert />
+            </div>
+        @endif
+
         <!-- Content -->
         <div class="profile-content">
             <!-- Sidebar -->
