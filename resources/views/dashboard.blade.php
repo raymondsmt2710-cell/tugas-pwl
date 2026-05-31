@@ -202,6 +202,9 @@
                     </div>
                 @endif
 
+                {{-- Email Verification Alert --}}
+                <x-email-verification-alert />
+
                 {{-- TAB: OVERVIEW --}}
                 <div x-show="activeTab === 'overview'" class="space-y-6">
                     <!-- Welcome -->

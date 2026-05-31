@@ -38,6 +38,9 @@
                 </div>
             </div>
 
+            {{-- Email Verification Alert --}}
+            <x-email-verification-alert />
+
             {{-- Tab: Riwayat Donasi --}}
             <div id="tab-donations" class="profile-tab-content">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
