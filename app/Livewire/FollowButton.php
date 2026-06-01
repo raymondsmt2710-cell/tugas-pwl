@@ -34,6 +34,8 @@ class FollowButton extends Component
             $this->isFollowing = true;
             $this->followersCount++;
         }
+
+        $this->dispatch('followUpdated', followersCount: $this->followersCount, isFollowing: $this->isFollowing);
     }
 
     public function render()

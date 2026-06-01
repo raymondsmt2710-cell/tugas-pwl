@@ -27,19 +27,6 @@ class ProfileController extends Controller
             ->latest()
             ->get();
 
-        // Get donations
-        $donationsQuery = $user->donations()
-            ->with('campaign')
-            ->latest()
-            ->take(10);
-
-        if (!$isOwner) {
-            $donationsQuery->where('payment_status', 'paid')
-                ->where('is_anonymous', false);
-        }
-
-        $donations = $donationsQuery->get();
-
         // Stats
         $totalDonationsReceived = $user->campaigns()->sum('collected_amount');
         $campaignCount = $user->campaigns()->count();
@@ -53,13 +40,13 @@ class ProfileController extends Controller
         return view('profile.public-show', [
             'user' => $user,
             'campaigns' => $campaigns,
-            'donations' => $donations,
             'totalDonationsReceived' => $totalDonationsReceived,
             'campaignCount' => $campaignCount,
             'followersCount' => $followersCount,
             'followingCount' => $followingCount,
             'isFollowing' => $isFollowing,
             'isOwner' => $isOwner,
+            'settings' => $settings,
         ]);
     }
 }
