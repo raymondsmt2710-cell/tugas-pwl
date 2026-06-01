@@ -86,7 +86,7 @@ class Campaign extends Model
 
     public function comments() { return $this->morphMany(Comment::class, 'commentable'); }
     public function likes() { return $this->morphMany(Like::class, 'likeable'); }
-
+    public function reports() { return $this->morphMany(Report::class, 'reportable'); }
 public function isLikedByUser($userId) {
     return $this->likes()->where('user_id', $userId)->exists();
 }
