@@ -64,6 +64,8 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
+    Route::view('/my-campaigns', 'dashboard');
+
     // Settings
     Route::get('/settings', function () {
         return view('settings');
