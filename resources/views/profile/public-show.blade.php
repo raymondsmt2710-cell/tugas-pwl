@@ -72,15 +72,90 @@
                 </span>
             </div>
 
-            <div class="flex gap-5 mt-3 text-sm">
-                <span class="text-slate-500 hover:underline cursor-default">
-                    <span class="font-bold text-slate-900" id="following-count">{{ $followingCount !== null ? $followingCount : '0' }}</span>
-                    {{ __('Following') }}
-                </span>
-                <span class="text-slate-500 hover:underline cursor-default">
-                    <span class="font-bold text-slate-900" id="followers-count">{{ $followersCount !== null ? $followersCount : '0' }}</span>
-                    {{ __('Followers') }}
-                </span>
+            <div class="flex gap-5 mt-3 text-sm" x-data="{ showFollowersModal: false, showFollowingModal: false }">
+                {{-- Following --}}
+                @if($showFollowing)
+                    <button @click="showFollowingModal = true" class="text-slate-500 hover:underline cursor-pointer text-left">
+                        <span class="font-bold text-slate-900">{{ $followingCount }}</span>
+                        Mengikuti
+                    </button>
+                @else
+                    <span class="text-slate-400 cursor-default text-left flex items-center gap-1">
+                        <i class="fas fa-lock text-xs"></i> Mengikuti
+                    </span>
+                @endif
+
+                {{-- Followers --}}
+                @if($showFollowers)
+                    <button @click="showFollowersModal = true" class="text-slate-500 hover:underline cursor-pointer text-left">
+                        <span class="font-bold text-slate-900">{{ $followersCount }}</span>
+                        Followers
+                    </button>
+                @else
+                    <span class="text-slate-400 cursor-default flex items-center gap-1">
+                        <i class="fas fa-lock text-xs"></i> Followers
+                    </span>
+                @endif
+
+                {{-- Modal: Following --}}
+                @if($showFollowing)
+                    <div x-show="showFollowingModal" x-transition.opacity
+                         class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+                         @click.self="showFollowingModal = false">
+                        <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm max-h-[80vh] flex flex-col">
+                            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+                                <h3 class="text-base font-bold text-slate-900">Mengikuti ({{ $followingCount }})</h3>
+                                <button @click="showFollowingModal = false" class="text-slate-400 hover:text-slate-700 transition">
+                                    <i class="fas fa-xmark text-lg"></i>
+                                </button>
+                            </div>
+                            <div class="overflow-y-auto flex-1 divide-y divide-slate-50">
+                                @forelse($followingList as $u)
+                                    <a href="{{ url('/@' . $u->username) }}" @click="showFollowingModal = false"
+                                       class="flex items-center gap-3 px-5 py-3 hover:bg-slate-50 transition">
+                                        <img src="{{ $u->profile_photo_url }}" class="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0">
+                                        <div class="min-w-0">
+                                            <p class="text-sm font-semibold text-slate-900 truncate">{{ $u->full_name }}</p>
+                                            <p class="text-xs text-slate-400 truncate">@{{ $u->username }}</p>
+                                        </div>
+                                    </a>
+                                @empty
+                                    <div class="py-10 text-center text-sm text-slate-400">Belum mengikuti siapapun.</div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                {{-- Modal: Followers --}}
+                @if($showFollowers)
+                    <div x-show="showFollowersModal" x-transition.opacity
+                         class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+                         @click.self="showFollowersModal = false">
+                        <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm max-h-[80vh] flex flex-col">
+                            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+                                <h3 class="text-base font-bold text-slate-900">Followers ({{ $followersCount }})</h3>
+                                <button @click="showFollowersModal = false" class="text-slate-400 hover:text-slate-700 transition">
+                                    <i class="fas fa-xmark text-lg"></i>
+                                </button>
+                            </div>
+                            <div class="overflow-y-auto flex-1 divide-y divide-slate-50">
+                                @forelse($followersList as $u)
+                                    <a href="{{ url('/@' . $u->username) }}" @click="showFollowersModal = false"
+                                       class="flex items-center gap-3 px-5 py-3 hover:bg-slate-50 transition">
+                                        <img src="{{ $u->profile_photo_url }}" class="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0">
+                                        <div class="min-w-0">
+                                            <p class="text-sm font-semibold text-slate-900 truncate">{{ $u->full_name }}</p>
+                                            <p class="text-xs text-slate-400 truncate">@{{ $u->username }}</p>
+                                        </div>
+                                    </a>
+                                @empty
+                                    <div class="py-10 text-center text-sm text-slate-400">Belum ada followers.</div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
 
