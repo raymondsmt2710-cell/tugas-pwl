@@ -32,9 +32,16 @@ class ProfileController extends Controller
         $totalDonationsReceived = $user->campaigns()->sum('collected_amount');
         $campaignCount = $user->campaigns()->count();
 
-        // Respect privacy settings for follower/following counts
-        $followersCount = $settings->show_followers_count || $isOwner ? $user->followers()->count() : null;
-        $followingCount = $settings->show_following_count || $isOwner ? $user->following()->count() : null;
+        // Respect privacy settings for follower/following counts + lists
+        $showFollowers = $settings->show_followers_count || $isOwner;
+        $showFollowing = $settings->show_following_count || $isOwner;
+
+        $followersCount = $showFollowers ? $user->followers()->count() : null;
+        $followingCount = $showFollowing ? $user->following()->count() : null;
+
+        // Load actual lists (only if allowed to see)
+        $followersList = $showFollowers ? $user->followers()->get() : collect();
+        $followingList = $showFollowing ? $user->following()->get() : collect();
 
         $isFollowing = auth()->check() ? auth()->user()->isFollowing($user) : false;
 
@@ -45,6 +52,10 @@ class ProfileController extends Controller
             'campaignCount' => $campaignCount,
             'followersCount' => $followersCount,
             'followingCount' => $followingCount,
+            'followersList' => $followersList,
+            'followingList' => $followingList,
+            'showFollowers' => $showFollowers,
+            'showFollowing' => $showFollowing,
             'isFollowing' => $isFollowing,
             'isOwner' => $isOwner,
             'settings' => $settings,
