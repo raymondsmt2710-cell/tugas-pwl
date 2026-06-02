@@ -76,7 +76,7 @@ class CampaignController extends Controller
             auth()->user()
         );
 
-        return redirect()->route('dashboard')
+        return redirect()->to(url('/dashboard?tab=campaigns'))
             ->with('success', 'Kampanye berhasil dibuat! Silakan ajukan untuk review.');
     }
 
@@ -138,7 +138,7 @@ class CampaignController extends Controller
 
         $this->campaignService->delete($campaign);
 
-        return redirect()->route('dashboard')
+        return redirect()->to(url('/dashboard?tab=campaigns'))
             ->with('success', 'Kampanye berhasil dihapus.');
     }
 
@@ -151,7 +151,7 @@ class CampaignController extends Controller
 
         $this->campaignService->submitForReview($campaign);
 
-        return back()
+        return redirect()->to(url('/dashboard?tab=campaigns'))
             ->with('success', 'Kampanye berhasil diajukan untuk review. Menunggu persetujuan admin.');
     }
 

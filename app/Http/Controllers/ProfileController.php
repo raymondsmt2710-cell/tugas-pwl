@@ -20,25 +20,13 @@ class ProfileController extends Controller
             return view('profile.private', ['user' => $user]);
         }
 
-        // Get user's approved/active campaigns
+        // Hanya tampilkan campaign yang sudah disetujui admin (approved & goal_reached)
+        // Berlaku untuk semua orang termasuk pemilik profil sendiri
         $campaigns = $user->campaigns()
-            ->where('status', 'approved')
+            ->whereIn('status', ['approved', 'goal_reached'])
             ->with('category')
             ->latest()
             ->get();
-
-        // Get donations
-        $donationsQuery = $user->donations()
-            ->with('campaign')
-            ->latest()
-            ->take(10);
-
-        if (!$isOwner) {
-            $donationsQuery->where('payment_status', 'paid')
-                ->where('is_anonymous', false);
-        }
-
-        $donations = $donationsQuery->get();
 
         // Stats
         $totalDonationsReceived = $user->campaigns()->sum('collected_amount');
@@ -53,13 +41,13 @@ class ProfileController extends Controller
         return view('profile.public-show', [
             'user' => $user,
             'campaigns' => $campaigns,
-            'donations' => $donations,
             'totalDonationsReceived' => $totalDonationsReceived,
             'campaignCount' => $campaignCount,
             'followersCount' => $followersCount,
             'followingCount' => $followingCount,
             'isFollowing' => $isFollowing,
             'isOwner' => $isOwner,
+            'settings' => $settings,
         ]);
     }
 }
