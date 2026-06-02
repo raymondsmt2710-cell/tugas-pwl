@@ -53,7 +53,15 @@
         }
     </style>
 
-    <div class="min-h-screen bg-gray-50 flex font-sans" x-data="{ activeTab: 'overview', sidebarOpen: false }">
+    <div class="min-h-screen bg-gray-50 flex font-sans"
+         x-data="{
+             activeTab: new URLSearchParams(window.location.search).get('tab') || 'overview',
+             sidebarOpen: false
+         }"
+         x-init="
+             const validTabs = ['overview','campaigns','donations','withdrawals','notifications','followers','following'];
+             if (!validTabs.includes(activeTab)) activeTab = 'overview';
+         ">
 
         {{-- MOBILE HEADER --}}
         <div class="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 z-40">
@@ -301,10 +309,27 @@
                     @else
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             @foreach($myCampaigns as $c)
+                                @php
+                                    $statusMap = [
+                                        'draft'        => ['label' => 'Draft',            'bg' => 'bg-gray-100',    'text' => 'text-gray-500'],
+                                        'pending'      => ['label' => 'Menunggu Review',  'bg' => 'bg-amber-50',    'text' => 'text-amber-600'],
+                                        'approved'     => ['label' => 'Aktif',            'bg' => 'bg-emerald-50',  'text' => 'text-emerald-600'],
+                                        'goal_reached' => ['label' => 'Goal Tercapai',    'bg' => 'bg-green-100',   'text' => 'text-green-700'],
+                                        'pending_close'=> ['label' => 'Menunggu Tutup',   'bg' => 'bg-orange-50',   'text' => 'text-orange-600'],
+                                        'closed'       => ['label' => 'Ditutup',          'bg' => 'bg-red-50',      'text' => 'text-red-500'],
+                                        'rejected'     => ['label' => 'Ditolak',          'bg' => 'bg-red-100',     'text' => 'text-red-600'],
+                                        'archived'     => ['label' => 'Diarsipkan',       'bg' => 'bg-gray-100',    'text' => 'text-gray-400'],
+                                    ];
+                                    $st = $statusMap[$c->status] ?? ['label' => ucfirst($c->status), 'bg' => 'bg-gray-100', 'text' => 'text-gray-500'];
+                                @endphp
                                 <div class="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col">
                                     <img class="w-full h-40 object-cover bg-gray-100" src="{{ $c->banner_image_url ?? 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400&h=200&fit=crop' }}" alt="">
                                     <div class="p-4 flex-1 flex flex-col">
-                                        <span class="text-xs font-semibold px-2 py-0.5 bg-gray-100 text-gray-500 rounded self-start mb-2">{{ $c->category->name ?? 'Umum' }}</span>
+                                        {{-- Category + Status badge --}}
+                                        <div class="flex items-center gap-2 flex-wrap mb-2">
+                                            <span class="text-xs font-semibold px-2 py-0.5 bg-gray-100 text-gray-500 rounded">{{ $c->category->name ?? 'Umum' }}</span>
+                                            <span class="text-xs font-semibold px-2 py-0.5 rounded {{ $st['bg'] }} {{ $st['text'] }}">{{ $st['label'] }}</span>
+                                        </div>
                                         <h3 class="text-sm font-semibold text-gray-800 mb-2">{{ $c->title }}</h3>
                                         <div class="w-full bg-gray-100 rounded-full h-1.5 mb-2">
                                             <div class="bg-emerald-500 h-1.5 rounded-full" style="width: {{ min(100, $c->progress_percentage) }}%"></div>
@@ -320,6 +345,16 @@
                                     </div>
                                     <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 flex gap-2 text-xs">
                                         @if(in_array($c->status, ['draft', 'rejected']))
+                                            {{-- Hapus --}}
+                                            <form action="{{ route('campaign.destroy', $c->id_campaign) }}" method="POST"
+                                                  onsubmit="return confirm('Yakin ingin menghapus kampanye ini? Tindakan ini tidak bisa dibatalkan.')"
+                                                  class="shrink-0">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="py-1.5 px-2.5 border border-red-200 text-red-500 rounded-lg font-semibold hover:bg-red-50 transition" title="Hapus">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
                                             <a href="{{ route('campaign.edit', $c->id_campaign) }}" class="flex-1 py-1.5 border border-gray-300 text-gray-700 rounded-lg text-center font-semibold hover:bg-white">Edit</a>
                                             <form action="{{ route('campaign.submit', $c->id_campaign) }}" method="POST" class="flex-1">
                                                 @csrf
@@ -338,6 +373,8 @@
                                                     <button class="w-full py-1.5 bg-gray-500 text-white rounded-lg font-semibold hover:bg-gray-600">Batalkan Tutup</button>
                                                 </form>
                                             @endif
+                                        @elseif($c->status === 'pending')
+                                            <span class="flex-1 py-1.5 text-center text-gray-400 text-xs font-medium">Menunggu persetujuan admin...</span>
                                         @else
                                             <a href="{{ route('campaigns.show', $c->slug) }}" class="w-full py-1.5 border border-gray-300 text-gray-700 rounded-lg text-center font-semibold hover:bg-white">Lihat</a>
                                         @endif

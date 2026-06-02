@@ -66,7 +66,7 @@
                     <h2 class="text-2xl font-bold text-gray-900">Kampanye Terbaru</h2>
                     <p class="mt-1 text-sm text-gray-500">Bantu mereka yang membutuhkan</p>
                 </div>
-                <a href="{{ url('/campaigns') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800">Lihat Semua →</a>
+                <a href="{{ url('/campaigns') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800">Lihat Semua ></a>
             </div>
             @livewire('featured-campaigns')
         </div>
@@ -305,8 +305,8 @@
                     <div class="mt-3 space-y-2">
                         @auth
                             <a href="{{ url('/user/profile') }}" class="block text-sm text-gray-400 hover:text-white">Profil</a>
-                            <a href="{{ url('/my-campaigns') }}" class="block text-sm text-gray-400 hover:text-white">Kampanye Saya</a>
-                            <a href="{{ url('/my-donations') }}" class="block text-sm text-gray-400 hover:text-white">Riwayat Donasi</a>
+                            <a href="{{ url('/dashboard?tab=campaigns') }}" class="block text-sm text-gray-400 hover:text-white">Kampanye Saya</a>
+                            <a href="{{ url('/dashboard?tab=donations') }}" class="block text-sm text-gray-400 hover:text-white">Riwayat Donasi</a>
                         @else
                             <a href="{{ route('login') }}" class="block text-sm text-gray-400 hover:text-white">Masuk</a>
                             <a href="{{ route('register') }}" class="block text-sm text-gray-400 hover:text-white">Daftar</a>

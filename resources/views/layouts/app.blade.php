@@ -17,7 +17,7 @@
     <body class="font-sans antialiased bg-gray-50 text-gray-900">
         <x-banner />
 
-        <div class="min-h-screen">
+        <div class="min-h-screen flex flex-col">
             <x-navbar />
 
             @if (isset($header))
@@ -28,13 +28,15 @@
                 </header>
             @endif
 
-            <main>
+            <main class="flex-1">
                 @if(isset($slot))
                     {{ $slot }}
                 @else
                     @yield('content')
                 @endif
             </main>
+
+            <x-footer />
         </div>
 
         @stack('modals')

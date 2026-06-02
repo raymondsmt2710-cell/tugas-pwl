@@ -20,46 +20,45 @@ class ProfileController extends Controller
             return view('profile.private', ['user' => $user]);
         }
 
-        // Get user's approved/active campaigns
+        // Hanya tampilkan campaign yang sudah disetujui admin (approved & goal_reached)
+        // Berlaku untuk semua orang termasuk pemilik profil sendiri
         $campaigns = $user->campaigns()
-            ->where('status', 'approved')
+            ->whereIn('status', ['approved', 'goal_reached'])
             ->with('category')
             ->latest()
             ->get();
-
-        // Get donations
-        $donationsQuery = $user->donations()
-            ->with('campaign')
-            ->latest()
-            ->take(10);
-
-        if (!$isOwner) {
-            $donationsQuery->where('payment_status', 'paid')
-                ->where('is_anonymous', false);
-        }
-
-        $donations = $donationsQuery->get();
 
         // Stats
         $totalDonationsReceived = $user->campaigns()->sum('collected_amount');
         $campaignCount = $user->campaigns()->count();
 
-        // Respect privacy settings for follower/following counts
-        $followersCount = $settings->show_followers_count || $isOwner ? $user->followers()->count() : null;
-        $followingCount = $settings->show_following_count || $isOwner ? $user->following()->count() : null;
+        // Respect privacy settings for follower/following counts + lists
+        $showFollowers = $settings->show_followers_count || $isOwner;
+        $showFollowing = $settings->show_following_count || $isOwner;
+
+        $followersCount = $showFollowers ? $user->followers()->count() : null;
+        $followingCount = $showFollowing ? $user->following()->count() : null;
+
+        // Load actual lists (only if allowed to see)
+        $followersList = $showFollowers ? $user->followers()->get() : collect();
+        $followingList = $showFollowing ? $user->following()->get() : collect();
 
         $isFollowing = auth()->check() ? auth()->user()->isFollowing($user) : false;
 
         return view('profile.public-show', [
             'user' => $user,
             'campaigns' => $campaigns,
-            'donations' => $donations,
             'totalDonationsReceived' => $totalDonationsReceived,
             'campaignCount' => $campaignCount,
             'followersCount' => $followersCount,
             'followingCount' => $followingCount,
+            'followersList' => $followersList,
+            'followingList' => $followingList,
+            'showFollowers' => $showFollowers,
+            'showFollowing' => $showFollowing,
             'isFollowing' => $isFollowing,
             'isOwner' => $isOwner,
+            'settings' => $settings,
         ]);
     }
 }

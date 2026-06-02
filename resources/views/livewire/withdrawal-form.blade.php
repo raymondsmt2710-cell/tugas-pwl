@@ -31,10 +31,14 @@
                     {{-- Amount --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">Jumlah Penarikan <span class="text-red-500">*</span></label>
-                        <div class="relative">
+                        <div class="relative" x-data>
                             <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">Rp</span>
-                            <input wire:model="amount" type="number" min="50000" step="1000"
-                                   class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                            <input
+                                type="text" inputmode="numeric"
+                                x-on:input="$el.value = $el.value.replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.')"
+                                x-on:change="$wire.set('amount', $el.value.replace(/\./g,''))"
+                                :value="$wire.amount ? Number($wire.amount).toLocaleString('id-ID') : ''"
+                                class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="50.000">
                         </div>
                         @error('amount') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
@@ -67,7 +71,7 @@
             </div>
 
             <div class="mt-6 flex items-center justify-between">
-                <a href="{{ url('/withdrawals/history') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">← Riwayat</a>
+                <a href="{{ url('/dashboard?tab=withdrawals') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">← Kembali</a>
                 <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-50"
                         class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition">
                     <span wire:loading.remove wire:target="submit">Ajukan Penarikan</span>

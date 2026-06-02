@@ -59,19 +59,27 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                         <label for="target_amount" class="block text-sm font-medium text-gray-700 mb-1.5">Target Donasi <span class="text-red-500">*</span></label>
-                        <div class="relative">
+                        <div class="relative" x-data>
                             <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">Rp</span>
-                            <input wire:model="target_amount" type="number" id="target_amount" min="100000" step="1000"
-                                   class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="100000">
+                            <input
+                                type="text" inputmode="numeric" id="target_amount"
+                                x-on:input="$el.value = $el.value.replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.')"
+                                x-on:change="$wire.set('target_amount', $el.value.replace(/\./g,''))"
+                                :value="$wire.target_amount ? Number($wire.target_amount).toLocaleString('id-ID') : ''"
+                                class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="100.000">
                         </div>
                         @error('target_amount') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label for="minimum_donation" class="block text-sm font-medium text-gray-700 mb-1.5">Minimum Donasi</label>
-                        <div class="relative">
+                        <div class="relative" x-data>
                             <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">Rp</span>
-                            <input wire:model="minimum_donation" type="number" id="minimum_donation" min="1000" step="1000"
-                                   class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="10000">
+                            <input
+                                type="text" inputmode="numeric" id="minimum_donation"
+                                x-on:input="$el.value = $el.value.replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.')"
+                                x-on:change="$wire.set('minimum_donation', $el.value.replace(/\./g,''))"
+                                :value="$wire.minimum_donation ? Number($wire.minimum_donation).toLocaleString('id-ID') : ''"
+                                class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="10.000">
                         </div>
                         @error('minimum_donation') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
@@ -195,7 +203,7 @@
 
         {{-- Actions --}}
         <div class="mt-8 flex items-center justify-between">
-            <a href="{{ url('/my-campaigns') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">← Kembali</a>
+            <a href="{{ url('/dashboard?tab=campaigns') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">← Kembali</a>
             <button type="submit"
                     wire:loading.attr="disabled"
                     wire:loading.class="opacity-50 cursor-not-allowed"

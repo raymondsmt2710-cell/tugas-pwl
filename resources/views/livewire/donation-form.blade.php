@@ -3,16 +3,22 @@
         {{-- Amount --}}
         <div class="mb-5">
             <label class="block text-sm font-medium text-gray-700 mb-1.5">Jumlah Donasi <span class="text-red-500">*</span></label>
-            <div class="relative">
+            <div class="relative" x-data>
                 <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm font-medium">Rp</span>
-                <input wire:model.live="donation_amount" type="number" min="{{ $campaign->minimum_donation ?: 1000 }}" step="1000"
-                       class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="50000">
+                <input
+                    type="text" inputmode="numeric"
+                    x-on:input="$el.value = $el.value.replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.')"
+                    x-on:change="$wire.set('donation_amount', $el.value.replace(/\./g,''))"
+                    :value="$wire.donation_amount ? Number($wire.donation_amount).toLocaleString('id-ID') : ''"
+                    class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="50.000">
             </div>
             @error('donation_amount') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
 
             <div class="mt-3 flex flex-wrap gap-2">
                 @foreach([25000, 50000, 100000, 250000, 500000] as $amt)
-                    <button type="button" wire:click="setAmount({{ $amt }})"
+                    <button type="button"
+                            wire:click="setAmount({{ $amt }})"
+                            x-on:click="$nextTick(() => { let el = $el.closest('form').querySelector('input[inputmode=numeric]'); el.value = Number({{ $amt }}).toLocaleString('id-ID'); })"
                             class="px-3 py-1.5 text-xs font-medium rounded-lg border transition
                             {{ (int)$donation_amount === $amt ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-gray-200 text-gray-600 hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-700' }}">
                         Rp {{ number_format($amt, 0, ',', '.') }}

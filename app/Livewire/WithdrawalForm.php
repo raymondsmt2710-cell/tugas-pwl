@@ -45,7 +45,7 @@ class WithdrawalForm extends Component
     public function getCampaignsProperty()
     {
         return Campaign::ownedBy(auth()->user()->id_user)
-            ->where('status', 'approved')
+            ->whereIn('status', ['approved', 'goal_reached'])
             ->where('available_balance', '>', 0)
             ->get();
     }
@@ -67,7 +67,7 @@ class WithdrawalForm extends Component
             ]);
 
             session()->flash('success', 'Permintaan penarikan berhasil diajukan.');
-            $this->redirect(url('/withdrawals/history'));
+            $this->redirect(url('/dashboard?tab=withdrawals'));
         } catch (\Illuminate\Validation\ValidationException $e) {
             foreach ($e->errors() as $field => $messages) {
                 $this->addError($field, $messages[0]);
