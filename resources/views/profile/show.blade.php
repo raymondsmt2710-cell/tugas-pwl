@@ -49,7 +49,7 @@
                             <h3 class="text-lg font-semibold text-gray-900">Riwayat Donasi</h3>
                             <p class="text-sm text-gray-500 mt-0.5">Semua donasi yang pernah Anda berikan.</p>
                         </div>
-                        <a href="{{ url('/my-donations') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800">Lihat Semua →</a>
+                        <a href="{{ url('/dashboard?tab=donations') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800">Lihat Semua →</a>
                     </div>
                     <div class="divide-y divide-gray-50">
                         @forelse ($myDonations as $donation)
@@ -114,7 +114,7 @@
                             <p class="text-sm text-gray-500 mt-0.5">Kampanye yang Anda buat.</p>
                         </div>
                         <div class="flex gap-2">
-                            <a href="{{ url('/my-campaigns') }}" class="text-sm font-medium text-gray-600 hover:text-gray-800">Kelola →</a>
+                            <a href="{{ url('/dashboard?tab=campaigns') }}" class="text-sm font-medium text-gray-600 hover:text-gray-800">Kelola →</a>
                             <a href="{{ url('/campaigns/create') }}" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition">
                                 + Buat Baru
                             </a>

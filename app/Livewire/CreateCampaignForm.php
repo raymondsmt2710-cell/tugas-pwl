@@ -128,7 +128,7 @@ class CreateCampaignForm extends Component
 
         $this->saved = true;
         session()->flash('success', 'Kampanye berhasil dibuat! Silakan ajukan untuk review.');
-        $this->redirect(url('/my-campaigns'));
+        $this->redirect(url('/dashboard?tab=campaigns'));
     }
 
     public function render()

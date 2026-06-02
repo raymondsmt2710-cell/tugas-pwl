@@ -145,7 +145,7 @@
 
         {{-- Actions --}}
         <div class="mt-8 flex items-center justify-between">
-            <a href="{{ url('/my-campaigns') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">← Kembali</a>
+            <a href="{{ url('/dashboard?tab=campaigns') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">← Kembali</a>
             <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-50"
                     class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition">
                 <span wire:loading.remove wire:target="save">Simpan Perubahan</span>

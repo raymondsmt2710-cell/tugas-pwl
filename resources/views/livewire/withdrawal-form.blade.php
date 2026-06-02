@@ -67,7 +67,7 @@
             </div>
 
             <div class="mt-6 flex items-center justify-between">
-                <a href="{{ url('/withdrawals/history') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">← Riwayat</a>
+                <a href="{{ url('/dashboard?tab=withdrawals') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">← Kembali</a>
                 <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-50"
                         class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition">
                     <span wire:loading.remove wire:target="submit">Ajukan Penarikan</span>

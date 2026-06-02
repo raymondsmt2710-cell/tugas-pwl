@@ -103,7 +103,7 @@
             </nav>
         </div>
 
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 mt-4">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 mt-4 pb-16">
 
             <div id="tab-content-campaigns" class="tab-pane">
                 @if($campaigns->isEmpty())
@@ -111,17 +111,18 @@
                         <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-slate-100 text-slate-400 text-2xl mb-4">
                             <i class="fas fa-hand-holding-heart"></i>
                         </div>
-                        <h3 class="text-base font-bold text-slate-900">{{ __('No active campaigns') }}</h3>
-                        <p class="text-sm text-slate-500 mt-1.5 max-w-[340px] mx-auto leading-relaxed">{{ __('When this creator starts a campaign, it will appear here for you to support.') }}</p>
-                        @auth
-                            @if(auth()->user()->id_user === $user->id_user)
-                                <a href="{{ url('/campaigns/create') }}"
-                                   class="inline-flex items-center gap-1.5 mt-5 px-5 py-2.5 rounded-full bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-700 transition shadow-md shadow-indigo-600/20">
-                                    <i class="fas fa-plus text-xs"></i>
-                                    {{ __('Create Campaign') }}
-                                </a>
-                            @endif
-                        @endauth
+                        @if($isOwner)
+                            <h3 class="text-base font-bold text-slate-900">Belum ada kampanye</h3>
+                            <p class="text-sm text-slate-500 mt-1.5 max-w-[340px] mx-auto leading-relaxed">Buat kampanye pertama kamu untuk mulai menggalang dana.</p>
+                            <a href="{{ url('/campaigns/create') }}"
+                               class="inline-flex items-center gap-1.5 mt-5 px-5 py-2.5 rounded-full bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-700 transition shadow-md shadow-indigo-600/20">
+                                <i class="fas fa-plus text-xs"></i>
+                                Buat Kampanye
+                            </a>
+                        @else
+                            <h3 class="text-base font-bold text-slate-900">{{ __('No active campaigns') }}</h3>
+                            <p class="text-sm text-slate-500 mt-1.5 max-w-[340px] mx-auto leading-relaxed">{{ __('When this creator starts a campaign, it will appear here for you to support.') }}</p>
+                        @endif
                     </div>
                 @else
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -138,10 +139,17 @@
                                             <span class="text-slate-500 text-xs">{{ $campaign->created_at->diffForHumans(null, true) }}</span>
                                         </div>
 
-                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-600 text-xs font-semibold">
-                                            <i class="fas fa-tag text-[10px]"></i>
-                                            {{ $campaign->category->name ?? 'Umum' }}
-                                        </span>
+                                                        <div class="flex items-center gap-2 flex-wrap">
+                                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-600 text-xs font-semibold">
+                                                <i class="fas fa-tag text-[10px]"></i>
+                                                {{ $campaign->category->name ?? 'Umum' }}
+                                            </span>
+                                            @if($campaign->status === 'goal_reached')
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                                                    🏆 Goal Tercapai
+                                                </span>
+                                            @endif
+                                        </div>
 
                                         <h3 class="mt-2 text-base font-bold text-slate-900 leading-snug line-clamp-1">{{ $campaign->title }}</h3>
 
@@ -165,12 +173,9 @@
                                             <span>{{ $campaign->donor_count }} {{ __('donatur') }}</span>
                                         </div>
 
-                                        <div class="flex justify-between mt-3 pt-2 border-t border-slate-100">
-                                            <span class="inline-flex items-center gap-1.5 text-slate-500 text-xs hover:text-indigo-600 transition cursor-pointer">
+                                        <div class="flex gap-4 mt-3 pt-2 border-t border-slate-100">
+                                            <span class="inline-flex items-center gap-1.5 text-slate-500 text-xs hover:text-rose-500 transition cursor-pointer">
                                                 <i class="far fa-heart"></i>
-                                            </span>
-                                            <span class="inline-flex items-center gap-1.5 text-slate-500 text-xs hover:text-indigo-600 transition cursor-pointer">
-                                                <i class="far fa-comment"></i>
                                             </span>
                                             <span class="inline-flex items-center gap-1.5 text-slate-500 text-xs hover:text-indigo-600 transition cursor-pointer">
                                                 <i class="fas fa-arrow-up-from-bracket"></i>

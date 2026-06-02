@@ -20,9 +20,10 @@ class ProfileController extends Controller
             return view('profile.private', ['user' => $user]);
         }
 
-        // Get user's approved/active campaigns
+        // Hanya tampilkan campaign yang sudah disetujui admin (approved & goal_reached)
+        // Berlaku untuk semua orang termasuk pemilik profil sendiri
         $campaigns = $user->campaigns()
-            ->where('status', 'approved')
+            ->whereIn('status', ['approved', 'goal_reached'])
             ->with('category')
             ->latest()
             ->get();
