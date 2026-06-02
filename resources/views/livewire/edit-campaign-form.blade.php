@@ -39,14 +39,28 @@
             <div class="px-6 py-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Target Donasi <span class="text-red-500">*</span></label>
-                    <div class="relative"><span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">Rp</span>
-                    <input wire:model="target_amount" type="number" class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"></div>
+                    <div class="relative" x-data>
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">Rp</span>
+                        <input
+                            type="text" inputmode="numeric"
+                            x-on:input="$el.value = $el.value.replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.')"
+                            x-on:change="$wire.set('target_amount', $el.value.replace(/\./g,''))"
+                            x-init="$el.value = $wire.target_amount ? Number($wire.target_amount).toLocaleString('id-ID') : ''"
+                            class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="100.000">
+                    </div>
                     @error('target_amount') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Minimum Donasi</label>
-                    <div class="relative"><span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">Rp</span>
-                    <input wire:model="minimum_donation" type="number" class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"></div>
+                    <div class="relative" x-data>
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">Rp</span>
+                        <input
+                            type="text" inputmode="numeric"
+                            x-on:input="$el.value = $el.value.replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.')"
+                            x-on:change="$wire.set('minimum_donation', $el.value.replace(/\./g,''))"
+                            x-init="$el.value = $wire.minimum_donation ? Number($wire.minimum_donation).toLocaleString('id-ID') : ''"
+                            class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="10.000">
+                    </div>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Tanggal Berakhir <span class="text-red-500">*</span></label>

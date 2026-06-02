@@ -66,7 +66,7 @@
                     <h2 class="text-2xl font-bold text-gray-900">Kampanye Terbaru</h2>
                     <p class="mt-1 text-sm text-gray-500">Bantu mereka yang membutuhkan</p>
                 </div>
-                <a href="{{ url('/campaigns') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800">Lihat Semua →</a>
+                <a href="{{ url('/campaigns') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800">Lihat Semua ></a>
             </div>
             @livewire('featured-campaigns')
         </div>

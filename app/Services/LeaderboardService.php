@@ -78,7 +78,7 @@ class LeaderboardService
         $key = "leaderboard:campaigns:{$period}:{$limit}";
 
         return Cache::remember($key, $this->cacheTtl($period), function () use ($period, $limit) {
-            $query = Campaign::where('status', 'approved');
+            $query = Campaign::whereIn('status', ['approved', 'goal_reached']);
 
             if ($period !== 'all') {
                 $start = $this->getPeriodStart($period);
@@ -112,7 +112,7 @@ class LeaderboardService
         $key = "leaderboard:creators:{$period}:{$limit}";
 
         return Cache::remember($key, $this->cacheTtl($period), function () use ($period, $limit) {
-            $query = Campaign::where('status', 'approved');
+            $query = Campaign::whereIn('status', ['approved', 'goal_reached']);
 
             if ($period !== 'all') {
                 $start = $this->getPeriodStart($period);
