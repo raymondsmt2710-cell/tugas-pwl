@@ -362,4 +362,17 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     {
         $this->notify(new \App\Notifications\CustomVerifyEmail);
     }
+
+    /**
+     * user biasa verify email.
+     * Admins gosa verify email.
+     */
+    public function hasVerifiedEmail(): bool
+    {
+        if ($this->isAdmin()) {
+            return true;
+        }
+
+        return ! is_null($this->email_verified_at);
+    }
 }
