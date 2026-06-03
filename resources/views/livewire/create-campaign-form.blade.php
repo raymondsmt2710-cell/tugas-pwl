@@ -1,4 +1,4 @@
-<div>
+﻿<div>
     <form wire:submit="save">
 
         {{-- Card: Informasi Dasar --}}
@@ -12,7 +12,7 @@
                 <div>
                     <label for="title" class="block text-sm font-medium text-gray-700 mb-1.5">Judul Kampanye <span class="text-red-500">*</span></label>
                     <input wire:model.live.debounce.500ms="title" type="text" id="title"
-                           class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                           class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm"
                            placeholder="Contoh: Bantu Korban Banjir Medan">
                     @error('title') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
@@ -20,7 +20,7 @@
                 {{-- Category --}}
                 <div>
                     <label for="id_category" class="block text-sm font-medium text-gray-700 mb-1.5">Kategori <span class="text-red-500">*</span></label>
-                    <select wire:model="id_category" id="id_category" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                    <select wire:model="id_category" id="id_category" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm">
                         <option value="">— Pilih Kategori —</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id_category }}">{{ $category->name }}</option>
@@ -33,7 +33,7 @@
                 <div>
                     <label for="short_description" class="block text-sm font-medium text-gray-700 mb-1.5">Deskripsi Singkat <span class="text-red-500">*</span></label>
                     <textarea wire:model="short_description" id="short_description" rows="2"
-                              class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                              class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm"
                               placeholder="Ringkasan singkat kampanye (maks 500 karakter)"></textarea>
                     @error('short_description') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
@@ -42,7 +42,7 @@
                 <div>
                     <label for="description" class="block text-sm font-medium text-gray-700 mb-1.5">Cerita Lengkap <span class="text-red-500">*</span></label>
                     <textarea wire:model="description" id="description" rows="6"
-                              class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                              class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm"
                               placeholder="Ceritakan secara detail tentang kampanye Anda..."></textarea>
                     <p class="mt-1 text-xs text-gray-400">Minimal 50 karakter</p>
                     @error('description') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
@@ -66,7 +66,7 @@
                                 x-on:input="$el.value = $el.value.replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.')"
                                 x-on:change="$wire.set('target_amount', $el.value.replace(/\./g,''))"
                                 :value="$wire.target_amount ? Number($wire.target_amount).toLocaleString('id-ID') : ''"
-                                class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="100.000">
+                                class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm" placeholder="100.000">
                         </div>
                         @error('target_amount') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
@@ -79,14 +79,14 @@
                                 x-on:input="$el.value = $el.value.replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.')"
                                 x-on:change="$wire.set('minimum_donation', $el.value.replace(/\./g,''))"
                                 :value="$wire.minimum_donation ? Number($wire.minimum_donation).toLocaleString('id-ID') : ''"
-                                class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="10.000">
+                                class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm" placeholder="10.000">
                         </div>
                         @error('minimum_donation') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label for="end_date" class="block text-sm font-medium text-gray-700 mb-1.5">Tanggal Berakhir <span class="text-red-500">*</span></label>
                         <input wire:model="end_date" type="date" id="end_date" min="{{ date('Y-m-d', strtotime('+1 day')) }}"
-                               class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                               class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm">
                         @error('end_date') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
                 </div>
@@ -110,8 +110,8 @@
 
                 <div>
                     <input wire:model.live="banner_image" type="file" id="banner_image" accept="image/jpeg,image/png,image/webp"
-                           class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer border border-gray-300 rounded-lg">
-                    <div wire:loading wire:target="banner_image" class="mt-2 flex items-center gap-2 text-sm text-indigo-600">
+                           class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-600 hover:file:bg-brand-100 cursor-pointer border border-gray-300 rounded-lg">
+                    <div wire:loading wire:target="banner_image" class="mt-2 flex items-center gap-2 text-sm text-brand-500">
                         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                         Mengunggah...
                     </div>
@@ -142,7 +142,7 @@
                 @if(count($gallery_images) < 5)
                     <input wire:model.live="gallery_images" type="file" accept="image/jpeg,image/png,image/webp" multiple
                            class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100 cursor-pointer border border-gray-300 rounded-lg">
-                    <div wire:loading wire:target="gallery_images" class="mt-2 flex items-center gap-2 text-sm text-indigo-600">
+                    <div wire:loading wire:target="gallery_images" class="mt-2 flex items-center gap-2 text-sm text-brand-500">
                         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                         Mengunggah...
                     </div>
@@ -182,7 +182,7 @@
                 @if(count($documents) < 5)
                     <input wire:model.live="documents" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple
                            class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-green-50 file:text-green-700 hover:file:bg-green-100 cursor-pointer border border-gray-300 rounded-lg">
-                    <div wire:loading wire:target="documents" class="mt-2 flex items-center gap-2 text-sm text-indigo-600">
+                    <div wire:loading wire:target="documents" class="mt-2 flex items-center gap-2 text-sm text-brand-500">
                         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                         Mengunggah...
                     </div>
@@ -200,7 +200,7 @@
             <button type="submit"
                     wire:loading.attr="disabled"
                     wire:loading.class="opacity-50 cursor-not-allowed"
-                    class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition disabled:opacity-50">
+                    class="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-brand-600 transition disabled:opacity-50">
                 <span wire:loading.remove wire:target="save">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
                 </span>

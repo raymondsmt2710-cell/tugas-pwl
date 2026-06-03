@@ -10,7 +10,9 @@ return new class extends Migration
     public function up(): void
     {
         // Update payment_status enum to match new statuses
-        DB::statement("ALTER TABLE donations MODIFY COLUMN payment_status ENUM('pending', 'paid', 'failed', 'expired', 'cancelled') DEFAULT 'pending'");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE donations MODIFY COLUMN payment_status ENUM('pending', 'paid', 'failed', 'expired', 'cancelled') DEFAULT 'pending'");
+        }
 
         Schema::table('donations', function (Blueprint $table) {
             if (!Schema::hasColumn('donations', 'donation_amount')) {
@@ -30,7 +32,9 @@ return new class extends Migration
 
     public function down(): void
     {
-        DB::statement("ALTER TABLE donations MODIFY COLUMN payment_status ENUM('pending', 'success', 'failed', 'cancelled') DEFAULT 'pending'");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE donations MODIFY COLUMN payment_status ENUM('pending', 'success', 'failed', 'cancelled') DEFAULT 'pending'");
+        }
 
         Schema::table('donations', function (Blueprint $table) {
             $table->dropColumn(['donation_amount', 'order_id', 'is_anonymous', 'paid_at']);

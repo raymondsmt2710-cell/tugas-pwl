@@ -83,11 +83,7 @@
         {{-- MOBILE HEADER --}}
         <div class="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 z-40">
             <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
-                    <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                    </svg>
-                </div>
+                <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover">
                 <span class="text-lg font-bold text-gray-800">Autopahala</span>
             </div>
             <button @click="sidebarOpen = !sidebarOpen" class="p-2 text-gray-500 hover:bg-gray-100 rounded-lg">
@@ -106,18 +102,14 @@
         <div class="px-4">
             <!-- Logo -->
             <div class="flex items-center gap-2 px-2 mb-6">
-                <div class="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
-                    <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                    </svg>
-                </div>
+                <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover">
                 <span class="text-lg font-bold text-gray-800">Autopahala</span>
             </div>
 
             {{-- Tombol Buat Kampanye (dipindah ke atas) --}}
             <div class="mb-6 px-2">
                 <a href="{{ route('campaign.create') }}" 
-                   class="w-full flex items-center justify-center gap-2 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold transition">
+                   class="w-full flex items-center justify-center gap-2 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-lg text-sm font-semibold transition">
                     <i class="fas fa-plus text-xs"></i>
                     Buat Kampanye
                 </a>
@@ -127,7 +119,7 @@
             <nav class="space-y-1">
                 <!-- Overview -->
                 <button @click="setTab('overview'); sidebarOpen = false"
-                        :class="activeTab === 'overview' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
+                        :class="activeTab === 'overview' ? 'bg-brand-50 text-brand-600' : 'text-gray-600 hover:bg-gray-50'"
                         class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition">
                     <i class="fas fa-home w-4 h-4 text-center"></i>
                     <span>Overview</span>
@@ -135,7 +127,7 @@
 
                 <!-- My Campaigns -->
                 <button @click="setTab('campaigns'); sidebarOpen = false"
-                        :class="activeTab === 'campaigns' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
+                        :class="activeTab === 'campaigns' ? 'bg-brand-50 text-brand-600' : 'text-gray-600 hover:bg-gray-50'"
                         class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition">
                     <i class="fas fa-bullhorn w-4 h-4 text-center"></i>
                     <span>Kampanye Saya</span>
@@ -143,7 +135,7 @@
 
                 <!-- Donations -->
                 <button @click="setTab('donations'); sidebarOpen = false"
-                        :class="activeTab === 'donations' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
+                        :class="activeTab === 'donations' ? 'bg-brand-50 text-brand-600' : 'text-gray-600 hover:bg-gray-50'"
                         class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition">
                     <i class="fas fa-heart w-4 h-4 text-center"></i>
                     <span>Donasi</span>
@@ -151,7 +143,7 @@
 
                 <!-- Withdrawals -->
                 <button @click="setTab('withdrawals'); sidebarOpen = false"
-                        :class="activeTab === 'withdrawals' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
+                        :class="activeTab === 'withdrawals' ? 'bg-brand-50 text-brand-600' : 'text-gray-600 hover:bg-gray-50'"
                         class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition">
                     <i class="fas fa-wallet w-4 h-4 text-center"></i>
                     <span>Penarikan</span>
@@ -159,12 +151,12 @@
 
                 <!-- Notifications -->
                 <button @click="setTab('notifications'); sidebarOpen = false"
-                        :class="activeTab === 'notifications' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
+                        :class="activeTab === 'notifications' ? 'bg-brand-50 text-brand-600' : 'text-gray-600 hover:bg-gray-50'"
                         class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition relative">
                     <i class="fas fa-bell w-4 h-4 text-center"></i>
                     <span>Notifikasi</span>
                     @if($unreadNotificationsCount > 0)
-                        <span class="ml-auto bg-emerald-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">{{ $unreadNotificationsCount }}</span>
+                        <span class="ml-auto bg-brand-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">{{ $unreadNotificationsCount }}</span>
                     @endif
                 </button>
 
@@ -218,7 +210,7 @@
                             <h1 class="text-xl font-bold text-gray-800">Halo, {{ $user->full_name }}!</h1>
                             <p class="text-sm text-gray-500 mt-0.5">Bergabung sejak {{ $joinDate }}</p>
                         </div>
-                        <a href="{{ route('campaign.create') }}" class="px-4 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-sm font-semibold hover:bg-emerald-100 transition flex items-center gap-1.5">
+                        <a href="{{ route('campaign.create') }}" class="px-4 py-2 bg-brand-50 text-brand-600 border border-brand-200 rounded-lg text-sm font-semibold hover:bg-brand-100 transition flex items-center gap-1.5">
                             <i class="fas fa-plus text-xs"></i> Buat Kampanye
                         </a>
                     </div>
@@ -226,7 +218,7 @@
                     <!-- Stats -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div class="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                            <div class="w-10 h-10 rounded-lg bg-brand-50 text-brand-500 flex items-center justify-center">
                                 <i class="fas fa-heart"></i>
                             </div>
                             <div>
@@ -259,7 +251,7 @@
                         <div class="lg:col-span-3 bg-white border border-gray-200 rounded-xl p-5">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-sm font-semibold text-gray-800">Kampanye Terbaru</h3>
-                                <button @click="setTab('campaigns')" class="text-xs font-semibold text-emerald-600 hover:underline">Lihat semua</button>
+                                <button @click="setTab('campaigns')" class="text-xs font-semibold text-brand-500 hover:underline">Lihat semua</button>
                             </div>
                             @if($myCampaigns->isEmpty())
                                 <div class="text-center py-8 text-sm text-gray-400">Belum ada kampanye.</div>
@@ -275,7 +267,7 @@
                                                 </div>
                                             </div>
                                             <span class="px-2 py-0.5 rounded text-xs font-semibold
-                                                @if($c->status == 'approved') bg-emerald-50 text-emerald-600
+                                                @if($c->status == 'approved') bg-brand-50 text-brand-500
                                                 @elseif($c->status == 'pending') bg-amber-50 text-amber-600
                                                 @else bg-gray-100 text-gray-500 @endif">
                                                 {{ $c->status == 'approved' ? 'Aktif' : ucfirst($c->status) }}
@@ -292,7 +284,7 @@
                 <div x-show="activeTab === 'campaigns'" class="space-y-6">
                     <div class="flex items-center justify-between">
                         <h2 class="text-lg font-bold text-gray-800">Kampanye Anda ({{ $campaignCount }})</h2>
-                        <a href="{{ route('campaign.create') }}" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 transition flex items-center gap-1.5">
+                        <a href="{{ route('campaign.create') }}" class="px-4 py-2 bg-brand-500 text-white rounded-lg text-sm font-semibold hover:bg-brand-600 transition flex items-center gap-1.5">
                             <i class="fas fa-plus"></i> Baru
                         </a>
                     </div>
@@ -301,7 +293,7 @@
                             <div class="text-4xl text-gray-300 mb-3"><i class="fas fa-hand-holding-heart"></i></div>
                             <h3 class="text-sm font-semibold text-gray-700">Belum ada kampanye</h3>
                             <p class="text-xs text-gray-400 mt-1">Buat kampanye pertamamu untuk mulai menggalang dana.</p>
-                            <a href="{{ route('campaign.create') }}" class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold">
+                            <a href="{{ route('campaign.create') }}" class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-brand-500 text-white rounded-lg text-sm font-semibold">
                                 <i class="fas fa-plus"></i> Buat Kampanye
                             </a>
                         </div>
@@ -312,7 +304,7 @@
                                     $statusMap = [
                                         'draft'        => ['label' => 'Draft',            'bg' => 'bg-gray-100',    'text' => 'text-gray-500'],
                                         'pending'      => ['label' => 'Menunggu Review',  'bg' => 'bg-amber-50',    'text' => 'text-amber-600'],
-                                        'approved'     => ['label' => 'Aktif',            'bg' => 'bg-emerald-50',  'text' => 'text-emerald-600'],
+                                        'approved'     => ['label' => 'Aktif',            'bg' => 'bg-brand-50',  'text' => 'text-brand-500'],
                                         'goal_reached' => ['label' => 'Goal Tercapai',    'bg' => 'bg-green-100',   'text' => 'text-green-700'],
                                         'pending_close'=> ['label' => 'Menunggu Tutup',   'bg' => 'bg-orange-50',   'text' => 'text-orange-600'],
                                         'closed'       => ['label' => 'Ditutup',          'bg' => 'bg-red-50',      'text' => 'text-red-500'],
@@ -321,7 +313,7 @@
                                     ];
                                     $st = $statusMap[$c->status] ?? ['label' => ucfirst($c->status), 'bg' => 'bg-gray-100', 'text' => 'text-gray-500'];
                                 @endphp
-                                <div class="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col">
+                                <div class="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col h-full">
                                     <img class="w-full h-40 object-cover bg-gray-100" src="{{ $c->banner_image_url ?? 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400&h=200&fit=crop' }}" alt="">
                                     <div class="p-4 flex-1 flex flex-col">
                                         {{-- Category + Status badge --}}
@@ -331,7 +323,7 @@
                                         </div>
                                         <h3 class="text-sm font-semibold text-gray-800 mb-2">{{ $c->title }}</h3>
                                         <div class="w-full bg-gray-100 rounded-full h-1.5 mb-2">
-                                            <div class="bg-emerald-500 h-1.5 rounded-full" style="width: {{ min(100, $c->progress_percentage) }}%"></div>
+                                            <div class="bg-brand-500 h-1.5 rounded-full" style="width: {{ min(100, $c->progress_percentage) }}%"></div>
                                         </div>
                                         <div class="flex justify-between text-xs text-gray-500 mb-3">
                                             <span>Rp {{ number_format($c->collected_amount, 0, ',', '.') }}</span>
@@ -371,7 +363,7 @@
                                                         type: 'info',
                                                         onConfirm: () => document.getElementById('form-submit-{{ $c->id_campaign }}').submit()
                                                     })"
-                                                    class="w-full py-1.5 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700">Ajukan</button>
+                                                    class="w-full py-1.5 bg-brand-500 text-white rounded-lg font-semibold hover:bg-brand-600">Ajukan</button>
                                             </form>
                                         @elseif(in_array($c->status, ['approved', 'goal_reached']))
                                             <a href="{{ route('campaigns.show', $c->slug) }}" class="flex-1 py-1.5 border border-gray-300 text-gray-700 rounded-lg text-center font-semibold hover:bg-white">Lihat</a>
@@ -422,7 +414,7 @@
                             <div class="text-4xl text-gray-300 mb-3"><i class="fas fa-heart"></i></div>
                             <h3 class="text-sm font-semibold text-gray-700">Belum ada donasi</h3>
                             <p class="text-xs text-gray-400 mt-1">Donasi pertama Anda akan muncul di sini.</p>
-                            <a href="{{ url('/campaigns') }}" class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold">
+                            <a href="{{ url('/campaigns') }}" class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-brand-500 text-white rounded-lg text-sm font-semibold">
                                 Jelajahi Kampanye
                             </a>
                         </div>
@@ -452,7 +444,7 @@
                                             </td>
                                             <td class="p-4 text-center">
                                                 <span class="px-2 py-0.5 rounded text-xs font-semibold
-                                                    @if($d->payment_status == 'paid') bg-emerald-50 text-emerald-600
+                                                    @if($d->payment_status == 'paid') bg-brand-50 text-brand-500
                                                     @elseif($d->payment_status == 'pending') bg-amber-50 text-amber-600
                                                     @else bg-gray-100 text-gray-500 @endif">
                                                     {{ $d->payment_status == 'paid' ? 'Berhasil' : ucfirst($d->payment_status) }}
@@ -461,7 +453,7 @@
                                             <td class="p-4 text-right font-semibold text-gray-800">Rp {{ number_format($d->donation_amount, 0, ',', '.') }}</td>
                                             <td class="p-4 text-center text-xs text-gray-500">{{ $d->created_at->translatedFormat('d M Y, H:i') }}</td>
                                             <td class="p-4 text-center">
-                                                <a href="{{ url('/donations/' . $d->order_id . '/track') }}" class="text-emerald-600 hover:underline text-xs font-semibold">Lacak →</a>
+                                                <a href="{{ url('/donations/' . $d->order_id . '/track') }}" class="text-brand-500 hover:underline text-xs font-semibold">Lacak →</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -475,7 +467,7 @@
                 <div x-show="activeTab === 'withdrawals'" class="space-y-6">
                     <div class="flex items-center justify-between">
                         <h2 class="text-lg font-bold text-gray-800">Penarikan Dana</h2>
-                        <a href="{{ route('withdrawals.create') }}" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 transition flex items-center gap-1.5">
+                        <a href="{{ route('withdrawals.create') }}" class="px-4 py-2 bg-brand-500 text-white rounded-lg text-sm font-semibold hover:bg-brand-600 transition flex items-center gap-1.5">
                             <i class="fas fa-plus"></i> Tarik Dana
                         </a>
                     </div>
@@ -484,7 +476,7 @@
                             <div class="text-4xl text-gray-300 mb-3"><i class="fas fa-wallet"></i></div>
                             <h3 class="text-sm font-semibold text-gray-700">Belum ada penarikan</h3>
                             <p class="text-xs text-gray-400 mt-1">Dana kampanye yang siap dicairkan akan muncul di sini.</p>
-                            <a href="{{ route('withdrawals.create') }}" class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold">
+                            <a href="{{ route('withdrawals.create') }}" class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-brand-500 text-white rounded-lg text-sm font-semibold">
                                 Ajukan Penarikan
                             </a>
                         </div>
@@ -512,7 +504,7 @@
                                             <td class="p-4 text-right font-semibold text-gray-800">Rp {{ number_format($w->amount, 0, ',', '.') }}</td>
                                             <td class="p-4 text-center">
                                                 <span class="px-2 py-0.5 rounded text-xs font-semibold
-                                                    @if($w->status == 'paid') bg-emerald-50 text-emerald-600
+                                                    @if($w->status == 'paid') bg-brand-50 text-brand-500
                                                     @elseif($w->status == 'approved') bg-blue-50 text-blue-600
                                                     @elseif(in_array($w->status, ['pending', 'under_review'])) bg-amber-50 text-amber-600
                                                     @else bg-gray-100 text-gray-500 @endif">
@@ -561,8 +553,8 @@
                     @else
                         <div class="space-y-3">
                             @foreach($notifications as $notif)
-                                <div class="bg-white border border-gray-200 rounded-xl p-4 flex items-start gap-3 {{ is_null($notif->read_at) ? 'border-l-4 border-l-emerald-500' : '' }}">
-                                    <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                <div class="bg-white border border-gray-200 rounded-xl p-4 flex items-start gap-3 {{ is_null($notif->read_at) ? 'border-l-4 border-l-brand-500' : '' }}">
+                                    <div class="w-8 h-8 rounded-full bg-brand-50 text-brand-500 flex items-center justify-center shrink-0">
                                         <i class="fas fa-bell text-xs"></i>
                                     </div>
                                     <div class="flex-1">
@@ -570,7 +562,7 @@
                                         <span class="text-xs text-gray-400 mt-1 block">{{ $notif->created_at->diffForHumans() }}</span>
                                     </div>
                                     @if(is_null($notif->read_at))
-                                        <span class="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0"></span>
+                                        <span class="w-2 h-2 rounded-full bg-brand-500 mt-1.5 shrink-0"></span>
                                     @endif
                                 </div>
                             @endforeach

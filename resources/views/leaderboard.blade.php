@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">Leaderboard</h2>
     </x-slot>
@@ -10,7 +10,7 @@
             <div class="mb-6 flex flex-wrap gap-2">
                 @foreach(['all' => 'Semua', 'weekly' => 'Minggu Ini', 'monthly' => 'Bulan Ini', 'yearly' => 'Tahun Ini'] as $key => $label)
                     <a href="{{ url('/leaderboard?period=' . $key . '&tab=' . $tab) }}"
-                       class="px-4 py-2 rounded-lg text-sm font-medium transition {{ $period === $key ? 'bg-indigo-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50' }}">
+                       class="px-4 py-2 rounded-lg text-sm font-medium transition {{ $period === $key ? 'bg-brand-500 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50' }}">
                         {{ $label }}
                     </a>
                 @endforeach
@@ -20,15 +20,15 @@
             <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="flex border-b border-gray-100">
                     <a href="{{ url('/leaderboard?period=' . $period . '&tab=donors') }}"
-                       class="flex-1 text-center px-4 py-3 text-sm font-medium transition {{ $tab === 'donors' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500 hover:text-gray-700' }}">
+                       class="flex-1 text-center px-4 py-3 text-sm font-medium transition {{ $tab === 'donors' ? 'text-brand-500 border-b-2 border-brand-500' : 'text-gray-500 hover:text-gray-700' }}">
                         🏆 Top Donatur
                     </a>
                     <a href="{{ url('/leaderboard?period=' . $period . '&tab=campaigns') }}"
-                       class="flex-1 text-center px-4 py-3 text-sm font-medium transition {{ $tab === 'campaigns' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500 hover:text-gray-700' }}">
+                       class="flex-1 text-center px-4 py-3 text-sm font-medium transition {{ $tab === 'campaigns' ? 'text-brand-500 border-b-2 border-brand-500' : 'text-gray-500 hover:text-gray-700' }}">
                         📈 Top Kampanye
                     </a>
                     <a href="{{ url('/leaderboard?period=' . $period . '&tab=creators') }}"
-                       class="flex-1 text-center px-4 py-3 text-sm font-medium transition {{ $tab === 'creators' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500 hover:text-gray-700' }}">
+                       class="flex-1 text-center px-4 py-3 text-sm font-medium transition {{ $tab === 'creators' ? 'text-brand-500 border-b-2 border-brand-500' : 'text-gray-500 hover:text-gray-700' }}">
                         ⭐ Top Penggalang
                     </a>
                 </div>
@@ -71,7 +71,7 @@
                                     <p class="mt-2 text-sm font-semibold text-gray-900 text-center truncate w-full">
                                         @if($tab === 'campaigns') {{ $top3[1]['title'] }} @else {{ $top3[1]['user_name'] }} @endif
                                     </p>
-                                    <p class="text-xs font-bold text-green-600">Rp {{ number_format($tab === 'campaigns' ? $top3[1]['collected_amount'] : ($tab === 'creators' ? $top3[1]['total_raised'] : $top3[1]['total_amount']), 0, ',', '.') }}</p>
+                                    <p class="text-xs font-bold text-brand-500">Rp {{ number_format($tab === 'campaigns' ? $top3[1]['collected_amount'] : ($tab === 'creators' ? $top3[1]['total_raised'] : $top3[1]['total_amount']), 0, ',', '.') }}</p>
                                     <div class="mt-2 w-full h-20 bg-gray-200 rounded-t-lg"></div>
                                 </a>
                             @endif
@@ -91,7 +91,7 @@
                                 <p class="mt-2 text-base font-bold text-gray-900 text-center truncate w-full">
                                     @if($tab === 'campaigns') {{ $top3[0]['title'] }} @else {{ $top3[0]['user_name'] }} @endif
                                 </p>
-                                <p class="text-sm font-bold text-green-600">Rp {{ number_format($tab === 'campaigns' ? $top3[0]['collected_amount'] : ($tab === 'creators' ? $top3[0]['total_raised'] : $top3[0]['total_amount']), 0, ',', '.') }}</p>
+                                <p class="text-sm font-bold text-brand-500">Rp {{ number_format($tab === 'campaigns' ? $top3[0]['collected_amount'] : ($tab === 'creators' ? $top3[0]['total_raised'] : $top3[0]['total_amount']), 0, ',', '.') }}</p>
                                 <div class="mt-2 w-full h-28 bg-yellow-100 border-2 border-yellow-300 rounded-t-lg"></div>
                             </a>
 
@@ -111,7 +111,7 @@
                                     <p class="mt-2 text-sm font-semibold text-gray-900 text-center truncate w-full">
                                         @if($tab === 'campaigns') {{ $top3[2]['title'] }} @else {{ $top3[2]['user_name'] }} @endif
                                     </p>
-                                    <p class="text-xs font-bold text-green-600">Rp {{ number_format($tab === 'campaigns' ? $top3[2]['collected_amount'] : ($tab === 'creators' ? $top3[2]['total_raised'] : $top3[2]['total_amount']), 0, ',', '.') }}</p>
+                                    <p class="text-xs font-bold text-brand-500">Rp {{ number_format($tab === 'campaigns' ? $top3[2]['collected_amount'] : ($tab === 'creators' ? $top3[2]['total_raised'] : $top3[2]['total_amount']), 0, ',', '.') }}</p>
                                     <div class="mt-2 w-full h-14 bg-orange-100 rounded-t-lg"></div>
                                 </a>
                             @endif
@@ -145,7 +145,7 @@
                                             @endif
                                         </p>
                                     </div>
-                                    <span class="text-sm font-bold text-green-600 shrink-0">
+                                    <span class="text-sm font-bold text-brand-500 shrink-0">
                                         Rp {{ number_format($tab === 'campaigns' ? $item['collected_amount'] : ($tab === 'creators' ? $item['total_raised'] : $item['total_amount']), 0, ',', '.') }}
                                     </span>
                                 </a>
@@ -173,9 +173,9 @@
                                     <div class="min-w-0">
                                         <p class="text-sm font-semibold text-gray-900 truncate">
                                             @if($tab === 'campaigns')
-                                                <a href="{{ url('/campaigns/' . $item['slug']) }}" class="hover:text-indigo-600">{{ $item['title'] }}</a>
+                                                <a href="{{ url('/campaigns/' . $item['slug']) }}" class="hover:text-brand-500">{{ $item['title'] }}</a>
                                             @else
-                                                <a href="{{ url('/@' . $item['username']) }}" class="hover:text-indigo-600">{{ $item['user_name'] }}</a>
+                                                <a href="{{ url('/@' . $item['username']) }}" class="hover:text-brand-500">{{ $item['user_name'] }}</a>
                                             @endif
                                         </p>
                                         <p class="text-xs text-gray-500">
@@ -186,7 +186,7 @@
                                         </p>
                                     </div>
                                 </div>
-                                <span class="text-sm font-bold text-green-600 shrink-0">
+                                <span class="text-sm font-bold text-brand-500 shrink-0">
                                     Rp {{ number_format($tab === 'campaigns' ? $item['collected_amount'] : ($tab === 'creators' ? $item['total_raised'] : $item['total_amount']), 0, ',', '.') }}
                                 </span>
                             </div>

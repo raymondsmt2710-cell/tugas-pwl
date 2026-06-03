@@ -2,14 +2,17 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="flex items-center justify-between h-16">
             {{-- Logo --}}
-            <a href="/" class="text-xl font-bold text-gray-900 shrink-0">Auto<span class="text-indigo-600">pahala</span></a>
+            <a href="/" class="flex items-center gap-2 text-xl font-bold text-gray-900 shrink-0">
+                <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover">
+                <span>Auto<span class="text-brand-500">pahala</span></span>
+            </a>
 
             {{-- Desktop: Search + Nav Links --}}
             <div class="hidden md:flex items-center gap-6">
                 {{-- Inline Search --}}
                 <form action="{{ url('/search') }}" method="GET" class="relative">
                     <input type="text" name="q" placeholder="Cari kampanye atau user..."
-                           class="w-44 xl:w-56 rounded-lg border-gray-200 bg-gray-50 pl-9 pr-3 py-1.5 text-sm focus:border-indigo-500 focus:ring-indigo-500 focus:bg-white transition">
+                           class="w-44 xl:w-56 rounded-lg border-gray-200 bg-gray-50 pl-9 pr-3 py-1.5 text-sm focus:border-brand-500 focus:ring-brand-500 focus:bg-white transition">
                     <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
                 </form>
 
@@ -67,7 +70,7 @@
                     </div>
                 @else
                     <a href="{{ route('login') }}" class="hidden sm:inline text-sm font-medium text-gray-700 hover:text-gray-900">Masuk</a>
-                    <a href="{{ route('register') }}" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg transition">Daftar</a>
+                    <a href="{{ route('register') }}" class="text-sm font-medium text-white bg-brand-500 hover:bg-brand-600 px-4 py-2 rounded-lg transition">Daftar</a>
                 @endauth
 
                 {{-- Mobile Menu Toggle --}}
@@ -85,11 +88,11 @@
             {{-- Mobile Search --}}
             <form action="{{ url('/search') }}" method="GET" class="mb-3">
                 <input type="text" name="q" placeholder="Cari kampanye atau user..."
-                       class="w-full rounded-lg border-gray-200 bg-gray-50 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                       class="w-full rounded-lg border-gray-200 bg-gray-50 text-sm focus:border-brand-500 focus:ring-brand-500">
             </form>
 
             @auth
-                <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-lg text-sm {{ request()->routeIs('dashboard') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-gray-700 hover:bg-gray-50' }}">Dashboard</a>
+                <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-lg text-sm {{ request()->routeIs('dashboard') ? 'bg-brand-50 text-brand-500 font-semibold' : 'text-gray-700 hover:bg-gray-50' }}">Dashboard</a>
             @endauth
             <a href="{{ url('/campaigns') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Kampanye</a>
             <a href="{{ url('/#categories') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Kategori</a>

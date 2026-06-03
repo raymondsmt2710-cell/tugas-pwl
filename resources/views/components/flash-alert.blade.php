@@ -1,4 +1,4 @@
-@php
+﻿@php
     $message = session('success') ?? session('error') ?? session('warning') ?? session('status') ?? null;
     $type = session('success') ? 'success'
         : (session('error') ? 'error'
@@ -10,7 +10,7 @@
 @if($message)
     @php
         $styles = [
-            'success' => ['bg' => 'bg-green-50', 'border' => 'border-green-200', 'text' => 'text-green-700', 'icon_color' => 'text-green-500'],
+            'success' => ['bg' => 'bg-green-50', 'border' => 'border-green-200', 'text' => 'text-green-700', 'icon_color' => 'text-brand-500'],
             'error'   => ['bg' => 'bg-red-50',   'border' => 'border-red-200',   'text' => 'text-red-700',   'icon_color' => 'text-red-500'],
             'warning' => ['bg' => 'bg-amber-50',  'border' => 'border-amber-200', 'text' => 'text-amber-700', 'icon_color' => 'text-amber-500'],
             'info'    => ['bg' => 'bg-blue-50',   'border' => 'border-blue-200',  'text' => 'text-blue-700',  'icon_color' => 'text-blue-500'],
@@ -79,7 +79,7 @@
      }">
     <svg class="w-5 h-5 mt-0.5 flex-shrink-0"
          :class="{
-             'text-green-500': type==='success',
+             'text-brand-500': type==='success',
              'text-red-500':   type==='error',
              'text-amber-500': type==='warning',
              'text-blue-500':  type==='info',

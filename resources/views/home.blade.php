@@ -4,418 +4,450 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'Autopahala' }}</title>
-    
-    <!-- Memanggil Tailwind CSS bawaan project -->
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/favicon.jpeg') }}">
+    <link rel="shortcut icon" type="image/jpeg" href="{{ asset('images/favicon.jpeg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
-    <!-- FontAwesome untuk Ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     @livewireStyles
 </head>
-<body class="bg-slate-50/50 text-gray-900 antialiased font-sans">
+<body class="bg-white text-gray-900 antialiased font-sans">
 
-    {{-- 1. NAVBAR --}}
+    {{-- NAVBAR --}}
     <x-navbar />
 
-    {{-- 2. HERO SECTION (GoFundMe Style dengan warna tema #20BDC4) --}}
-    <section class="py-12 md:py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-            
-            {{-- Teks Hero (Kiri) --}}
-            <div class="md:col-span-7 space-y-6">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border" style="background-color: rgba(32, 189, 196, 0.1); color: #20BDC4; border-color: rgba(32, 189, 196, 0.2);">
-                    <i class="fa-solid fa-shield-halved"></i> 100% Aman & Terverifikasi
+    {{-- ============================================================
+         1. HERO — background slider otomatis, teks di tengah
+    ============================================================ --}}
+    <section class="relative overflow-hidden"
+             x-data="{
+                 current: 0,
+                 total: 5,
+                 timer: null,
+                 start() {
+                     this.timer = setInterval(() => {
+                         this.current = (this.current + 1) % this.total;
+                     }, 4000);
+                 },
+                 prev() { clearInterval(this.timer); this.current = (this.current - 1 + this.total) % this.total; this.start(); },
+                 next() { clearInterval(this.timer); this.current = (this.current + 1) % this.total; this.start(); }
+             }"
+             x-init="start()">
+
+        {{-- Background Images --}}
+        @php
+            $heroImages = [
+                'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=1600',
+                'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1600',
+                'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&q=80&w=1600',
+                'https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=1600',
+                'https://images.unsplash.com/photo-1578496479914-7ef3b0193be3?auto=format&fit=crop&q=80&w=1600',
+            ];
+        @endphp
+
+        @foreach($heroImages as $i => $img)
+            <div x-show="current === {{ $i }}"
+                 x-transition:enter="transition-opacity duration-1000"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition-opacity duration-700"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="absolute inset-0">
+                <img src="{{ $img }}" class="w-full h-full object-cover" alt="Hero {{ $i + 1 }}">
+                <div class="absolute inset-0 bg-gray-950/60"></div>
+            </div>
+        @endforeach
+
+        {{-- Content --}}
+        <div class="relative z-10 py-24 sm:py-32">
+            <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-white/10 border border-white/20 text-white mb-5">
+                    <i class="fa-solid fa-shield-halved"></i> 100% Aman &amp; Terverifikasi
                 </div>
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-950 tracking-tight leading-none">
-                    Harapan baru dimulai dari kepedulian Anda.
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight">
+                    Harapan baru dimulai dari<br class="hidden sm:block"> kepedulian Anda.
                 </h1>
-                <p class="text-lg sm:text-xl text-gray-600 font-normal leading-relaxed max-w-2xl">
-                    Bantu sesama melewati masa sulit. Mulai penggalangan dana medis, pendidikan, bencana alam, atau bantu wujudkan impian sosial di sekitar Anda secara transparan dan mudah bersama Autopahala.
+                <p class="mt-4 text-base sm:text-lg text-white/75 leading-relaxed max-w-xl mx-auto">
+                    Bantu sesama melewati masa sulit. Mulai penggalangan dana medis, pendidikan, dan bencana alam secara transparan bersama <span class="font-bold text-white">Autopahala</span>.
                 </p>
-                <div class="pt-2 flex flex-col sm:flex-row gap-4">
+                <div class="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
                     @auth
-                        <a href="{{ url('/campaigns/create') }}" class="inline-block w-full sm:w-auto px-8 py-4 rounded-full text-white font-extrabold text-base text-center transition duration-200 hover:opacity-90 shadow-lg" style="background-color: #20BDC4; shadow-color: rgba(32, 189, 196, 0.3);">
+                        <a href="{{ url('/campaigns/create') }}"
+                           class="w-full sm:w-auto px-7 py-3 rounded-full bg-brand-500 text-white font-bold text-sm hover:bg-brand-600 shadow-lg transition">
                             Mulai Galang Dana
                         </a>
                     @else
-                        <a href="{{ route('register') }}" class="inline-block w-full sm:w-auto px-8 py-4 rounded-full text-white font-extrabold text-base text-center transition duration-200 hover:opacity-90 shadow-lg" style="background-color: #20BDC4; shadow-color: rgba(32, 189, 196, 0.3);">
+                        <a href="{{ route('register') }}"
+                           class="w-full sm:w-auto px-7 py-3 rounded-full bg-brand-500 text-white font-bold text-sm hover:bg-brand-600 shadow-lg transition">
                             Mulai Galang Dana
                         </a>
                     @endauth
-                    <a href="#cara-kerja" class="inline-block w-full sm:w-auto px-8 py-4 rounded-full bg-white text-gray-700 font-extrabold text-base text-center border border-gray-200 hover:bg-gray-50 transition duration-200">
-                        Cara Kerja
+                    <a href="{{ url('/campaigns') }}"
+                       class="w-full sm:w-auto px-7 py-3 rounded-full bg-white/10 border border-white/30 text-white font-bold text-sm hover:bg-white/20 transition">
+                        Jelajahi Kampanye
                     </a>
                 </div>
             </div>
+        </div>
 
-            {{-- Media Hero / Kisah Utama (Kanan) --}}
-            <div class="md:col-span-5">
-                <div class="relative rounded-3xl overflow-hidden bg-white border border-gray-100 shadow-xl aspect-[4/3] group transition-all duration-300 hover:translate-y-[-4px]">
-                    <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=800" alt="Hero Campaign" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-gray-950/90 via-gray-950/20 to-transparent flex flex-col justify-end p-6 sm:p-8">
-                        <span class="px-3 py-1 text-white rounded-full text-[10px] font-bold self-start mb-3 shadow-sm" style="background-color: #20BDC4;">
-                            Kisah Utama Terpopuler ⚡
-                        </span>
-                        <h3 class="text-xl sm:text-2xl font-black text-white leading-tight mb-2">
-                            Bantu Renovasi Rumah Belajar Anak Pesisir
-                        </h3>
-                        <div class="w-full bg-white/30 h-2 rounded-full overflow-hidden mt-2">
-                            <div class="h-2 rounded-full w-3/4 animate-pulse" style="background-color: #20BDC4;"></div>
-                        </div>
-                        <div class="flex justify-between text-xs text-gray-200 font-bold mt-2">
-                            <span>75% Terkumpul</span>
-                            <span class="font-black" style="color: #20BDC4;">Rp 45.000.000</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        {{-- Navigasi Panah --}}
+        <button @click="prev()"
+                class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 border border-white/20 text-white flex items-center justify-center hover:bg-white/25 transition backdrop-blur-sm">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
+            </svg>
+        </button>
+        <button @click="next()"
+                class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 border border-white/20 text-white flex items-center justify-center hover:bg-white/25 transition backdrop-blur-sm">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+            </svg>
+        </button>
 
+        {{-- Dots --}}
+        <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+            @for($i = 0; $i < 5; $i++)
+                <button @click="current = {{ $i }}; clearInterval(timer); start()"
+                        :class="current === {{ $i }} ? 'bg-white w-5' : 'bg-white/40 w-2'"
+                        class="h-2 rounded-full transition-all duration-300"></button>
+            @endfor
         </div>
     </section>
 
-    {{-- 3. TRUST & STATS BANNER (Dinamis mengambil data database) --}}
-    <section class="border-y border-gray-200 bg-white py-8">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center gap-4 text-center md:text-left">
-                <div class="p-3 rounded-full hidden sm:block" style="background-color: rgba(32, 189, 196, 0.1); color: #20BDC4;">
-                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z"/>
-                    </svg>
+    {{-- ============================================================
+         2. STATS BANNER
+    ============================================================ --}}
+    <section class="border-y border-gray-100 bg-gray-50 py-8">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-3 gap-4 text-center">
+                <div>
+                    <p class="text-2xl sm:text-3xl font-black text-gray-900">{{ $totalCampaigns ?? 0 }}</p>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-0.5">Kampanye Aktif</p>
+                </div>
+                <div class="border-x border-gray-200">
+                    <p class="text-2xl sm:text-3xl font-black text-gray-900">{{ $totalDonors ?? 0 }}</p>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-0.5">Donatur</p>
                 </div>
                 <div>
-                    <h4 class="text-sm font-black text-gray-950">Garansi Keamanan Autopahala</h4>
-                    <p class="text-xs text-gray-500">Platform terverifikasi demi memastikan donasi Anda sampai ke tangan yang tepat.</p>
-                </div>
-            </div>
-            <div class="flex gap-8 sm:gap-16 text-center">
-                <div>
-                    <p class="text-2xl font-black text-gray-950">{{ $totalCampaigns ?? 0 }}</p>
-                    <p class="text-xs text-gray-500 font-bold">Kampanye Aktif</p>
-                </div>
-                <div class="border-l border-gray-200 pl-8 sm:pl-16">
-                    <p class="text-2xl font-black text-gray-950">{{ $totalDonors ?? 0 }}</p>
-                    <p class="text-xs text-gray-500 font-bold">Donatur Terdaftar</p>
-                </div>
-                <div class="border-l border-gray-200 pl-8 sm:pl-16">
-                    <p class="text-2xl font-black" style="color: #20BDC4;">Rp {{ number_format($totalRaised ?? 0, 0, ',', '.') }}</p>
-                    <p class="text-xs text-gray-500 font-bold">Dana Tersalurkan</p>
+                    <p class="text-2xl sm:text-3xl font-black text-brand-500">
+                        Rp {{ number_format(($totalRaised ?? 0) / 1000000, 0) }}jt
+                    </p>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-0.5">Dana Tersalurkan</p>
                 </div>
             </div>
         </div>
     </section>
 
-    {{-- 4. DISCOVER CATEGORIES --}}
-    <section id="categories" class="py-12 bg-white">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <h2 class="text-xl font-extrabold text-gray-950 mb-6">Cari penggalangan dana berdasarkan kategori</h2>
-            <div class="flex gap-3 overflow-x-auto pb-3 snap-x no-scrollbar">
-                @if(isset($categories) && count($categories) > 0)
-                    @foreach($categories as $category)
-                        <a href="{{ url('/campaigns?category=' . ($category->id_category ?? $category->id)) }}" 
-                           class="snap-start shrink-0 px-6 py-3 bg-gray-50 rounded-full text-sm font-bold text-gray-700 border border-gray-200 transition-all duration-200 hover:text-white"
-                           onmouseover="this.style.backgroundColor='#20BDC4'; this.style.borderColor='#20BDC4'; this.style.color='#ffffff';"
-                           onmouseout="this.style.backgroundColor=''; this.style.borderColor=''; this.style.color='';">
-                            {{ $category->name }}
-                        </a>
-                    @endforeach
-                @else
-                    @foreach(['Medis', 'Pendidikan', 'Bencana Alam', 'Panti Asuhan', 'Kemanusiaan'] as $cat)
-                        <a href="#" class="snap-start shrink-0 px-6 py-3 bg-gray-50 rounded-full text-sm font-bold text-gray-400 border border-gray-200 cursor-not-allowed">
-                            {{ $cat }} (Statis)
-                        </a>
-                    @endforeach
-                @endif
-            </div>
-        </div>
-    </section>
+    {{-- ============================================================
+         3. KATEGORI — tengah, tiap kategori ada icon
+    ============================================================ --}}
+    @php
+        $categoryIcons = [
+            'medis'        => 'fa-solid fa-heart-pulse',
+            'kesehatan'    => 'fa-solid fa-heart-pulse',
+            'pendidikan'   => 'fa-solid fa-graduation-cap',
+            'bencana'      => 'fa-solid fa-house-flood-water',
+            'sosial'       => 'fa-solid fa-hands-holding-child',
+            'kemanusiaan'  => 'fa-solid fa-hand-holding-heart',
+            'lingkungan'   => 'fa-solid fa-leaf',
+            'agama'        => 'fa-solid fa-mosque',
+            'hewan'        => 'fa-solid fa-paw',
+            'seni'         => 'fa-solid fa-palette',
+            'olahraga'     => 'fa-solid fa-futbol',
+            'umum'         => 'fa-solid fa-circle-dot',
+        ];
+        $defaultIcon = 'fa-solid fa-tag';
+    @endphp
 
-    {{-- 5. KAMPANYE TERPOPULER (GoFundMe Card Style) --}}
-    <section id="campaigns" class="py-16 bg-slate-50/50 border-t border-gray-100">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex items-baseline justify-between mb-10">
-                <div>
-                    <h2 class="text-2xl md:text-3xl font-black text-gray-950 tracking-tight">Kampanye Terpopuler</h2>
-                    <p class="text-sm text-gray-500 mt-1">Bantu kampanye mendesak yang membutuhkan kontribusi Anda saat ini.</p>
-                </div>
-                <a href="{{ url('/campaigns') }}" class="text-sm font-bold hover:opacity-80 underline underline-offset-4" style="color: #20BDC4;">Lihat semua</a>
-            </div>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                @if(isset($topCampaigns) && count($topCampaigns) > 0)
-                    @foreach($topCampaigns as $item)
-                        @php 
-                            $campaign = is_array($item) ? (object) $item : $item; 
-                            $percentage = ($campaign->target_amount ?? 0) > 0 ? min(round((($campaign->current_amount ?? 0) / $campaign->target_amount) * 100), 100) : 0;
-                        @endphp
-                        
-                        <div class="bg-white rounded-3xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full group">
-                            <div class="aspect-[16/10] overflow-hidden bg-gray-100 relative">
-                                <img src="{{ !empty($campaign->banner_image) ? asset('storage/' . str_replace('public/', '', $campaign->banner_image)) : 'https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=600' }}" 
-                                     class="w-full h-full object-cover group-hover:scale-105 transition duration-500" 
-                                     alt="{{ $campaign->title ?? 'Campaign' }}">
-                            </div>
-                            <div class="p-6 flex flex-col flex-1 font-sans">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <span class="text-[10px] font-extrabold uppercase tracking-wide px-2.5 py-1 rounded-full" style="background-color: rgba(32, 189, 196, 0.1); color: #20BDC4;">
-                                        {{ $campaign->location ?? 'Indonesia' }}
-                                    </span>
-                                </div>
-                                <h3 class="text-base font-black text-gray-950 mt-1 line-clamp-2 transition-colors duration-200 cursor-pointer"
-                                    onmouseover="this.style.color='#20BDC4';"
-                                    onmouseout="this.style.color='';"
-                                    onclick="window.location='{{ url('/campaigns/' . $campaign->id) }}'">
-                                    {{ $campaign->title ?? '' }}
-                                </h3>
-                                <p class="text-xs text-gray-500 mt-2 line-clamp-2 leading-relaxed font-normal">{{ $campaign->description ?? 'Tidak ada deskripsi.' }}</p>
-                                
-                                <div class="mt-auto pt-6">
-                                    <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                                        <div class="h-2 rounded-full transition-all duration-500" style="width: {{ $percentage }}%; background-color: #20BDC4;"></div>
-                                    </div>
-                                    <div class="flex justify-between items-center mt-3 text-xs">
-                                        <span class="text-gray-950 font-black">
-                                            Rp {{ number_format($campaign->current_amount ?? 0, 0, ',', '.') }} 
-                                            <span class="text-gray-500 font-normal">terkumpul</span>
-                                        </span>
-                                        <span class="font-extrabold" style="color: #20BDC4;">{{ $percentage }}%</span>
-                                    </div>
-                                </div>
-                            </div>
+    <section id="categories" class="py-16 bg-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+            <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-2">Temukan Berdasarkan Kategori</h2>
+            <p class="text-sm text-gray-500 mb-10">Pilih kategori yang ingin Anda dukung</p>
+
+            <div class="flex flex-wrap justify-center gap-3">
+                @foreach($categories as $category)
+                    @php
+                        $slug = strtolower($category->name);
+                        $icon = $defaultIcon;
+                        foreach ($categoryIcons as $key => $ic) {
+                            if (str_contains($slug, $key)) { $icon = $ic; break; }
+                        }
+                    @endphp
+                    <a href="{{ url('/campaigns?category=' . $category->id_category) }}"
+                       class="group flex flex-col items-center gap-2 w-24 sm:w-28 px-3 py-4 bg-gray-50 rounded-2xl border border-gray-100 hover:border-brand-300 hover:bg-brand-50 hover:shadow-sm transition">
+                        <div class="w-10 h-10 rounded-xl bg-white border border-gray-100 group-hover:border-brand-200 flex items-center justify-center shadow-sm">
+                            <i class="{{ $icon }} text-brand-500 text-sm"></i>
                         </div>
-                    @endforeach
-                                @else
-                    @foreach([
-                        ['title' => 'Solidaritas Pangan: Berbagi Paket Makanan Lansia', 'img' => 'https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=600', 'pct' => '60%', 'location' => 'Jakarta, DKI', 'raised' => 'Rp 15.000.000', 'target' => 'Rp 25.000.000'],
-                        ['title' => 'Beasiswa Pendidikan Anak Yatim Berprestasi', 'img' => 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=600', 'pct' => '40%', 'location' => 'Sleman, DIY', 'raised' => 'Rp 12.000.000', 'target' => 'Rp 30.000.000'],
-                        ['title' => 'Bantuan Darurat Korban Kebakaran Pemukiman', 'img' => 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&q=80&w=600', 'pct' => '90%', 'location' => 'Medan, Sumut', 'raised' => 'Rp 45.000.000', 'target' => 'Rp 50.000.000']
-                    ] as $dummy)
-                        <div class="bg-white rounded-3xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl hover:translate-y-[-6px] transition-all duration-300 flex flex-col h-full group cursor-pointer"
-                             onclick="window.location='{{ url('/campaigns') }}'">
-                            <div class="aspect-[16/10] overflow-hidden bg-gray-100 relative">
-                                <img src="{{ $dummy['img'] }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                                <div class="absolute top-3 left-3 bg-[#20BDC4] text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-sm">
-                                    Simulasi ⚡
-                                </div>
-                            </div>
-                            <div class="p-6 flex flex-col flex-1 font-sans">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <span class="text-[10px] font-extrabold uppercase tracking-wide px-2 py-1 rounded-full" style="background-color: rgba(32, 189, 196, 0.1); color: #20BDC4;">
-                                        {{ $dummy['location'] }}
-                                    </span>
-                                </div>
-                                <h3 class="text-base font-black text-gray-950 mt-1 line-clamp-2 group-hover:text-[#20BDC4] transition-colors duration-200">
-                                    {{ $dummy['title'] }}
-                                </h3>
-                                <p class="text-xs text-gray-500 mt-2 line-clamp-2 leading-relaxed font-normal">Ketuk untuk menjelajahi kampanye kemanusiaan aktif ini.</p>
-                                <div class="mt-auto pt-6">
-                                    <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                                        <div class="h-2 rounded-full transition-all duration-500" style="width: {{ $dummy['pct'] }}; background-color: #20BDC4;"></div>
-                                    </div>
-                                    <div class="flex justify-between items-center mt-3 text-xs">
-                                        <span class="text-gray-950 font-black">
-                                            {{ $dummy['raised'] }} 
-                                            <span class="text-gray-500 font-normal">terkumpul</span>
-                                        </span>
-                                        <span class="font-extrabold" style="color: #20BDC4;">{{ $dummy['pct'] }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                @endif
+                        <span class="text-xs font-semibold text-gray-700 group-hover:text-brand-600 text-center leading-tight">{{ $category->name }}</span>
+                    </a>
+                @endforeach
             </div>
         </div>
     </section>
 
-    {{-- 6. LEADERBOARD / INSPIRASI PENGGERAK (Dinamis dari Database) --}}
-    <section class="py-16 bg-white border-y border-gray-200">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="mb-10 text-center md:text-left">
-                <h2 class="text-2xl md:text-3xl font-black text-gray-950 tracking-tight">Inspirasi Penggerak Kebaikan</h2>
-                <p class="text-sm text-gray-500 mt-1">Apresiasi khusus bagi komunitas, donatur, dan kreator teratas.</p>
+    {{-- ============================================================
+         4. KAMPANYE TERBARU — pakai x-campaign-card (sama dgn profile)
+    ============================================================ --}}
+    <section id="campaigns" class="py-16 bg-gray-50 border-t border-gray-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex items-end justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-gray-900">Kampanye Terbaru</h2>
+                    <p class="text-sm text-gray-500 mt-1">Bantu mereka yang membutuhkan</p>
+                </div>
+                <a href="{{ url('/campaigns') }}" class="text-sm font-semibold text-brand-500 hover:text-brand-700">Lihat Semua →</a>
+            </div>
+            @livewire('featured-campaigns')
+        </div>
+    </section>
+
+    {{-- ============================================================
+         5. LEADERBOARD — urutan 1 2 3, tombol lihat lengkap
+    ============================================================ --}}
+    <section class="py-16 bg-white border-t border-gray-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-10">
+                <h2 class="text-2xl sm:text-3xl font-black text-gray-900">Leaderboard</h2>
+                <p class="text-sm text-gray-500 mt-1">Mereka yang paling banyak berkontribusi</p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
-                {{-- TOP DONORS --}}
-                <div class="bg-slate-50/50 p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-sm">
-                    <h3 class="text-xs font-black text-gray-400 uppercase tracking-wider mb-6 flex items-center gap-2">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                {{-- Top Donors --}}
+                <div class="bg-gray-50 rounded-2xl border border-gray-100 p-5">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                         <span>🏆</span> Top Donatur
                     </h3>
-                    <div class="space-y-4">
-                        @if(isset($topDonors) && count($topDonors) > 0)
-                            @foreach($topDonors as $index => $donor)
-                                @php $d = is_array($donor) ? (object) $donor : $donor; @endphp
-                                <div class="flex items-center gap-3 p-3 bg-white rounded-2xl border border-gray-100 hover:shadow-md transition">
-                                    <span class="w-6 text-sm font-bold text-center">
-                                        {{ $index == 0 ? '🥇' : ($index == 1 ? '🥈' : '🥉') }}
-                                    </span>
-                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($d->donor_name ?? 'Donatur') }}&background=20BDC4&color=fff" class="w-10 h-10 rounded-full object-cover">
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-bold text-gray-900 truncate">{{ $d->donor_name ?? 'Hamba Allah' }}</p>
-                                        <p class="text-[11px] text-gray-500">{{ $d->total_donations ?? 1 }} Kali Donasi</p>
-                                    </div>
-                                    <span class="text-sm font-black" style="color: #20BDC4;">Rp {{ number_format($d->total_amount ?? 0, 0, ',', '.') }}</span>
+                    <div class="space-y-2">
+                        @forelse($topDonors as $i => $d)
+                            @php $medals = ['🥇','🥈','🥉']; @endphp
+                            <a href="{{ url('/@' . ($d['username'] ?? '')) }}"
+                               class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-brand-200 hover:shadow-sm transition">
+                                <span class="text-base w-6 text-center shrink-0">{{ $medals[$i] ?? ($i+1) }}</span>
+                                <img src="{{ $d['avatar'] ?? '' }}" class="w-9 h-9 rounded-full object-cover border border-gray-200 shrink-0">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-gray-900 truncate">{{ $d['user_name'] ?? '-' }}</p>
+                                    <p class="text-xs text-gray-400">{{ $d['donation_count'] ?? 0 }} donasi</p>
                                 </div>
-                            @endforeach
-                        @else
-                            <div class="text-center py-8">
-                                <i class="fa-solid fa-users text-gray-300 text-3xl mb-2"></i>
-                                <p class="text-xs text-gray-400">Belum ada data donatur di database.</p>
-                            </div>
-                        @endif
+                                <span class="text-xs font-bold text-brand-500 shrink-0">
+                                    Rp {{ number_format(($d['total_amount'] ?? 0) / 1000, 0) }}rb
+                                </span>
+                            </a>
+                        @empty
+                            <p class="text-xs text-center text-gray-400 py-6">Belum ada data</p>
+                        @endforelse
                     </div>
                 </div>
 
-                {{-- TOP CAMPAIGNS --}}
-                <div class="bg-slate-50/50 p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-sm">
-                    <h3 class="text-xs font-black text-gray-400 uppercase tracking-wider mb-6 flex items-center gap-2">
+                {{-- Top Campaigns --}}
+                <div class="bg-gray-50 rounded-2xl border border-gray-100 p-5">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                         <span>📈</span> Top Kampanye
                     </h3>
-                    <div class="space-y-4">
-                        @if(isset($topCampaigns) && count($topCampaigns) > 0)
-                            @foreach($topCampaigns as $index => $camp)
-                                @php $c = is_array($camp) ? (object) $camp : $camp; @endphp
-                                <div class="flex items-center gap-3 p-3 bg-white rounded-2xl border border-gray-100 hover:shadow-md transition">
-                                    <span class="w-6 text-sm font-bold text-center">
-                                        {{ $index == 0 ? '🥇' : ($index == 1 ? '🥈' : '🥉') }}
-                                    </span>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-bold text-gray-900 truncate">{{ $c->title ?? 'Judul Kampanye' }}</p>
-                                        <p class="text-[11px] text-gray-500">Target: Rp {{ number_format($c->target_amount ?? 0, 0, ',', '.') }}</p>
-                                    </div>
-                                    <span class="text-sm font-black" style="color: #20BDC4;">Rp {{ number_format($c->current_amount ?? 0, 0, ',', '.') }}</span>
+                    <div class="space-y-2">
+                        @forelse($topCampaigns as $i => $c)
+                            @php $medals = ['🥇','🥈','🥉']; @endphp
+                            <a href="{{ url('/campaigns/' . ($c['slug'] ?? '')) }}"
+                               class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-brand-200 hover:shadow-sm transition">
+                                <span class="text-base w-6 text-center shrink-0">{{ $medals[$i] ?? ($i+1) }}</span>
+                                @if(!empty($c['banner_image']))
+                                    <img src="{{ asset('storage/' . $c['banner_image']) }}" class="w-9 h-9 rounded-lg object-cover shrink-0">
+                                @else
+                                    <div class="w-9 h-9 rounded-lg bg-gray-100 shrink-0"></div>
+                                @endif
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-gray-900 truncate">{{ $c['title'] ?? '-' }}</p>
+                                    <p class="text-xs text-gray-400">{{ $c['donor_count'] ?? 0 }} donatur</p>
                                 </div>
-                            @endforeach
-                        @else
-                            <div class="text-center py-8">
-                                <i class="fa-solid fa-chart-line text-gray-300 text-3xl mb-2"></i>
-                                <p class="text-xs text-gray-400">Belum ada kampanye terpopuler.</p>
-                            </div>
-                        @endif
+                                <span class="text-xs font-bold text-brand-500 shrink-0">
+                                    {{ number_format($c['progress'] ?? 0, 0) }}%
+                                </span>
+                            </a>
+                        @empty
+                            <p class="text-xs text-center text-gray-400 py-6">Belum ada data</p>
+                        @endforelse
                     </div>
                 </div>
 
-                {{-- TOP CREATORS --}}
-                <div class="bg-slate-50/50 p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-sm">
-                    <h3 class="text-xs font-black text-gray-400 uppercase tracking-wider mb-6 flex items-center gap-2">
+                {{-- Top Creators --}}
+                <div class="bg-gray-50 rounded-2xl border border-gray-100 p-5">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                         <span>⭐</span> Top Penggalang
                     </h3>
-                    <div class="space-y-4">
-                        @if(isset($topCreators) && count($topCreators) > 0)
-                            @foreach($topCreators as $index => $creator)
-                                @php $cr = is_array($creator) ? (object) $creator : $creator; @endphp
-                                <div class="flex items-center gap-3 p-3 bg-white rounded-2xl border border-gray-100 hover:shadow-md transition">
-                                    <span class="w-6 text-sm font-bold text-center">
-                                        {{ $index == 0 ? '🥇' : ($index == 1 ? '🥈' : '🥉') }}
-                                    </span>
-                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($cr->name ?? 'User') }}&background=20BDC4&color=fff" class="w-10 h-10 rounded-full object-cover">
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-bold text-gray-900 truncate">{{ $cr->name ?? 'Penggalang Dana' }}</p>
-                                        <p class="text-[11px] text-gray-500 font-semibold text-gray-400">Aktif Berbagi Kebaikan</p>
-                                    </div>
+                    <div class="space-y-2">
+                        @forelse($topCreators as $i => $cr)
+                            @php $medals = ['🥇','🥈','🥉']; @endphp
+                            <a href="{{ url('/@' . ($cr['username'] ?? '')) }}"
+                               class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-brand-200 hover:shadow-sm transition">
+                                <span class="text-base w-6 text-center shrink-0">{{ $medals[$i] ?? ($i+1) }}</span>
+                                <img src="{{ $cr['avatar'] ?? '' }}" class="w-9 h-9 rounded-full object-cover border border-gray-200 shrink-0">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-gray-900 truncate">{{ $cr['user_name'] ?? '-' }}</p>
+                                    <p class="text-xs text-gray-400">{{ $cr['campaign_count'] ?? 0 }} kampanye</p>
                                 </div>
-                            @endforeach
-                        @else
-                            <div class="text-center py-8">
-                                <i class="fa-solid fa-hand-holding-heart text-gray-300 text-3xl mb-2"></i>
-                                <p class="text-xs text-gray-400">Belum ada data pembuat kampanye.</p>
-                            </div>
-                        @endif
+                                <span class="text-xs font-bold text-brand-500 shrink-0">
+                                    Rp {{ number_format(($cr['total_raised'] ?? 0) / 1000, 0) }}rb
+                                </span>
+                            </a>
+                        @empty
+                            <p class="text-xs text-center text-gray-400 py-6">Belum ada data</p>
+                        @endforelse
                     </div>
                 </div>
 
             </div>
-        </div>
-    </section>
 
-    {{-- 7. HOW IT WORKS (3 Langkah Kunci GoFundMe) --}}
-    <section class="py-20 bg-white" id="cara-kerja">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <h2 class="text-3xl font-black text-gray-950 text-center mb-16">Galang dana di Autopahala itu mudah</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <div class="space-y-4 group">
-                    <div class="font-black text-6xl transition duration-300 text-gray-200 group-hover:text-[#20BDC4]"
-                         onmouseover="this.style.color='#20BDC4';"
-                         onmouseout="this.style.color='';">1</div>
-                    <h3 class="text-xl font-extrabold text-gray-950">Mulai dengan dasar-dasar</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">Atur judul kampanye Anda, tentukan target dana, dan ceritakan kisah haru atau rencana baik Anda kepada dunia.</p>
-                </div>
-                <div class="space-y-4 group">
-                    <div class="font-black text-6xl transition duration-300 text-gray-200 group-hover:text-[#20BDC4]"
-                         onmouseover="this.style.color='#20BDC4';"
-                         onmouseout="this.style.color='';">2</div>
-                    <h3 class="text-xl font-extrabold text-gray-950">Bagikan ke kerabat</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">Kirimkan link kampanye Anda lewat pesan singkat, email, atau bagikan langsung di feed media sosial Anda untuk menjangkau donatur.</p>
-                </div>
-                <div class="space-y-4 group">
-                    <div class="font-black text-6xl transition duration-300 text-gray-200 group-hover:text-[#20BDC4]"
-                         onmouseover="this.style.color='#20BDC4';"
-                         onmouseout="this.style.color='';">3</div>
-                    <h3 class="text-xl font-extrabold text-gray-950">Terima penarikan dana</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">Setiap rupiah yang masuk bisa Anda pantau secara transparan dan dicairkan berkala langsung ke rekening bank yang dituju.</p>
-                </div>
+            {{-- Tombol Lihat Leaderboard Lengkap --}}
+            <div class="mt-8 text-center">
+                <a href="{{ url('/leaderboard') }}"
+                   class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-gray-200 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition shadow-sm">
+                    <i class="fas fa-trophy text-yellow-500"></i>
+                    Lihat Leaderboard Lengkap →
+                </a>
             </div>
         </div>
     </section>
 
-    {{-- 8. FAQ SECTION (Mendukung Livewire kelompok Anda) --}}
-    <section class="py-16 bg-slate-50/50 border-t border-gray-100">
-        <div class="max-w-4xl mx-auto px-6">
-            <h2 class="text-2xl md:text-3xl font-black text-gray-950 text-center mb-10">Pertanyaan Umum</h2>
+    {{-- ============================================================
+         6. CARA KERJA
+    ============================================================ --}}
+    <section id="cara-kerja" class="py-16 bg-gray-50 border-t border-gray-100">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+            <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-2">Cara Kerja</h2>
+            <p class="text-sm text-gray-500 mb-12">Tiga langkah mudah untuk mulai berbagi</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @foreach([
+                    ['num'=>'1','icon'=>'fa-solid fa-pen-to-square','title'=>'Buat Kampanye','desc'=>'Atur judul, target dana, dan ceritakan kisah atau rencana baik Anda kepada dunia.'],
+                    ['num'=>'2','icon'=>'fa-solid fa-share-nodes','title'=>'Bagikan ke Kerabat','desc'=>'Kirimkan link kampanye ke teman, keluarga, dan media sosial untuk menjangkau lebih banyak donatur.'],
+                    ['num'=>'3','icon'=>'fa-solid fa-wallet','title'=>'Terima Dana','desc'=>'Donasi dipantau secara transparan dan dapat dicairkan kapan saja ke rekening bank Anda.'],
+                ] as $step)
+                    <div class="flex flex-col items-center text-center gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center shadow-sm">
+                            <i class="{{ $step['icon'] }} text-brand-500 text-xl"></i>
+                        </div>
+                        <div class="w-7 h-7 rounded-full bg-brand-500 text-white flex items-center justify-center text-xs font-black">
+                            {{ $step['num'] }}
+                        </div>
+                        <h3 class="text-base font-bold text-gray-900">{{ $step['title'] }}</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed">{{ $step['desc'] }}</p>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- ============================================================
+         7. FAQ
+    ============================================================ --}}
+    <section id="faq" class="py-16 bg-white border-t border-gray-100">
+        <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+            <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-2">Pertanyaan Umum</h2>
+            <p class="text-sm text-gray-500 mb-10">Jawaban untuk pertanyaan yang sering ditanyakan</p>
+        </div>
+        <div class="max-w-2xl mx-auto px-4 sm:px-6">
             @livewire('faq-section')
         </div>
     </section>
 
-    {{-- 9. CONTACT FORM (Mendukung Livewire kelompok Anda) --}}
-    <section id="contact" class="py-20 bg-white border-t border-gray-200">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-            <div class="md:col-span-5 space-y-6">
-                <h2 class="text-3xl md:text-4xl font-black text-gray-950 tracking-tight leading-none">Butuh bantuan tim kami?</h2>
-                <p class="text-base text-gray-600 leading-relaxed">Jika Anda mengalami kendala saat verifikasi identitas atau proses pencairan dana kampanye, tim support kami siap melayani Anda.</p>
-                <p class="text-base font-bold flex items-center gap-2" style="color: #20BDC4;">
-                    <i class="fa-solid fa-envelope"></i>
-                    support@autopahala.com
-                </p>
-            </div>
-            <div class="md:col-span-7 bg-slate-50/50 rounded-3xl border border-gray-200 p-6 sm:p-10 shadow-sm">
-                @livewire('contact-form')
+    {{-- ============================================================
+         8. KONTAK
+    ============================================================ --}}
+    <section id="contact" class="py-16 bg-gray-50 border-t border-gray-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-3">Hubungi Kami</h2>
+                    <p class="text-sm text-gray-500 mb-6 leading-relaxed">Ada pertanyaan atau masukan? Tim kami siap membantu Anda.</p>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 text-sm text-gray-600">
+                            <div class="w-9 h-9 rounded-lg bg-brand-50 flex items-center justify-center shrink-0">
+                                <i class="fas fa-envelope text-brand-500 text-xs"></i>
+                            </div>
+                            support@autopahala.com
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-600">
+                            <div class="w-9 h-9 rounded-lg bg-brand-50 flex items-center justify-center shrink-0">
+                                <i class="fas fa-location-dot text-brand-500 text-xs"></i>
+                            </div>
+                            Medan, Sumatera Utara, Indonesia
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                    @livewire('contact-form')
+                </div>
             </div>
         </div>
     </section>
 
-    {{-- 10. FOOTER --}}
-    <footer class="bg-gray-950 text-white pt-20 pb-10 border-t border-gray-900">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
-            <div class="md:col-span-6 space-y-4">
-                <span class="text-2xl font-black tracking-tight">Auto<span style="color: #20BDC4;">pahala</span></span>
-                <p class="text-sm text-gray-400 max-w-sm leading-relaxed">Platform urunan dana modern yang aman, transparan, dan berdedikasi membantu jutaan impian sosial serta kemanusiaan.</p>
-            </div>
-            <div class="md:col-span-3">
-                <h4 class="text-xs font-black uppercase tracking-wider text-gray-400 mb-6">Navigasi Utama</h4>
-                <div class="space-y-3 text-sm font-bold">
-                    <a href="{{ url('/campaigns') }}" class="block text-gray-300 hover:text-white transition">Jelajahi Kampanye</a>
-                    <a href="#categories" class="block text-gray-300 hover:text-white transition">Kategori Pilihan</a>
-                </div>
-            </div>
-            <div class="md:col-span-3">
-                <h4 class="text-xs font-black uppercase tracking-wider text-gray-400 mb-6">Akses Pengguna</h4>
-                <div class="space-y-3 text-sm font-bold">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="block text-gray-300 hover:text-white transition">Dashboard Saya</a>
-                    @else
-                        <a href="{{ route('login') }}" class="block text-gray-300 hover:text-white transition">Masuk Akun</a>
-                        <a href="{{ route('register') }}" class="block text-gray-300 hover:text-white transition">Daftar Baru</a>
-                    @endauth
-                </div>
+    {{-- ============================================================
+         9. CTA
+    ============================================================ --}}
+    <section class="py-16 bg-brand-500">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+            <h2 class="text-2xl sm:text-3xl font-black text-white mb-2">Siap Berbagi Kebaikan?</h2>
+            <p class="text-brand-100 text-sm mb-8">Mulai buat kampanye atau berikan donasi hari ini.</p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a href="{{ url('/campaigns') }}"
+                   class="w-full sm:w-auto px-6 py-3 rounded-xl bg-white text-brand-500 font-bold text-sm hover:bg-brand-50 transition">
+                    Donasi Sekarang
+                </a>
+                @auth
+                    <a href="{{ url('/campaigns/create') }}"
+                       class="w-full sm:w-auto px-6 py-3 rounded-xl border border-brand-400 text-white font-bold text-sm hover:bg-brand-600 transition">
+                        Buat Kampanye
+                    </a>
+                @else
+                    <a href="{{ route('register') }}"
+                       class="w-full sm:w-auto px-6 py-3 rounded-xl border border-brand-400 text-white font-bold text-sm hover:bg-brand-600 transition">
+                        Daftar Gratis
+                    </a>
+                @endauth
             </div>
         </div>
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 pt-8 border-t border-gray-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 font-semibold">
-            <p>&copy; {{ date('Y') }} Autopahala. All rights reserved.</p>
-            <div class="flex gap-6">
-                <a href="#" class="hover:text-gray-400 transition">Syarat & Ketentuan</a>
-                <a href="#" class="hover:text-gray-400 transition">Kebijakan Privasi</a>
+    </section>
+
+    {{-- ============================================================
+         10. FOOTER
+    ============================================================ --}}
+    <footer class="bg-gray-900 py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <a href="{{ url('/') }}" class="flex items-center gap-2.5 text-lg font-black text-white">
+                        <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-7 h-7 rounded-lg object-cover">
+                        <span>Auto<span class="text-brand-400">pahala</span></span>
+                    </a>
+                    <p class="mt-3 text-sm text-gray-400 max-w-sm leading-relaxed">
+                        Platform crowdfunding terpercaya untuk membantu sesama. Setiap kebaikan, sekecil apapun, berarti.
+                    </p>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Navigasi</p>
+                    <div class="space-y-2">
+                        <a href="{{ url('/campaigns') }}" class="block text-sm text-gray-400 hover:text-white transition">Kampanye</a>
+                        <a href="{{ url('/leaderboard') }}" class="block text-sm text-gray-400 hover:text-white transition">Leaderboard</a>
+                        <a href="#cara-kerja" class="block text-sm text-gray-400 hover:text-white transition">Cara Kerja</a>
+                        <a href="#faq" class="block text-sm text-gray-400 hover:text-white transition">FAQ</a>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Akun</p>
+                    <div class="space-y-2">
+                        @auth
+                            <a href="{{ url('/dashboard') }}" class="block text-sm text-gray-400 hover:text-white transition">Dashboard</a>
+                            <a href="{{ url('/@' . auth()->user()->username) }}" class="block text-sm text-gray-400 hover:text-white transition">Profil Publik</a>
+                            <a href="{{ url('/dashboard?tab=campaigns') }}" class="block text-sm text-gray-400 hover:text-white transition">Kampanye Saya</a>
+                            <a href="{{ url('/dashboard?tab=donations') }}" class="block text-sm text-gray-400 hover:text-white transition">Riwayat Donasi</a>
+                        @else
+                            <a href="{{ route('login') }}" class="block text-sm text-gray-400 hover:text-white transition">Masuk</a>
+                            <a href="{{ route('register') }}" class="block text-sm text-gray-400 hover:text-white transition">Daftar</a>
+                        @endauth
+                    </div>
+                </div>
+            </div>
+            <div class="mt-10 pt-6 border-t border-gray-800 text-center">
+                <p class="text-xs text-gray-500">&copy; {{ date('Y') }} Autopahala. All rights reserved.</p>
             </div>
         </div>
     </footer>

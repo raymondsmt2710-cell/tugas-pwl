@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autopahala - Platform Penggalangan Dana & Donasi Online</title>
 
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/favicon.jpeg') }}">
+    <link rel="shortcut icon" type="image/jpeg" href="{{ asset('images/favicon.jpeg') }}">
+
     <!-- Memanggil Tailwind CSS bawaan project -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
@@ -16,8 +19,8 @@
     <!-- 1. NAVBAR (GoFundMe Style dengan warna tema #20BDC4) -->
     <nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <span class="text-2xl" style="color: #20BDC4;"><i class="fa-solid fa-hand-holding-heart"></i></span>
+            <div class="flex items-center gap-2.5">
+                <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover">
                 <span class="font-black text-2xl tracking-tight">Auto<span style="color: #20BDC4;">pahala</span></span>
             </div>
             
