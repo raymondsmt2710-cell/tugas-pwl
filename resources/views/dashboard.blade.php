@@ -58,7 +58,7 @@
              activeTab: new URLSearchParams(window.location.search).get('tab') || 'overview',
              sidebarOpen: false,
              setTab(tab) {
-                 const validTabs = ['overview','campaigns','donations','withdrawals','notifications','followers','following'];
+                 const validTabs = ['overview','campaigns','donations','withdrawals','notifications'];
                  if (!validTabs.includes(tab)) tab = 'overview';
                  this.activeTab = tab;
                  const url = new URL(window.location);
@@ -67,15 +67,13 @@
              }
          }"
          x-init="
-             const validTabs = ['overview','campaigns','donations','withdrawals','notifications','followers','following'];
+             const validTabs = ['overview','campaigns','donations','withdrawals','notifications'];
              if (!validTabs.includes(activeTab)) activeTab = 'overview';
-             // Sync URL on init if tab param missing
              const url = new URL(window.location);
              if (!url.searchParams.get('tab')) {
                  url.searchParams.set('tab', activeTab);
                  history.replaceState({ tab: activeTab }, '', url);
              }
-             // Handle browser back/forward
              window.addEventListener('popstate', (e) => {
                  const tab = e.state?.tab || new URLSearchParams(window.location.search).get('tab') || 'overview';
                  activeTab = validTabs.includes(tab) ? tab : 'overview';
@@ -168,24 +166,6 @@
                     @if($unreadNotificationsCount > 0)
                         <span class="ml-auto bg-emerald-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">{{ $unreadNotificationsCount }}</span>
                     @endif
-                </button>
-
-                <!-- Followers -->
-                <button @click="setTab('followers'); sidebarOpen = false"
-                        :class="activeTab === 'followers' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
-                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition">
-                    <i class="fas fa-users w-4 h-4 text-center"></i>
-                    <span>Followers</span>
-                    <span class="ml-auto text-xs text-gray-400">{{ $followersCount }}</span>
-                </button>
-
-                <!-- Following -->
-                <button @click="setTab('following'); sidebarOpen = false"
-                        :class="activeTab === 'following' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
-                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition">
-                    <i class="fas fa-user-check w-4 h-4 text-center"></i>
-                    <span>Mengikuti</span>
-                    <span class="ml-auto text-xs text-gray-400">{{ $followingCount }}</span>
                 </button>
 
                 <div class="border-t border-gray-100 my-4"></div>
@@ -530,7 +510,7 @@
                                             <td class="p-4 font-semibold text-gray-800 truncate max-w-[200px]">{{ $w->campaign->title ?? 'Kampanye Dihapus' }}</td>
                                             <td class="p-4">
                                                 <p class="font-semibold text-gray-700">{{ $w->bank_name }}</p>
-                                                <p class="text-xs text-gray-400">No. Rek: {{ maskAccountNumber($w->account_number) }}</p>
+                                                <p class="text-xs text-gray-400">No. Rek: {{ substr($w->account_number, 0, 3) . str_repeat('*', max(0, strlen($w->account_number) - 6)) . substr($w->account_number, -3) }}</p>
                                             </td>
                                             <td class="p-4 text-right font-semibold text-gray-800">Rp {{ number_format($w->amount, 0, ',', '.') }}</td>
                                             <td class="p-4 text-center">
@@ -596,52 +576,6 @@
                                         <span class="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0"></span>
                                     @endif
                                 </div>
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
-
-                {{-- TAB: FOLLOWERS --}}
-                <div x-show="activeTab === 'followers'" class="space-y-6">
-                    <h2 class="text-lg font-bold text-gray-800">Followers ({{ $followersCount }})</h2>
-                    @if($followers->isEmpty())
-                        <div class="text-center py-12 bg-white border border-gray-200 rounded-xl">
-                            <div class="text-4xl text-gray-300 mb-3"><i class="fas fa-users"></i></div>
-                            <h3 class="text-sm font-semibold text-gray-700">Belum ada pengikut</h3>
-                        </div>
-                    @else
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            @foreach($followers as $f)
-                                <a href="{{ url('/@' . $f->username) }}" class="bg-white border border-gray-200 rounded-xl p-3 flex items-center gap-3 hover:bg-gray-50 transition">
-                                    <img class="w-10 h-10 rounded-full object-cover" src="{{ $f->profile_photo_url }}" alt="">
-                                    <div>
-                                        <h4 class="text-sm font-semibold text-gray-800 truncate">{{ $f->full_name }}</h4>
-                                        <p class="text-xs text-gray-400">@ {{ $f->username }}</p>
-                                    </div>
-                                </a>
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
-
-                {{-- TAB: FOLLOWING --}}
-                <div x-show="activeTab === 'following'" class="space-y-6">
-                    <h2 class="text-lg font-bold text-gray-800">Mengikuti ({{ $followingCount }})</h2>
-                    @if($following->isEmpty())
-                        <div class="text-center py-12 bg-white border border-gray-200 rounded-xl">
-                            <div class="text-4xl text-gray-300 mb-3"><i class="fas fa-user-plus"></i></div>
-                            <h3 class="text-sm font-semibold text-gray-700">Belum mengikuti siapapun</h3>
-                        </div>
-                    @else
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            @foreach($following as $f)
-                                <a href="{{ url('/@' . $f->username) }}" class="bg-white border border-gray-200 rounded-xl p-3 flex items-center gap-3 hover:bg-gray-50 transition">
-                                    <img class="w-10 h-10 rounded-full object-cover" src="{{ $f->profile_photo_url }}" alt="">
-                                    <div>
-                                        <h4 class="text-sm font-semibold text-gray-800 truncate">{{ $f->full_name }}</h4>
-                                        <p class="text-xs text-gray-400">@ {{ $f->username }}</p>
-                                    </div>
-                                </a>
                             @endforeach
                         </div>
                     @endif

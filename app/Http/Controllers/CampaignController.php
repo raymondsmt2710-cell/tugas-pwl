@@ -100,9 +100,15 @@ class CampaignController extends Controller
             ->take(10)
             ->get();
 
+        $withdrawals = \App\Models\Withdrawal::forCampaign($campaign->id_campaign)
+            ->whereIn('status', ['approved', 'paid'])
+            ->latest()
+            ->get();
+
         return view('campaigns.show', [
             'campaign' => $campaign,
             'donations' => $donations,
+            'withdrawals' => $withdrawals,
             'comments' => $campaign->comments()->with('user')->latest()->get(),
             'likesCount' => $campaign->likes()->count(),
             'isLiked' => auth()->check() && $campaign->isLikedByUser(auth()->id()),

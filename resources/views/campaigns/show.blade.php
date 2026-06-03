@@ -1,28 +1,6 @@
 <x-app-layout>
     <div class="py-8 sm:py-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            {{-- Session Success & Error Alerts --}}
-            @if(session('success'))
-                <div class="mb-6 rounded-2xl bg-green-50 border border-green-200 p-4 flex items-start gap-3 shadow-sm">
-                    <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <p class="text-sm text-green-700 font-medium">{{ session('success') }}</p>
-                </div>
-            @endif
-
-            @if($errors->any())
-                <div class="mb-6 rounded-2xl bg-red-50 border border-red-200 p-4 flex items-start gap-3 shadow-sm">
-                    <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <div class="space-y-1">
-                        @foreach($errors->all() as $error)
-                            <p class="text-sm text-red-700 font-medium">{{ $error }}</p>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
@@ -161,6 +139,67 @@
                         </div>
                     </div>
 
+                    {{-- Withdrawal Detail --}}
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-semibold text-gray-900">Riwayat Penarikan Dana</h2>
+                            @if($withdrawals->count() > 0)
+                                <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
+                                    {{ $withdrawals->count() }} penarikan
+                                </span>
+                            @endif
+                        </div>
+
+                        @if($withdrawals->isEmpty())
+                            <div class="text-center py-8">
+                                <svg class="w-10 h-10 text-gray-200 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75"/>
+                                </svg>
+                                <p class="text-sm text-gray-400">Belum ada penarikan dana.</p>
+                            </div>
+                        @else
+                            <div class="space-y-3 max-h-[400px] overflow-y-auto pr-1">
+                                @foreach($withdrawals as $w)
+                                    <div class="flex items-start justify-between p-4 bg-gray-50 rounded-xl border border-gray-100 gap-4">
+                                        <div class="flex-1 min-w-0">
+                                            {{-- Amount + Status --}}
+                                            <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                                                <span class="text-sm font-bold text-gray-900">
+                                                    Rp {{ number_format($w->amount, 0, ',', '.') }}
+                                                </span>
+                                                <span class="text-xs font-semibold px-2 py-0.5 rounded-full
+                                                    @if($w->status === 'paid') bg-emerald-50 text-emerald-700
+                                                    @elseif($w->status === 'approved') bg-blue-50 text-blue-700
+                                                    @else bg-gray-100 text-gray-500 @endif">
+                                                    {{ $w->status_label }}
+                                                </span>
+                                            </div>
+
+                                            {{-- Purpose --}}
+                                            @if($w->purpose)
+                                                <p class="text-sm text-gray-700 leading-relaxed mb-1">{{ $w->purpose }}</p>
+                                            @endif
+
+                                            {{-- Notes --}}
+                                            @if($w->notes)
+                                                <p class="text-xs text-gray-400 italic">{{ $w->notes }}</p>
+                                            @endif
+
+                                            {{-- Date --}}
+                                            <p class="text-xs text-gray-400 mt-1.5">
+                                                @if($w->paid_at)
+                                                    Dibayarkan {{ $w->paid_at->translatedFormat('d M Y') }}
+                                                @else
+                                                    Diajukan {{ $w->created_at->translatedFormat('d M Y') }}
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+
                     {{-- Comments Section --}}
                     <div id="comments" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
                         <div class="flex items-center justify-between border-b border-gray-50 pb-4">
@@ -240,32 +279,6 @@
                         </div>
                     </div>
 
-                    {{-- Withdrawal History Preview --}}
-                    @php
-                        $recentWithdrawals = $campaign->withdrawals ?? \App\Models\Withdrawal::forCampaign($campaign->id_campaign)->where('status', 'paid')->latest('paid_at')->take(3)->get();
-                    @endphp
-                    @if($recentWithdrawals->count() > 0)
-                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-lg font-semibold text-gray-900">Riwayat Penarikan</h2>
-                                <a href="{{ route('campaign.withdrawals', $campaign->slug) }}" class="text-xs font-medium text-indigo-600 hover:text-indigo-800">Lihat Semua →</a>
-                            </div>
-                            <div class="space-y-3">
-                                @foreach($recentWithdrawals as $w)
-                                    <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-900">Rp {{ number_format($w->amount, 0, ',', '.') }}</p>
-                                            <p class="text-xs text-gray-500">{{ $w->paid_at?->format('d M Y') ?? $w->created_at->format('d M Y') }}</p>
-                                            @if($w->notes)
-                                                <p class="text-xs text-gray-400 mt-0.5">{{ $w->notes }}</p>
-                                            @endif
-                                        </div>
-                                        <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-green-50 text-green-700">Dibayar</span>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
                 </div>
 
                 {{-- Sidebar --}}

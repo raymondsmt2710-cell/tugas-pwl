@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Campaign;
+use App\Models\CampaignLike;
 use App\Models\Category;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -33,14 +34,23 @@ class CampaignFilter extends Component
     {
         $campaigns = Campaign::active()
             ->with(['category', 'user'])
+            ->withCount('likes')
             ->search($this->search ?: null)
             ->when($this->category, fn ($q) => $q->byCategory($this->category))
             ->latest()
             ->paginate(12);
 
+        $likedIds = auth()->check()
+            ? CampaignLike::where('id_user', auth()->id())
+                ->whereIn('id_campaign', $campaigns->pluck('id_campaign'))
+                ->pluck('id_campaign')
+                ->toArray()
+            : [];
+
         return view('livewire.campaign-filter', [
             'campaigns' => $campaigns,
             'categories' => Category::all(),
+            'likedIds' => $likedIds,
         ]);
     }
 }

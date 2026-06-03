@@ -64,7 +64,7 @@ class ProfileSettings extends Component
         $this->avatar = null;
         $this->cover_photo = null;
 
-        session()->flash('profile_saved', true);
+        $this->dispatch('flash', message: 'Profil berhasil disimpan.', type: 'success');
     }
 
     public function render()

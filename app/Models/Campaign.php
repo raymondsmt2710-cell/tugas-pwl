@@ -83,6 +83,11 @@ class Campaign extends Model
         return $this->hasMany(CampaignDocument::class, 'campaign_id', 'id_campaign');
     }
 
+    public function withdrawals(): HasMany
+    {
+        return $this->hasMany(\App\Models\Withdrawal::class, 'id_campaign', 'id_campaign');
+    }
+
     public function likes(): HasMany
     {
         return $this->hasMany(CampaignLike::class, 'id_campaign', 'id_campaign');

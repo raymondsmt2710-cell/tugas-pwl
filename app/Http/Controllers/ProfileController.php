@@ -25,8 +25,16 @@ class ProfileController extends Controller
         $campaigns = $user->campaigns()
             ->whereIn('status', ['approved', 'goal_reached'])
             ->with('category')
+            ->withCount('likes')
             ->latest()
             ->get();
+
+        $likedIds = auth()->check()
+            ? \App\Models\CampaignLike::where('id_user', auth()->id())
+                ->whereIn('id_campaign', $campaigns->pluck('id_campaign'))
+                ->pluck('id_campaign')
+                ->toArray()
+            : [];
 
         // Stats
         $totalDonationsReceived = $user->campaigns()->sum('collected_amount');
@@ -48,6 +56,7 @@ class ProfileController extends Controller
         return view('profile.public-show', [
             'user' => $user,
             'campaigns' => $campaigns,
+            'likedIds' => $likedIds,
             'totalDonationsReceived' => $totalDonationsReceived,
             'campaignCount' => $campaignCount,
             'followersCount' => $followersCount,
