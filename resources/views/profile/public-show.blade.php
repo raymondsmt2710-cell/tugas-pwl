@@ -202,63 +202,11 @@
                 @else
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         @foreach($campaigns as $campaign)
-                            <a href="{{ route('campaigns.show', $campaign->slug) }}" class="block p-4 border border-slate-100 rounded-2xl hover:bg-slate-50/50 hover:shadow-sm transition">
-                                <div class="flex gap-3 flex-col h-full justify-between">
-                                    <div>
-                                        <div class="flex items-center gap-2 text-sm flex-wrap mb-2">
-                                            <div class="shrink-0 w-7 h-7 rounded-full overflow-hidden">
-                                                <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover" />
-                                            </div>
-                                            <span class="font-bold text-slate-900 text-xs">{{ $user->name }}</span>
-                                            <span class="text-slate-400 text-xs">·</span>
-                                            <span class="text-slate-500 text-xs">{{ $campaign->created_at->diffForHumans(null, true) }}</span>
-                                        </div>
-
-                                                        <div class="flex items-center gap-2 flex-wrap">
-                                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-600 text-xs font-semibold">
-                                                <i class="fas fa-tag text-[10px]"></i>
-                                                {{ $campaign->category->name ?? 'Umum' }}
-                                            </span>
-                                            @if($campaign->status === 'goal_reached')
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                                                    🏆 Goal Tercapai
-                                                </span>
-                                            @endif
-                                        </div>
-
-                                        <h3 class="mt-2 text-base font-bold text-slate-900 leading-snug line-clamp-1">{{ $campaign->title }}</h3>
-
-                                        @if($campaign->short_description ?? ($campaign->description ?? null))
-                                            <p class="mt-1 text-sm text-slate-500 leading-relaxed line-clamp-2">{{ Str::limit(strip_tags($campaign->short_description ?? $campaign->description ?? ''), 140) }}</p>
-                                        @endif
-
-                                        @if($campaign->banner_image)
-                                            <div class="mt-3 rounded-xl overflow-hidden border border-slate-200 h-[180px]">
-                                                <img src="{{ asset('storage/' . $campaign->banner_image) }}" alt="{{ $campaign->title }}" class="w-full h-full object-cover" />
-                                            </div>
-                                        @endif
-                                    </div>
-
-                                    <div class="mt-4">
-                                        <div class="h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                                            <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all duration-500" style="width: {{ min(100, $campaign->progress_percentage) }}%"></div>
-                                        </div>
-                                        <div class="flex items-center justify-between mt-2 text-xs text-slate-500">
-                                            <span><strong class="text-slate-900 font-bold">Rp {{ number_format($campaign->collected_amount, 0, ',', '.') }}</strong> terkumpul</span>
-                                            <span>{{ $campaign->donor_count }} {{ __('donatur') }}</span>
-                                        </div>
-
-                                        <div class="flex gap-4 mt-3 pt-2 border-t border-slate-100">
-                                            <span class="inline-flex items-center gap-1.5 text-slate-500 text-xs hover:text-rose-500 transition cursor-pointer">
-                                                <i class="far fa-heart"></i>
-                                            </span>
-                                            <span class="inline-flex items-center gap-1.5 text-slate-500 text-xs hover:text-indigo-600 transition cursor-pointer">
-                                                <i class="fas fa-arrow-up-from-bracket"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
+                            <x-campaign-card
+                                :campaign="$campaign"
+                                :liked="in_array($campaign->id_campaign, $likedIds)"
+                                :likesCount="$campaign->likes_count"
+                            />
                         @endforeach
                     </div>
                 @endif

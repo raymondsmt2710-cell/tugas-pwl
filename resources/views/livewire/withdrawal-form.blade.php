@@ -64,8 +64,16 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Catatan</label>
-                        <textarea wire:model="notes" rows="2" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="Opsional"></textarea>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Tujuan Penarikan Dana <span class="text-red-500">*</span></label>
+                        <textarea wire:model="purpose" rows="3"
+                                  class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                  placeholder="Contoh: Biaya pengobatan pasien, pembelian alat kesehatan, renovasi sekolah, dll."></textarea>
+                        @error('purpose') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Catatan <span class="text-xs text-gray-400">(opsional)</span></label>
+                        <textarea wire:model="notes" rows="2" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="Informasi tambahan jika diperlukan"></textarea>
                     </div>
                 </div>
             </div>

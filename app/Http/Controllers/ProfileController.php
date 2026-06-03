@@ -20,19 +20,25 @@ class ProfileController extends Controller
             return view('profile.private', ['user' => $user]);
         }
 
-        // Tampilkan campaign aktif saja: approved atau goal_reached.
-        // Hitungan dan total donasi juga hanya dari campaign yang tampil.
-        $activeCampaignsQuery = $user->campaigns()
-            ->whereIn('status', ['approved', 'goal_reached']);
-
-        $campaigns = (clone $activeCampaignsQuery)
+        // Hanya tampilkan campaign yang sudah disetujui admin (approved & goal_reached)
+        // Berlaku untuk semua orang termasuk pemilik profil sendiri
+        $campaigns = $user->campaigns()
+            ->whereIn('status', ['approved', 'goal_reached'])
             ->with('category')
+            ->withCount('likes')
             ->latest()
             ->get();
 
-        // Stats hanya untuk campaign aktif yang ditampilkan di profil.
-        $totalDonationsReceived = (clone $activeCampaignsQuery)->sum('collected_amount');
-        $campaignCount = (clone $activeCampaignsQuery)->count();
+        $likedIds = auth()->check()
+            ? \App\Models\CampaignLike::where('id_user', auth()->id())
+                ->whereIn('id_campaign', $campaigns->pluck('id_campaign'))
+                ->pluck('id_campaign')
+                ->toArray()
+            : [];
+
+        // Stats
+        $totalDonationsReceived = $user->campaigns()->sum('collected_amount');
+        $campaignCount = $user->campaigns()->count();
 
         // Respect privacy settings for follower/following counts + lists
         $showFollowers = $settings->show_followers_count || $isOwner;
@@ -50,6 +56,7 @@ class ProfileController extends Controller
         return view('profile.public-show', [
             'user' => $user,
             'campaigns' => $campaigns,
+            'likedIds' => $likedIds,
             'totalDonationsReceived' => $totalDonationsReceived,
             'campaignCount' => $campaignCount,
             'followersCount' => $followersCount,

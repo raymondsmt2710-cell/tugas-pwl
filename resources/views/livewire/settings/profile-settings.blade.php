@@ -4,9 +4,6 @@
         <p class="text-sm text-gray-500 mt-0.5">Informasi publik yang ditampilkan di profil Anda.</p>
     </div>
     <form wire:submit="save" class="px-6 py-5 space-y-5">
-        @if(session('profile_saved'))
-            <div class="rounded-lg bg-green-50 border border-green-200 p-3 text-sm text-green-700">Profil berhasil disimpan.</div>
-        @endif
 
         {{-- Avatar & Cover --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">

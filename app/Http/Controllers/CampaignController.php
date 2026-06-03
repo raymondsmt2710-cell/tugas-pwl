@@ -100,7 +100,19 @@ class CampaignController extends Controller
             ->take(10)
             ->get();
 
-        return view('campaigns.show', compact('campaign', 'donations'));
+        $withdrawals = \App\Models\Withdrawal::forCampaign($campaign->id_campaign)
+            ->whereIn('status', ['approved', 'paid'])
+            ->latest()
+            ->get();
+
+        return view('campaigns.show', [
+            'campaign' => $campaign,
+            'donations' => $donations,
+            'withdrawals' => $withdrawals,
+            'comments' => $campaign->comments()->with('user')->latest()->get(),
+            'likesCount' => $campaign->likes()->count(),
+            'isLiked' => auth()->check() && $campaign->isLikedByUser(auth()->id()),
+        ]);
     }
 
     /**
@@ -166,7 +178,15 @@ class CampaignController extends Controller
 
         $this->campaignService->requestClose($campaign);
 
-        return back()->with('success', 'Permintaan penutupan kampanye telah diajukan. Menunggu persetujuan admin.');
+        // If came from campaign show page, go back there; otherwise go to dashboard campaigns tab
+        $referer = request()->headers->get('referer', '');
+        if (str_contains($referer, '/campaigns/') && !str_contains($referer, 'dashboard')) {
+            return redirect()->to(url('/campaigns/' . $campaign->slug))
+                ->with('success', 'Permintaan penutupan kampanye telah diajukan. Menunggu persetujuan admin.');
+        }
+
+        return redirect()->to(url('/dashboard?tab=campaigns'))
+            ->with('success', 'Permintaan penutupan kampanye telah diajukan. Menunggu persetujuan admin.');
     }
 
     /**
@@ -180,6 +200,14 @@ class CampaignController extends Controller
 
         $campaign->update(['campaign_status' => 'active']);
 
-        return back()->with('success', 'Permintaan penutupan dibatalkan.');
+        // If came from campaign show page, go back there; otherwise go to dashboard campaigns tab
+        $referer = request()->headers->get('referer', '');
+        if (str_contains($referer, '/campaigns/') && !str_contains($referer, 'dashboard')) {
+            return redirect()->to(url('/campaigns/' . $campaign->slug))
+                ->with('success', 'Permintaan penutupan dibatalkan.');
+        }
+
+        return redirect()->to(url('/dashboard?tab=campaigns'))
+            ->with('success', 'Permintaan penutupan dibatalkan.');
     }
 }

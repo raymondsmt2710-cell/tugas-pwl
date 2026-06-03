@@ -56,11 +56,28 @@
     <div class="min-h-screen bg-gray-50 flex font-sans"
          x-data="{
              activeTab: new URLSearchParams(window.location.search).get('tab') || 'overview',
-             sidebarOpen: false
+             sidebarOpen: false,
+             setTab(tab) {
+                 const validTabs = ['overview','campaigns','donations','withdrawals','notifications'];
+                 if (!validTabs.includes(tab)) tab = 'overview';
+                 this.activeTab = tab;
+                 const url = new URL(window.location);
+                 url.searchParams.set('tab', tab);
+                 history.pushState({ tab }, '', url);
+             }
          }"
          x-init="
-             const validTabs = ['overview','campaigns','donations','withdrawals','notifications','followers','following'];
+             const validTabs = ['overview','campaigns','donations','withdrawals','notifications'];
              if (!validTabs.includes(activeTab)) activeTab = 'overview';
+             const url = new URL(window.location);
+             if (!url.searchParams.get('tab')) {
+                 url.searchParams.set('tab', activeTab);
+                 history.replaceState({ tab: activeTab }, '', url);
+             }
+             window.addEventListener('popstate', (e) => {
+                 const tab = e.state?.tab || new URLSearchParams(window.location.search).get('tab') || 'overview';
+                 activeTab = validTabs.includes(tab) ? tab : 'overview';
+             });
          ">
 
         {{-- MOBILE HEADER --}}
@@ -109,7 +126,7 @@
             <!-- Menu -->
             <nav class="space-y-1">
                 <!-- Overview -->
-                <button @click="activeTab = 'overview'; sidebarOpen = false"
+                <button @click="setTab('overview'); sidebarOpen = false"
                         :class="activeTab === 'overview' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
                         class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition">
                     <i class="fas fa-home w-4 h-4 text-center"></i>
@@ -117,7 +134,7 @@
                 </button>
 
                 <!-- My Campaigns -->
-                <button @click="activeTab = 'campaigns'; sidebarOpen = false"
+                <button @click="setTab('campaigns'); sidebarOpen = false"
                         :class="activeTab === 'campaigns' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
                         class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition">
                     <i class="fas fa-bullhorn w-4 h-4 text-center"></i>
@@ -125,7 +142,7 @@
                 </button>
 
                 <!-- Donations -->
-                <button @click="activeTab = 'donations'; sidebarOpen = false"
+                <button @click="setTab('donations'); sidebarOpen = false"
                         :class="activeTab === 'donations' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
                         class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition">
                     <i class="fas fa-heart w-4 h-4 text-center"></i>
@@ -133,7 +150,7 @@
                 </button>
 
                 <!-- Withdrawals -->
-                <button @click="activeTab = 'withdrawals'; sidebarOpen = false"
+                <button @click="setTab('withdrawals'); sidebarOpen = false"
                         :class="activeTab === 'withdrawals' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
                         class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition">
                     <i class="fas fa-wallet w-4 h-4 text-center"></i>
@@ -141,7 +158,7 @@
                 </button>
 
                 <!-- Notifications -->
-                <button @click="activeTab = 'notifications'; sidebarOpen = false"
+                <button @click="setTab('notifications'); sidebarOpen = false"
                         :class="activeTab === 'notifications' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
                         class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition relative">
                     <i class="fas fa-bell w-4 h-4 text-center"></i>
@@ -149,24 +166,6 @@
                     @if($unreadNotificationsCount > 0)
                         <span class="ml-auto bg-emerald-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">{{ $unreadNotificationsCount }}</span>
                     @endif
-                </button>
-
-                <!-- Followers -->
-                <button @click="activeTab = 'followers'; sidebarOpen = false"
-                        :class="activeTab === 'followers' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
-                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition">
-                    <i class="fas fa-users w-4 h-4 text-center"></i>
-                    <span>Followers</span>
-                    <span class="ml-auto text-xs text-gray-400">{{ $followersCount }}</span>
-                </button>
-
-                <!-- Following -->
-                <button @click="activeTab = 'following'; sidebarOpen = false"
-                        :class="activeTab === 'following' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
-                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition">
-                    <i class="fas fa-user-check w-4 h-4 text-center"></i>
-                    <span>Mengikuti</span>
-                    <span class="ml-auto text-xs text-gray-400">{{ $followingCount }}</span>
                 </button>
 
                 <div class="border-t border-gray-100 my-4"></div>
@@ -260,7 +259,7 @@
                         <div class="lg:col-span-3 bg-white border border-gray-200 rounded-xl p-5">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-sm font-semibold text-gray-800">Kampanye Terbaru</h3>
-                                <button @click="activeTab = 'campaigns'" class="text-xs font-semibold text-emerald-600 hover:underline">Lihat semua</button>
+                                <button @click="setTab('campaigns')" class="text-xs font-semibold text-emerald-600 hover:underline">Lihat semua</button>
                             </div>
                             @if($myCampaigns->isEmpty())
                                 <div class="text-center py-8 text-sm text-gray-400">Belum ada kampanye.</div>
@@ -346,31 +345,61 @@
                                     <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 flex gap-2 text-xs">
                                         @if(in_array($c->status, ['draft', 'rejected']))
                                             {{-- Hapus --}}
-                                            <form action="{{ route('campaign.destroy', $c->id_campaign) }}" method="POST"
-                                                  onsubmit="return confirm('Yakin ingin menghapus kampanye ini? Tindakan ini tidak bisa dibatalkan.')"
-                                                  class="shrink-0">
+                                            <form id="form-delete-{{ $c->id_campaign }}" action="{{ route('campaign.destroy', $c->id_campaign) }}" method="POST" class="shrink-0">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button class="py-1.5 px-2.5 border border-red-200 text-red-500 rounded-lg font-semibold hover:bg-red-50 transition" title="Hapus">
+                                                <button type="button"
+                                                    @click="$dispatch('confirm', {
+                                                        title: 'Hapus Kampanye?',
+                                                        message: 'Kampanye \'{{ addslashes($c->title) }}\' akan dihapus permanen. Tindakan ini tidak bisa dibatalkan.',
+                                                        confirmText: 'Ya, Hapus',
+                                                        type: 'danger',
+                                                        onConfirm: () => document.getElementById('form-delete-{{ $c->id_campaign }}').submit()
+                                                    })"
+                                                    class="py-1.5 px-2.5 border border-red-200 text-red-500 rounded-lg font-semibold hover:bg-red-50 transition" title="Hapus">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
                                             <a href="{{ route('campaign.edit', $c->id_campaign) }}" class="flex-1 py-1.5 border border-gray-300 text-gray-700 rounded-lg text-center font-semibold hover:bg-white">Edit</a>
-                                            <form action="{{ route('campaign.submit', $c->id_campaign) }}" method="POST" class="flex-1">
+                                            <form id="form-submit-{{ $c->id_campaign }}" action="{{ route('campaign.submit', $c->id_campaign) }}" method="POST" class="flex-1">
                                                 @csrf
-                                                <button class="w-full py-1.5 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700">Ajukan</button>
+                                                <button type="button"
+                                                    @click="$dispatch('confirm', {
+                                                        title: 'Ajukan Kampanye?',
+                                                        message: 'Kampanye akan dikirim ke admin untuk ditinjau. Pastikan semua informasi sudah lengkap dan benar.',
+                                                        confirmText: 'Ya, Ajukan',
+                                                        type: 'info',
+                                                        onConfirm: () => document.getElementById('form-submit-{{ $c->id_campaign }}').submit()
+                                                    })"
+                                                    class="w-full py-1.5 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700">Ajukan</button>
                                             </form>
                                         @elseif(in_array($c->status, ['approved', 'goal_reached']))
                                             <a href="{{ route('campaigns.show', $c->slug) }}" class="flex-1 py-1.5 border border-gray-300 text-gray-700 rounded-lg text-center font-semibold hover:bg-white">Lihat</a>
                                             @if($c->campaign_status !== 'pending_close')
-                                                <form action="{{ route('campaign.close', $c->id_campaign) }}" method="POST" class="flex-1" onsubmit="return confirm('Ajukan penutupan kampanye? Admin akan meninjau permintaan Anda.')">
+                                                <form id="form-close-{{ $c->id_campaign }}" action="{{ route('campaign.close', $c->id_campaign) }}" method="POST" class="flex-1">
                                                     @csrf
-                                                    <button class="w-full py-1.5 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600">Ajukan Tutup</button>
+                                                    <button type="button"
+                                                        @click="$dispatch('confirm', {
+                                                            title: 'Ajukan Penutupan?',
+                                                            message: 'Permintaan penutupan akan dikirim ke admin untuk ditinjau. Kampanye tetap aktif sampai admin menyetujui.',
+                                                            confirmText: 'Ya, Ajukan Tutup',
+                                                            type: 'warning',
+                                                            onConfirm: () => document.getElementById('form-close-{{ $c->id_campaign }}').submit()
+                                                        })"
+                                                        class="w-full py-1.5 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600">Ajukan Tutup</button>
                                                 </form>
                                             @else
-                                                <form action="{{ route('campaign.cancel-close', $c->id_campaign) }}" method="POST" class="flex-1" onsubmit="return confirm('Batalkan permintaan penutupan?')">
+                                                <form id="form-cancel-close-{{ $c->id_campaign }}" action="{{ route('campaign.cancel-close', $c->id_campaign) }}" method="POST" class="flex-1">
                                                     @csrf
-                                                    <button class="w-full py-1.5 bg-gray-500 text-white rounded-lg font-semibold hover:bg-gray-600">Batalkan Tutup</button>
+                                                    <button type="button"
+                                                        @click="$dispatch('confirm', {
+                                                            title: 'Batalkan Permintaan?',
+                                                            message: 'Permintaan penutupan kampanye akan dibatalkan. Kampanye akan kembali aktif seperti semula.',
+                                                            confirmText: 'Ya, Batalkan',
+                                                            type: 'warning',
+                                                            onConfirm: () => document.getElementById('form-cancel-close-{{ $c->id_campaign }}').submit()
+                                                        })"
+                                                        class="w-full py-1.5 bg-gray-500 text-white rounded-lg font-semibold hover:bg-gray-600">Batalkan Tutup</button>
                                                 </form>
                                             @endif
                                         @elseif($c->status === 'pending')
@@ -469,6 +498,7 @@
                                         <th class="p-4 text-right">Jumlah</th>
                                         <th class="p-4 text-center">Status</th>
                                         <th class="p-4 text-center">Tanggal</th>
+                                        <th class="p-4 text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-100">
@@ -477,7 +507,7 @@
                                             <td class="p-4 font-semibold text-gray-800 truncate max-w-[200px]">{{ $w->campaign->title ?? 'Kampanye Dihapus' }}</td>
                                             <td class="p-4">
                                                 <p class="font-semibold text-gray-700">{{ $w->bank_name }}</p>
-                                                <p class="text-xs text-gray-400">No. Rek: {{ maskAccountNumber($w->account_number) }}</p>
+                                                <p class="text-xs text-gray-400">No. Rek: {{ substr($w->account_number, 0, 3) . str_repeat('*', max(0, strlen($w->account_number) - 6)) . substr($w->account_number, -3) }}</p>
                                             </td>
                                             <td class="p-4 text-right font-semibold text-gray-800">Rp {{ number_format($w->amount, 0, ',', '.') }}</td>
                                             <td class="p-4 text-center">
@@ -490,6 +520,27 @@
                                                 </span>
                                             </td>
                                             <td class="p-4 text-center text-xs text-gray-500">{{ $w->created_at->translatedFormat('d M Y, H:i') }}</td>
+                                            <td class="p-4 text-center">
+                                                @if($w->canBeCancelled())
+                                                    <form id="form-cancel-withdrawal-{{ $w->id_withdrawal }}"
+                                                          action="{{ route('withdrawals.cancel', $w->id_withdrawal) }}" method="POST">
+                                                        @csrf
+                                                        <button type="button"
+                                                            @click="$dispatch('confirm', {
+                                                                title: 'Batalkan Penarikan?',
+                                                                message: 'Penarikan sebesar Rp {{ number_format($w->amount, 0, ',', '.') }} akan dibatalkan.',
+                                                                confirmText: 'Ya, Batalkan',
+                                                                type: 'danger',
+                                                                onConfirm: () => document.getElementById('form-cancel-withdrawal-{{ $w->id_withdrawal }}').submit()
+                                                            })"
+                                                            class="text-xs text-red-500 hover:underline font-semibold">
+                                                            Batalkan
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <span class="text-xs text-gray-300">—</span>
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -522,52 +573,6 @@
                                         <span class="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0"></span>
                                     @endif
                                 </div>
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
-
-                {{-- TAB: FOLLOWERS --}}
-                <div x-show="activeTab === 'followers'" class="space-y-6">
-                    <h2 class="text-lg font-bold text-gray-800">Followers ({{ $followersCount }})</h2>
-                    @if($followers->isEmpty())
-                        <div class="text-center py-12 bg-white border border-gray-200 rounded-xl">
-                            <div class="text-4xl text-gray-300 mb-3"><i class="fas fa-users"></i></div>
-                            <h3 class="text-sm font-semibold text-gray-700">Belum ada pengikut</h3>
-                        </div>
-                    @else
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            @foreach($followers as $f)
-                                <a href="{{ url('/@' . $f->username) }}" class="bg-white border border-gray-200 rounded-xl p-3 flex items-center gap-3 hover:bg-gray-50 transition">
-                                    <img class="w-10 h-10 rounded-full object-cover" src="{{ $f->profile_photo_url }}" alt="">
-                                    <div>
-                                        <h4 class="text-sm font-semibold text-gray-800 truncate">{{ $f->full_name }}</h4>
-                                        <p class="text-xs text-gray-400">@ {{ $f->username }}</p>
-                                    </div>
-                                </a>
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
-
-                {{-- TAB: FOLLOWING --}}
-                <div x-show="activeTab === 'following'" class="space-y-6">
-                    <h2 class="text-lg font-bold text-gray-800">Mengikuti ({{ $followingCount }})</h2>
-                    @if($following->isEmpty())
-                        <div class="text-center py-12 bg-white border border-gray-200 rounded-xl">
-                            <div class="text-4xl text-gray-300 mb-3"><i class="fas fa-user-plus"></i></div>
-                            <h3 class="text-sm font-semibold text-gray-700">Belum mengikuti siapapun</h3>
-                        </div>
-                    @else
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            @foreach($following as $f)
-                                <a href="{{ url('/@' . $f->username) }}" class="bg-white border border-gray-200 rounded-xl p-3 flex items-center gap-3 hover:bg-gray-50 transition">
-                                    <img class="w-10 h-10 rounded-full object-cover" src="{{ $f->profile_photo_url }}" alt="">
-                                    <div>
-                                        <h4 class="text-sm font-semibold text-gray-800 truncate">{{ $f->full_name }}</h4>
-                                        <p class="text-xs text-gray-400">@ {{ $f->username }}</p>
-                                    </div>
-                                </a>
                             @endforeach
                         </div>
                     @endif

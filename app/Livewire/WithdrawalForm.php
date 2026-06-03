@@ -14,6 +14,7 @@ class WithdrawalForm extends Component
     public string $bank_name = '';
     public string $account_number = '';
     public string $account_holder = '';
+    public string $purpose = '';
     public string $notes = '';
 
     public function mount(?int $campaignId = null): void
@@ -26,12 +27,13 @@ class WithdrawalForm extends Component
     protected function rules(): array
     {
         return [
-            'id_campaign' => 'required|exists:campaigns,id_campaign',
-            'amount' => 'required|numeric|min:50000',
-            'bank_name' => 'required|string|max:100',
+            'id_campaign'    => 'required|exists:campaigns,id_campaign',
+            'amount'         => 'required|numeric|min:50000',
+            'bank_name'      => 'required|string|max:100',
             'account_number' => 'required|string|max:50',
             'account_holder' => 'required|string|max:100',
-            'notes' => 'nullable|string|max:500',
+            'purpose'        => 'required|string|max:500',
+            'notes'          => 'nullable|string|max:500',
         ];
     }
 
@@ -59,11 +61,12 @@ class WithdrawalForm extends Component
 
         try {
             $service->requestWithdrawal($campaign, auth()->user(), [
-                'amount' => $this->amount,
-                'bank_name' => $this->bank_name,
+                'amount'         => $this->amount,
+                'bank_name'      => $this->bank_name,
                 'account_number' => $this->account_number,
                 'account_holder' => $this->account_holder,
-                'notes' => $this->notes,
+                'purpose'        => $this->purpose,
+                'notes'          => $this->notes,
             ]);
 
             session()->flash('success', 'Permintaan penarikan berhasil diajukan.');

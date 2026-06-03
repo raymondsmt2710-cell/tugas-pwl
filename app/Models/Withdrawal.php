@@ -17,6 +17,7 @@ class Withdrawal extends Model
         'account_number',
         'account_holder',
         'status',
+        'purpose',
         'notes',
         'admin_notes',
         'reviewed_at',
