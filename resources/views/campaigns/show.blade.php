@@ -21,7 +21,7 @@
 
                     @if($slides->count() > 0)
                         <div class="mb-4">
-                            <a href="{{ url('/my-campaigns') }}" class="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">← Kembali</a>
+                            <a href="{{ route('home') }}" onclick="event.preventDefault(); window.history.length > 1 ? window.history.back() : window.location.href='{{ route('home') }}';" class="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">← Kembali</a>
                         </div>
                         <div class="rounded-2xl overflow-hidden bg-gray-100 shadow-sm relative" x-data="{ current: 0, total: {{ $slides->count() }} }">
                             {{-- Slides --}}
