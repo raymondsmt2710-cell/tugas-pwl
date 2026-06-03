@@ -1,0 +1,71 @@
+================================================================================
+PENJELASAN PERBAIKAN BUG DASHBOARD ADMIN (KELOLA DONASI & KELOLA KATEGORI)
+================================================================================
+
+1. PENYEBAB BUG ("Tidak Terbaca / Kosong"):
+--------------------------------------------------------------------------------
+Sebelumnya, ketika mengakses menu "Kelola Donasi" dan "Kelola Kategori" di Dashboard Admin 
+(Filament), data tidak terbaca dengan benar atau tampil kosong (blank). 
+
+Hal ini disebabkan karena file konfigurasi Form (Formulir) dan Table (Tabel/Kolom data) 
+untuk kedua resource tersebut masih kosong bawaan generator (hanya template kosong):
+- Di resource Donasi: `DonationForm.php` dan `DonationsTable.php` tidak memiliki komponen input maupun kolom data sama sekali.
+- Di resource Kategori: `CategoryForm.php` dan `CategoriesTable.php` juga tidak memiliki komponen input maupun kolom data sama sekali.
+
+Karena struktur kolom tabel dan field form kosong, Filament tidak dapat memetakan/membaca data 
+dari database untuk ditampilkan di antarmuka admin.
+
+
+2. APA YANG DITAMBAHKAN / DIPERBAIKI:
+--------------------------------------------------------------------------------
+Kami telah mengisi file skema form dan tabel tersebut dengan memetakan struktur database 
+yang sesuai secara lengkap dan presisi:
+
+A. KELOLA KATEGORI (Categories)
+   -----------------------------------------------------------------------------
+   * File Form: `app/Filament/Resources/Categories/Schemas/CategoryForm.php`
+     - Menambahkan input text untuk 'Nama Kategori' (name) yang bersifat wajib (required).
+     - Menambahkan fitur auto-generate Slug URL. Ketika mengetik Nama Kategori, Slug akan 
+       terisi secara otomatis (menggunakan `Str::slug`).
+     - Menambahkan input textarea untuk 'Deskripsi' (description) kategori.
+   
+   * File Table: `app/Filament/Resources/Categories/Tables/CategoriesTable.php`
+     - Menambahkan kolom 'Nama Kategori' (name) & 'Slug' (dapat dicari dan diurutkan).
+     - Menambahkan kolom 'Deskripsi' (description) dengan batas tampilan 50 karakter agar tetap rapi.
+     - Menambahkan kolom 'Dibuat Pada' (created_at) dengan format tanggal 'd M Y H:i'.
+     - Default pengurutan (sorting) otomatis berdasarkan tanggal dibuat terbaru.
+
+B. KELOLA DONASI (Donations)
+   -----------------------------------------------------------------------------
+   * File Form: `app/Filament/Resources/Donations/Schemas/DonationForm.php`
+     - Menambahkan pilihan relasi 'Kampanye' (id_campaign) yang terhubung ke model Campaign.
+     - Menambahkan pilihan relasi 'Pengguna' (id_user) untuk donatur terdaftar (opsional).
+     - Menambahkan input untuk data donatur: 'Nama Donatur' (donor_name) dan 'Email Donatur' (donor_email).
+     - Menambahkan input 'Jumlah Donasi' (donation_amount) berupa angka dengan awalan 'Rp'.
+     - Menambahkan pilihan 'Status Pembayaran' (payment_status): Menunggu Pembayaran (pending), Lunas (paid), Gagal (failed), Kedaluwarsa (expired), Dibatalkan (cancelled).
+     - Menambahkan pilihan 'Metode Pembayaran' (payment_method) seperti Transfer Bank, QRIS, GoPay, dsb.
+     - Menambahkan DateTimePicker untuk mencatat 'Waktu Pembayaran' (paid_at).
+     - Menambahkan toggle switch untuk status 'Donasi sebagai Anonim' (is_anonymous).
+     - Menambahkan input textarea untuk 'Pesan / Doa dari Donatur' (donor_message).
+
+   * File Table: `app/Filament/Resources/Donations/Tables/DonationsTable.php`
+     - Menambahkan kolom 'Order ID' (searchable, sortable, copyable ke clipboard).
+     - Menambahkan kolom nama Kampanye yang dituju (campaign.title, dibatasi 40 karakter).
+     - Menambahkan kolom 'Nama Donatur' (donor_name).
+     - Menambahkan kolom 'Jumlah Donasi' (donation_amount) yang otomatis berformat mata uang Rupiah (IDR).
+     - Menambahkan kolom badge status pembayaran dengan warna dinamis:
+       * Kuning/Warning untuk 'Pending'
+       * Hijau/Success untuk 'Paid' (Lunas)
+       * Merah/Danger untuk 'Failed' (Gagal)
+       * Abu-abu untuk 'Expired' (Kedaluwarsa) dan 'Cancelled' (Batal)
+     - Menambahkan kolom 'Metode Pembayaran' (payment_method).
+     - Menambahkan kolom status 'Anonim' (is_anonymous) menggunakan IconColumn (Centang hijau jika anonim, silang merah jika tidak).
+     - Menambahkan kolom 'Tanggal' (created_at).
+     - Menambahkan fitur Filter berdasarkan 'Status Pembayaran' di toolbar agar admin mudah menyaring data.
+
+
+3. HASIL:
+--------------------------------------------------------------------------------
+Sekarang, menu "Kelola Donasi" dan "Kelola Kategori" di panel admin dapat membaca, 
+menampilkan, mencari, menyaring (filter), mengedit, dan membuat data dengan sempurna 
+tanpa ada bagian yang kosong atau tidak terbaca lagi.
