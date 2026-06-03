@@ -17,11 +17,13 @@ return new class extends Migration
     {
         // Update role enum to include super_admin if not already present
         // Check current enum values
-        $currentEnum = DB::select("SHOW COLUMNS FROM users WHERE Field = 'role'");
-        if (!empty($currentEnum)) {
-            $type = $currentEnum[0]->Type;
-            if (strpos($type, 'super_admin') === false) {
-                DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('super_admin', 'admin', 'user') DEFAULT 'user'");
+        if (DB::getDriverName() !== 'sqlite') {
+            $currentEnum = DB::select("SHOW COLUMNS FROM users WHERE Field = 'role'");
+            if (!empty($currentEnum)) {
+                $type = $currentEnum[0]->Type;
+                if (strpos($type, 'super_admin') === false) {
+                    DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('super_admin', 'admin', 'user') DEFAULT 'user'");
+                }
             }
         }
 
@@ -50,9 +52,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Revert super_admin users to admin before removing enum value
-        DB::table('users')->where('role', 'super_admin')->update(['role' => 'admin']);
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'user') DEFAULT 'user'");
+        if (DB::getDriverName() !== 'sqlite') {
+            // Revert super_admin users to admin before removing enum value
+            DB::table('users')->where('role', 'super_admin')->update(['role' => 'admin']);
+            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'user') DEFAULT 'user'");
+        }
 
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn(['provider', 'provider_id', 'avatar_url']);

@@ -1,4 +1,4 @@
-<div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+﻿<div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
     <div class="px-6 py-5 border-b border-gray-100">
         <h3 class="text-lg font-semibold text-gray-900">Profil</h3>
         <p class="text-sm text-gray-500 mt-0.5">Informasi publik yang ditampilkan di profil Anda.</p>
@@ -11,15 +11,15 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">Foto Profil</label>
                 <div class="flex items-center gap-4">
                     <img src="{{ $avatar ? $avatar->temporaryUrl() : auth()->user()->profile_photo_url }}" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200">
-                    <input wire:model.live="avatar" type="file" accept="image/*" class="text-sm text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 cursor-pointer">
+                    <input wire:model.live="avatar" type="file" accept="image/*" class="text-sm text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-600 cursor-pointer">
                 </div>
-                <div wire:loading wire:target="avatar" class="mt-1 text-xs text-indigo-600">Mengunggah...</div>
+                <div wire:loading wire:target="avatar" class="mt-1 text-xs text-brand-500">Mengunggah...</div>
                 @error('avatar') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Foto Sampul</label>
                 <input wire:model.live="cover_photo" type="file" accept="image/*" class="text-sm text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-50 file:text-gray-700 cursor-pointer">
-                <div wire:loading wire:target="cover_photo" class="mt-1 text-xs text-indigo-600">Mengunggah...</div>
+                <div wire:loading wire:target="cover_photo" class="mt-1 text-xs text-brand-500">Mengunggah...</div>
                 @error('cover_photo') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
         </div>

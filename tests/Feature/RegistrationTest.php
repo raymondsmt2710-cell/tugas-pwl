@@ -48,6 +48,11 @@ class RegistrationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
+        
+        $expectedRedirect = Features::enabled(Features::emailVerification())
+            ? '/email/verify'
+            : route('dashboard', absolute: false);
+
+        $response->assertRedirect($expectedRedirect);
     }
 }

@@ -1,5 +1,22 @@
 @import "tailwindcss";
-@plugin "daisyui";
+
+/* ============================================================
+   Brand color: #20bdc4
+============================================================ */
+@theme {
+    --color-brand-50:  #f0fdfd;
+    --color-brand-100: #ccf7f8;
+    --color-brand-200: #99eef1;
+    --color-brand-300: #5cdde2;
+    --color-brand-400: #2ecbcf;
+    --color-brand-500: #20bdc4;
+    --color-brand-600: #179aa0;
+    --color-brand-700: #167b80;
+    --color-brand-800: #166369;
+    --color-brand-900: #165358;
+    --color-brand-950: #07363b;
+}
+
 
 [x-cloak] {
     display: none;

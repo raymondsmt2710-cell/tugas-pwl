@@ -24,7 +24,7 @@
                 <textarea wire:model="message" id="contact-message" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="Tulis pesan Anda..."></textarea>
                 @error('message') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
-            <button type="submit" class="w-full py-2.5 px-4 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition">
+            <button type="submit" class="w-full py-2.5 px-4 rounded-lg text-white text-sm font-semibold transition" style="background-color: #20bdc4;" onmouseover="this.style.backgroundColor='#179aa0'" onmouseout="this.style.backgroundColor='#20bdc4'">
                 Kirim Pesan
             </button>
         </form>
