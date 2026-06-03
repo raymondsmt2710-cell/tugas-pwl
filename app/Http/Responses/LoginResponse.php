@@ -15,6 +15,16 @@ class LoginResponse implements LoginResponseContract
      */
     public function toResponse($request): RedirectResponse
     {
+        if (auth()->check() && auth()->user()->isAdmin()) {
+            auth()->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect('/login')->withErrors([
+                'email' => 'Akun admin tidak diperbolehkan login melalui halaman ini. Silakan gunakan halaman login admin khusus.',
+            ]);
+        }
+
         return redirect('/');
     }
 }

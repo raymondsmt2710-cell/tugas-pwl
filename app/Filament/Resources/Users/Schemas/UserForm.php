@@ -91,11 +91,13 @@ class UserForm
                                 FileUpload::make('profile_photo')
                                     ->label('Foto Profil Avatar')
                                     ->image()
-                                    ->directory('profile-photos'),
+                                    ->directory('profile-photos')
+                                    ->disk('public'),
                                 FileUpload::make('cover_photo_path')
                                     ->label('Foto Sampul Profil')
                                     ->image()
-                                    ->directory('cover-photos'),
+                                    ->directory('cover-photos')
+                                    ->disk('public'),
                                 KeyValue::make('social_links')
                                     ->label('Tautan Media Sosial')
                                     ->columnSpanFull()

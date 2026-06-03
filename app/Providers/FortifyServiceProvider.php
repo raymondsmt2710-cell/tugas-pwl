@@ -13,6 +13,9 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Fortify;
+use Illuminate\Validation\ValidationException;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -57,6 +60,29 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::redirectUserForTwoFactorAuthenticationUsing(RedirectIfTwoFactorAuthenticatable::class);
+
+        // Kustomisasi Otentikasi Fortify untuk memblokir akun admin pada login publik
+        Fortify::authenticateUsing(function (Request $request) {
+            $username = $request->input(Fortify::username());
+            $password = $request->input('password');
+
+            // Cari user berdasarkan email atau username
+            $user = User::where('email', $username)
+                ->orWhere('username', $username)
+                ->first();
+
+            if ($user && Hash::check($password, $user->password)) {
+                // Jika user adalah admin, lemparkan error validasi langsung ke form login publik
+                if ($user->isAdmin()) {
+                    throw ValidationException::withMessages([
+                        Fortify::username() => ['Akun admin tidak diperbolehkan login melalui halaman ini. Silakan gunakan portal login admin khusus.'],
+                    ]);
+                }
+                return $user;
+            }
+
+            return null;
+        });
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
