@@ -89,13 +89,6 @@
                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
                         @error('end_date') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
-                    <div>
-                        <label for="video_url" class="block text-sm font-medium text-gray-700 mb-1.5">URL Video</label>
-                        <input wire:model="video_url" type="url" id="video_url"
-                               class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
-                               placeholder="https://youtube.com/watch?v=...">
-                        @error('video_url') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-                    </div>
                 </div>
             </div>
         </div>

@@ -39,6 +39,8 @@
             <x-footer />
         </div>
 
+        <x-confirm-modal />
+
         @stack('modals')
 
         @livewireScripts
