@@ -1,25 +1,43 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire; // Sesuaikan menjadi App\Http\Livewire jika di dalam folder App/Http/Livewire
 
 use Livewire\Component;
 
 class FaqSection extends Component
 {
-    public ?int $openIndex = null;
+    public $openIndex = null;
 
-    public array $faqs = [
-        ['q' => 'Bagaimana cara membuat kampanye?', 'a' => 'Daftar akun, lalu klik "Buat Kampanye" di halaman profil Anda. Isi detail kampanye, upload gambar, dan ajukan untuk review. Setelah disetujui admin, kampanye Anda akan tampil ke publik.'],
-        ['q' => 'Berapa lama proses verifikasi kampanye?', 'a' => 'Proses verifikasi biasanya memakan waktu 1-3 hari kerja. Tim kami akan meninjau kelengkapan informasi dan keaslian kampanye Anda.'],
-        ['q' => 'Metode pembayaran apa saja yang tersedia?', 'a' => 'Kami mendukung transfer bank (BCA, BNI, Mandiri, BRI), e-wallet (GoPay, OVO, Dana), kartu kredit/debit, dan virtual account melalui Midtrans.'],
-        ['q' => 'Bagaimana cara menarik dana?', 'a' => 'Masuk ke halaman kampanye Anda, klik "Tarik Dana", masukkan jumlah dan detail rekening bank. Penarikan akan diproses setelah disetujui admin dalam 1-3 hari kerja.'],
-        ['q' => 'Apakah ada biaya platform?', 'a' => 'Autopahala tidak memungut biaya platform. Biaya yang dikenakan hanya biaya payment gateway dari Midtrans sesuai metode pembayaran yang dipilih donatur.'],
-        ['q' => 'Apakah donasi saya aman?', 'a' => 'Ya. Semua transaksi diproses melalui Midtrans yang tersertifikasi PCI-DSS. Kampanye juga diverifikasi oleh tim kami sebelum ditampilkan ke publik.'],
+    public $faqs = [
+        [
+            'q' => 'Bagaimana cara membuat kampanye penggalangan dana di Autopahala?',
+            'a' => 'Untuk memulai, Anda perlu mendaftarkan akun terlebih dahulu. Setelah berhasil masuk ke akun Anda, klik tombol "Mulai Galang Dana" yang terletak di halaman navigasi atau di dalam dashboard Anda. Selanjutnya, lengkapi formulir informasi kampanye seperti judul, target dana, kategori yang sesuai, foto/banner pendukung, serta cerita kronologi lengkap mengenai penerima manfaat. Setelah dikirim, tim verifikasi kami akan meninjau kelayakan kampanye Anda dalam waktu maksimal 1x24 jam sebelum diaktifkan secara publik.'
+        ],
+        [
+            'q' => 'Berapa biaya administrasi yang dikenakan oleh platform?',
+            'a' => 'Autopahala berkomitmen untuk menyalurkan kebaikan secara maksimal tanpa potongan tersembunyi. Kami hanya mengenakan biaya operasional sistem sebesar 5% khusus untuk kampanye kategori umum guna menunjang pemeliharaan server dan biaya gerbang pembayaran (payment gateway). Sedangkan khusus untuk kampanye kategori tanggap darurat, medis kemanusiaan kritis, dan bencana alam nasional, kami mengenakan potongan 0% alias sepenuhnya gratis tanpa biaya administrasi apa pun.'
+        ],
+        [
+            'q' => 'Bagaimana proses verifikasi medis untuk kampanye kesehatan?',
+            'a' => 'Keamanan dan transparansi adalah prioritas utama kami. Untuk penggalangan dana kategori medis/kesehatan, penggalang dana wajib mengunggah dokumen administrasi berupa foto KTP/kartu identitas penggalang, foto kartu identitas pasien (bisa menggunakan KIA/Akte jika anak-anak), Surat Keterangan Medis resmi yang ditandatangani oleh dokter penanggung jawab dari Rumah Sakit, serta rincian estimasi biaya pengobatan. Hal ini kami lakukan demi menjamin keaslian kampanye dan menghindari tindak penipuan.'
+        ],
+        [
+            'q' => 'Bagaimana cara mencairkan dana yang telah terkumpul?',
+            'a' => 'Dana yang masuk dan berstatus berhasil (paid) dapat Anda pantau setiap saat secara transparan di dashboard Anda. Untuk mencairkannya, penggalang dana dapat mengajukan pencairan berkala melalui menu "Tarik Dana" dengan mengunggah Rencana Anggaran Biaya (RAB) serta rincian penggunaan kebutuhan mendesak terbaru. Setelah diajukan, dana akan ditransfer langsung ke rekening bank terdaftar yang telah divalidasi oleh tim keuangan kami dalam waktu 2-3 hari kerja.'
+        ],
+        [
+            'q' => 'Apakah saya bisa memberikan donasi secara anonim?',
+            'a' => 'Ya, Anda tentu bisa memberikan donasi secara anonim. Saat Anda mengisi formulir pembayaran donasi di kampanye mana pun, Anda cukup mengosongkan kolom nama donatur atau menuliskan nama samaran (seperti Hamba Allah). Sistem kami tidak akan menampilkan identitas asli Anda secara publik di halaman detail kampanye maupun di papan peringkat donatur teratas (Leaderboard), namun laporan penyaluran dana tetap tercatat sah secara akuntansi di sistem internal.'
+        ]
     ];
 
-    public function toggle(int $index): void
+    public function toggle($index)
     {
-        $this->openIndex = $this->openIndex === $index ? null : $index;
+        if ($this->openIndex === $index) {
+            $this->openIndex = null;
+        } else {
+            $this->openIndex = $index;
+        }
     }
 
     public function render()
