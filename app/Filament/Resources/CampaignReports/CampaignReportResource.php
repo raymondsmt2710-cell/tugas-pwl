@@ -2,17 +2,13 @@
 
 namespace App\Filament\Resources\CampaignReports;
 
-use App\Filament\Resources\CampaignReports\Pages\CreateCampaignReport;
-use App\Filament\Resources\CampaignReports\Pages\EditCampaignReport;
 use App\Filament\Resources\CampaignReports\Pages\ListCampaignReports;
-use App\Filament\Resources\CampaignReports\Schemas\CampaignReportForm;
 use App\Filament\Resources\CampaignReports\Tables\CampaignReportsTable;
 use App\Models\CampaignReport;
 use BackedEnum;
 use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 class CampaignReportResource extends Resource
@@ -34,9 +30,15 @@ class CampaignReportResource extends Resource
         return auth()->user()->isAdmin();
     }
 
-    public static function form(Schema $schema): Schema
+    public static function getNavigationBadge(): ?string
     {
-        return CampaignReportForm::configure($schema);
+        $count = CampaignReport::pending()->count();
+        return $count > 0 ? (string) $count : null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'warning';
     }
 
     public static function table(Table $table): Table
@@ -46,17 +48,13 @@ class CampaignReportResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
     {
         return [
             'index' => ListCampaignReports::route('/'),
-            'create' => CreateCampaignReport::route('/create'),
-            'edit' => EditCampaignReport::route('/{record}/edit'),
         ];
     }
 }

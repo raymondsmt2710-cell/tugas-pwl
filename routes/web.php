@@ -25,15 +25,6 @@ Route::view('/contact', 'contact', ['title' => 'Contact - Autopahala'])->name('c
 Route::view('/faq', 'faq', ['title' => 'FAQ - Autopahala'])->name('faq');
 
 /*
-|--------------------------------------------------------------------------
-| Admin Login Route
-|--------------------------------------------------------------------------
-*/
-Route::get('/admin/login', function () {
-    return view('admin.login');
-})->name('admin.login');
-
-
 /*
 |--------------------------------------------------------------------------
 | OAuth / Socialite Routes

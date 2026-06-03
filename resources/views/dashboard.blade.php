@@ -28,6 +28,12 @@
     // Notifications
     $notifications = $user->notifications()->latest()->take(20)->get();
     $unreadNotificationsCount = $notifications->whereNull('read_at')->count();
+
+    // Reports sent by user
+    $myReports = \App\Models\CampaignReport::where('id_user', $user->id_user)
+        ->with('campaign')
+        ->latest()
+        ->get();
 @endphp
 
 <x-app-layout>
@@ -58,7 +64,7 @@
              activeTab: new URLSearchParams(window.location.search).get('tab') || 'overview',
              sidebarOpen: false,
              setTab(tab) {
-                 const validTabs = ['overview','campaigns','donations','withdrawals','notifications'];
+                 const validTabs = ['overview','campaigns','donations','withdrawals','notifications','reports'];
                  if (!validTabs.includes(tab)) tab = 'overview';
                  this.activeTab = tab;
                  const url = new URL(window.location);
@@ -67,7 +73,7 @@
              }
          }"
          x-init="
-             const validTabs = ['overview','campaigns','donations','withdrawals','notifications'];
+             const validTabs = ['overview','campaigns','donations','withdrawals','notifications','reports'];
              if (!validTabs.includes(activeTab)) activeTab = 'overview';
              const url = new URL(window.location);
              if (!url.searchParams.get('tab')) {
@@ -165,6 +171,17 @@
                     <span>Notifikasi</span>
                     @if($unreadNotificationsCount > 0)
                         <span class="ml-auto bg-emerald-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">{{ $unreadNotificationsCount }}</span>
+                    @endif
+                </button>
+
+                <!-- Reports -->
+                <button @click="setTab('reports'); sidebarOpen = false"
+                        :class="activeTab === 'reports' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
+                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition">
+                    <i class="fas fa-flag w-4 h-4 text-center"></i>
+                    <span>Laporan Saya</span>
+                    @if($myReports->where('status', 'pending')->count() > 0)
+                        <span class="ml-auto bg-amber-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">{{ $myReports->where('status', 'pending')->count() }}</span>
                     @endif
                 </button>
 
@@ -574,6 +591,88 @@
                                     @endif
                                 </div>
                             @endforeach
+                        </div>
+                    @endif
+                </div>
+
+                {{-- TAB: REPORTS --}}
+                <div x-show="activeTab === 'reports'" class="space-y-6">
+                    <h2 class="text-lg font-bold text-gray-800">Laporan Saya</h2>
+                    @if($myReports->isEmpty())
+                        <div class="text-center py-12 bg-white border border-gray-200 rounded-xl">
+                            <div class="text-4xl text-gray-300 mb-3"><i class="fas fa-flag"></i></div>
+                            <h3 class="text-sm font-semibold text-gray-700">Belum ada laporan</h3>
+                            <p class="text-xs text-gray-400 mt-1">Laporan kampanye yang pernah Anda kirim akan muncul di sini.</p>
+                        </div>
+                    @else
+                        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                            <table class="w-full text-sm">
+                                <thead class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase">
+                                    <tr>
+                                        <th class="p-4 text-left">Kampanye</th>
+                                        <th class="p-4 text-left">Alasan</th>
+                                        <th class="p-4 text-center">Status</th>
+                                        <th class="p-4 text-center">Tanggal</th>
+                                        <th class="p-4 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100">
+                                    @foreach($myReports as $r)
+                                        @php
+                                            $statusStyles = [
+                                                'pending'   => ['bg' => 'bg-amber-50',   'text' => 'text-amber-600',  'label' => 'Menunggu'],
+                                                'reviewed'  => ['bg' => 'bg-blue-50',    'text' => 'text-blue-600',   'label' => 'Ditinjau'],
+                                                'resolved'  => ['bg' => 'bg-emerald-50', 'text' => 'text-emerald-600','label' => 'Diselesaikan'],
+                                                'dismissed' => ['bg' => 'bg-red-50',     'text' => 'text-red-500',    'label' => 'Ditolak'],
+                                            ];
+                                            $rs = $statusStyles[$r->status] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-500', 'label' => ucfirst($r->status)];
+                                        @endphp
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="p-4">
+                                                @if($r->campaign)
+                                                    <a href="{{ route('campaigns.show', $r->campaign->slug) }}"
+                                                       class="font-semibold text-gray-800 hover:text-indigo-600 truncate max-w-[180px] block transition">
+                                                        {{ $r->campaign->title }}
+                                                    </a>
+                                                @else
+                                                    <span class="text-gray-400 italic">Kampanye dihapus</span>
+                                                @endif
+                                            </td>
+                                            <td class="p-4 text-gray-600 max-w-[180px]">
+                                                <p class="truncate">{{ $r->reason }}</p>
+                                                @if($r->description)
+                                                    <p class="text-xs text-gray-400 truncate mt-0.5">{{ $r->description }}</p>
+                                                @endif
+                                            </td>
+                                            <td class="p-4 text-center">
+                                                <span class="px-2 py-0.5 rounded text-xs font-semibold {{ $rs['bg'] }} {{ $rs['text'] }}">
+                                                    {{ $rs['label'] }}
+                                                </span>
+                                            </td>
+                                            <td class="p-4 text-center text-xs text-gray-500">
+                                                {{ $r->created_at->translatedFormat('d M Y') }}
+                                            </td>
+                                            <td class="p-4 text-center">
+                                                @if($r->admin_notes)
+                                                    <span x-data="{ open: false }" class="relative">
+                                                        <button @click="open = !open"
+                                                                class="text-xs text-indigo-600 hover:underline font-semibold">
+                                                            Catatan Admin
+                                                        </button>
+                                                        <div x-show="open" @click.away="open = false"
+                                                             class="absolute right-0 z-10 mt-1 w-64 bg-white border border-gray-200 rounded-xl shadow-lg p-3 text-left">
+                                                            <p class="text-xs font-semibold text-gray-700 mb-1">Catatan Admin:</p>
+                                                            <p class="text-xs text-gray-600 leading-relaxed">{{ $r->admin_notes }}</p>
+                                                        </div>
+                                                    </span>
+                                                @else
+                                                    <span class="text-xs text-gray-300">—</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     @endif
                 </div>
