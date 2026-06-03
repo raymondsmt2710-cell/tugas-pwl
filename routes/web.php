@@ -104,15 +104,20 @@ Route::middleware([
 
 /*
 |--------------------------------------------------------------------------
-| Donation Routes (public - guests can donate)
+| Donation Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/campaigns/{slug}/donate', [DonationController::class, 'create'])->name('donation.create');
-Route::post('/campaigns/{slug}/donate', [DonationController::class, 'store'])->name('donation.store');
+// Rute publik (bisa dilihat guest)
 Route::get('/campaigns/{slug}/donors', [DonationController::class, 'donors'])->name('donation.donors');
 Route::get('/campaigns/{slug}/withdrawals', [\App\Http\Controllers\CampaignWithdrawalController::class, 'index'])->name('campaign.withdrawals');
-Route::get('/donations/{orderId}/finish', [DonationController::class, 'finish'])->name('donation.finish');
 Route::get('/donations/{orderId}/track', [DonationController::class, 'track'])->name('donation.track');
+
+// Rute yang membutuhkan otentikasi (wajib login)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/campaigns/{slug}/donate', [DonationController::class, 'create'])->name('donation.create');
+    Route::post('/campaigns/{slug}/donate', [DonationController::class, 'store'])->name('donation.store');
+    Route::get('/donations/{orderId}/finish', [DonationController::class, 'finish'])->name('donation.finish');
+});
 
 
 /*
