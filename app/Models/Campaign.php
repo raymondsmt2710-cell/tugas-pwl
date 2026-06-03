@@ -83,6 +83,27 @@ class Campaign extends Model
         return $this->hasMany(CampaignDocument::class, 'campaign_id', 'id_campaign');
     }
 
+    public function likes(): HasMany
+    {
+        return $this->hasMany(CampaignLike::class, 'id_campaign', 'id_campaign');
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(CampaignComment::class, 'id_campaign', 'id_campaign');
+    }
+
+    public function reports(): HasMany
+    {
+        return $this->hasMany(CampaignReport::class, 'id_campaign', 'id_campaign');
+    }
+
+    public function isLikedByUser(?int $userId): bool
+    {
+        if (!$userId) return false;
+        return $this->likes()->where('id_user', $userId)->exists();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Accessors

@@ -100,7 +100,12 @@ class CampaignController extends Controller
             ->take(10)
             ->get();
 
-        return view('campaigns.show', compact('campaign', 'donations'));
+        $comments = $campaign->comments()
+            ->with('user')
+            ->latest()
+            ->get();
+
+        return view('campaigns.show', compact('campaign', 'donations', 'comments'));
     }
 
     /**

@@ -94,6 +94,11 @@ Route::middleware([
 
     // Follow
     Route::post('/follow/{user}', [\App\Http\Controllers\FollowController::class, 'toggle'])->name('follow.toggle');
+
+    // Campaign Interactions (Like, Comment, Report)
+    Route::post('/campaigns/{campaign}/like', [\App\Http\Controllers\CampaignInteractionController::class, 'toggleLike'])->name('campaigns.like');
+    Route::post('/campaigns/{campaign}/comment', [\App\Http\Controllers\CampaignInteractionController::class, 'storeComment'])->name('campaigns.comment');
+    Route::post('/campaigns/{campaign}/report', [\App\Http\Controllers\CampaignInteractionController::class, 'storeReport'])->name('campaigns.report');
 });
 
 
