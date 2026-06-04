@@ -57,9 +57,12 @@
                                     <span class="text-lg font-bold text-gray-900">{{ $withdrawal->formatted_amount }}</span>
                                     @if ($withdrawal->canBeCancelled())
                                         <form action="{{ route('withdrawals.cancel', $withdrawal) }}" method="POST"
-                                              onsubmit="return confirm('Batalkan penarikan ini?')">
-                                            @csrf
-                                            <button type="submit" class="text-xs font-medium text-red-600 hover:text-red-800">Batalkan</button>
+                                        onsubmit="cancelWithdraw(event, this)">
+                                        @csrf
+
+                                        <button type="submit" class="text-xs font-medium text-red-600 hover:text-red-800">
+                                        Batalkan
+                                        </button>
                                         </form>
                                     @endif
                                 </div>
@@ -72,4 +75,24 @@
             @endif
         </div>
     </div>
+
+    <script>
+function cancelWithdraw(event, form) {
+    event.preventDefault();
+
+    Swal.fire({
+        title: "Batalkan penarikan ini?",
+        text: "Tindakan ini tidak bisa dibatalkan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Ya, batalkan",
+        cancelButtonText: "Tidak"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit();
+        }
+    });
+}
+</script>
+
 </x-app-layout>
