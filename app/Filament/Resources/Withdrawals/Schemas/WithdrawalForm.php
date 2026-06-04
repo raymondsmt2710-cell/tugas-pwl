@@ -16,7 +16,7 @@ class WithdrawalForm
         return $schema
             ->components([
                 Section::make('Detail Penarikan')
-                    ->aside()
+                    ->columnSpanFull()
                     ->schema([
                         Grid::make(2)->schema([
                             Select::make('id_campaign')
@@ -49,7 +49,7 @@ class WithdrawalForm
                     ]),
 
                 Section::make('Informasi Rekening')
-                    ->aside()
+                    ->columnSpanFull()
                     ->schema([
                         Grid::make(2)->schema([
                             TextInput::make('bank_name')
@@ -65,7 +65,7 @@ class WithdrawalForm
                     ]),
 
                 Section::make('Catatan')
-                    ->aside()
+                    ->columnSpanFull()
                     ->schema([
                         Textarea::make('notes')
                             ->label('Catatan Pengguna')

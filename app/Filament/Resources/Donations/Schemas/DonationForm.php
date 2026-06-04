@@ -18,7 +18,7 @@ class DonationForm
         return $schema
             ->components([
                 Section::make('Informasi Donasi')
-                    ->aside()
+                    ->columnSpanFull()
                     ->schema([
                         Grid::make(2)->schema([
                             Select::make('id_campaign')
