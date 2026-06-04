@@ -1,4 +1,4 @@
-﻿<div>
+<div>
     <form wire:submit="save">
         {{-- Info Dasar --}}
         <div class="bg-white shadow-sm rounded-2xl border border-gray-100 overflow-hidden">
@@ -7,12 +7,12 @@
             </div>
             <div class="px-6 py-5 space-y-5">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Judul <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Judul <span class="text-red-500">*</span></label>
                     <input wire:model="title" type="text" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm">
                     @error('title') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Kategori <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Kategori <span class="text-red-500">*</span></label>
                     <select wire:model="id_category" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm">
                         @foreach($categories as $cat)
                             <option value="{{ $cat->id_category }}">{{ $cat->name }}</option>
@@ -21,12 +21,12 @@
                     @error('id_category') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Deskripsi Singkat <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Singkat <span class="text-red-500">*</span></label>
                     <textarea wire:model="short_description" rows="2" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm"></textarea>
                     @error('short_description') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Cerita Lengkap <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Cerita Lengkap <span class="text-red-500">*</span></label>
                     <textarea wire:model="description" rows="6" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm"></textarea>
                     @error('description') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
@@ -38,7 +38,7 @@
             <div class="border-b border-gray-100 px-6 py-4"><h3 class="text-base font-semibold text-gray-900">Target & Waktu</h3></div>
             <div class="px-6 py-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Target Donasi <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Target Donasi <span class="text-red-500">*</span></label>
                     <div class="relative" x-data>
                         <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">Rp</span>
                         <input
@@ -51,7 +51,7 @@
                     @error('target_amount') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Minimum Donasi</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Donasi</label>
                     <div class="relative" x-data>
                         <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">Rp</span>
                         <input
@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Tanggal Berakhir <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Berakhir <span class="text-red-500">*</span></label>
                     <input wire:model="end_date" type="date" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm">
                     @error('end_date') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>

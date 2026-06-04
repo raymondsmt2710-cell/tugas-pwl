@@ -130,7 +130,7 @@
                 </div>
                 <div>
                     <p class="text-2xl sm:text-3xl font-black text-brand-500">
-                        Rp {{ number_format(($totalRaised ?? 0) / 1000000, 0) }}jt
+                        Rp {{ format_rupiah_short($totalRaised ?? 0) }}
                     </p>
                     <p class="text-xs sm:text-sm text-gray-500 mt-0.5">Dana Tersalurkan</p>
                 </div>
@@ -195,7 +195,12 @@
                     <h2 class="text-2xl sm:text-3xl font-black text-gray-900">Kampanye Terbaru</h2>
                     <p class="text-sm text-gray-500 mt-1">Bantu mereka yang membutuhkan</p>
                 </div>
-                <a href="{{ url('/campaigns') }}" class="text-sm font-semibold text-brand-500 hover:text-brand-700">Lihat Semua →</a>
+                <a href="{{ url('/campaigns') }}" class="text-sm font-semibold text-brand-500 hover:text-brand-700 inline-flex items-center gap-1">
+                    Lihat Semua 
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+                    </svg>
+                </a>
             </div>
             @livewire('featured-campaigns')
         </div>
@@ -230,7 +235,7 @@
                                     <p class="text-xs text-gray-400">{{ $d['donation_count'] ?? 0 }} donasi</p>
                                 </div>
                                 <span class="text-xs font-bold text-brand-500 shrink-0">
-                                    Rp {{ number_format(($d['total_amount'] ?? 0) / 1000, 0) }}rb
+                                    Rp {{ format_rupiah_short($d['total_amount'] ?? 0) }}
                                 </span>
                             </a>
                         @empty
@@ -286,7 +291,7 @@
                                     <p class="text-xs text-gray-400">{{ $cr['campaign_count'] ?? 0 }} kampanye</p>
                                 </div>
                                 <span class="text-xs font-bold text-brand-500 shrink-0">
-                                    Rp {{ number_format(($cr['total_raised'] ?? 0) / 1000, 0) }}rb
+                                    Rp {{ format_rupiah_short($cr['total_raised'] ?? 0) }}
                                 </span>
                             </a>
                         @empty
@@ -302,7 +307,10 @@
                 <a href="{{ url('/leaderboard') }}"
                    class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-gray-200 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition shadow-sm">
                     <i class="fas fa-trophy text-yellow-500"></i>
-                    Lihat Leaderboard Lengkap →
+                    Lihat Leaderboard Lengkap
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+                    </svg>
                 </a>
             </div>
         </div>

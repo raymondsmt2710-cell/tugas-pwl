@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">Leaderboard</h2>
     </x-slot>
@@ -71,7 +71,7 @@
                                     <p class="mt-2 text-sm font-semibold text-gray-900 text-center truncate w-full">
                                         @if($tab === 'campaigns') {{ $top3[1]['title'] }} @else {{ $top3[1]['user_name'] }} @endif
                                     </p>
-                                    <p class="text-xs font-bold text-brand-500">Rp {{ number_format($tab === 'campaigns' ? $top3[1]['collected_amount'] : ($tab === 'creators' ? $top3[1]['total_raised'] : $top3[1]['total_amount']), 0, ',', '.') }}</p>
+                                    <p class="text-xs font-bold text-brand-500">Rp {{ format_rupiah_short($tab === 'campaigns' ? $top3[1]['collected_amount'] : ($tab === 'creators' ? $top3[1]['total_raised'] : $top3[1]['total_amount'])) }}</p>
                                     <div class="mt-2 w-full h-20 bg-gray-200 rounded-t-lg"></div>
                                 </a>
                             @endif
@@ -91,7 +91,7 @@
                                 <p class="mt-2 text-base font-bold text-gray-900 text-center truncate w-full">
                                     @if($tab === 'campaigns') {{ $top3[0]['title'] }} @else {{ $top3[0]['user_name'] }} @endif
                                 </p>
-                                <p class="text-sm font-bold text-brand-500">Rp {{ number_format($tab === 'campaigns' ? $top3[0]['collected_amount'] : ($tab === 'creators' ? $top3[0]['total_raised'] : $top3[0]['total_amount']), 0, ',', '.') }}</p>
+                                <p class="text-sm font-bold text-brand-500">Rp {{ format_rupiah_short($tab === 'campaigns' ? $top3[0]['collected_amount'] : ($tab === 'creators' ? $top3[0]['total_raised'] : $top3[0]['total_amount'])) }}</p>
                                 <div class="mt-2 w-full h-28 bg-yellow-100 border-2 border-yellow-300 rounded-t-lg"></div>
                             </a>
 
@@ -111,7 +111,7 @@
                                     <p class="mt-2 text-sm font-semibold text-gray-900 text-center truncate w-full">
                                         @if($tab === 'campaigns') {{ $top3[2]['title'] }} @else {{ $top3[2]['user_name'] }} @endif
                                     </p>
-                                    <p class="text-xs font-bold text-brand-500">Rp {{ number_format($tab === 'campaigns' ? $top3[2]['collected_amount'] : ($tab === 'creators' ? $top3[2]['total_raised'] : $top3[2]['total_amount']), 0, ',', '.') }}</p>
+                                    <p class="text-xs font-bold text-brand-500">Rp {{ format_rupiah_short($tab === 'campaigns' ? $top3[2]['collected_amount'] : ($tab === 'creators' ? $top3[2]['total_raised'] : $top3[2]['total_amount'])) }}</p>
                                     <div class="mt-2 w-full h-14 bg-orange-100 rounded-t-lg"></div>
                                 </a>
                             @endif
@@ -146,7 +146,7 @@
                                         </p>
                                     </div>
                                     <span class="text-sm font-bold text-brand-500 shrink-0">
-                                        Rp {{ number_format($tab === 'campaigns' ? $item['collected_amount'] : ($tab === 'creators' ? $item['total_raised'] : $item['total_amount']), 0, ',', '.') }}
+                                        Rp {{ format_rupiah_short($tab === 'campaigns' ? $item['collected_amount'] : ($tab === 'creators' ? $item['total_raised'] : $item['total_amount'])) }}
                                     </span>
                                 </a>
                             @endforeach
@@ -187,7 +187,7 @@
                                     </div>
                                 </div>
                                 <span class="text-sm font-bold text-brand-500 shrink-0">
-                                    Rp {{ number_format($tab === 'campaigns' ? $item['collected_amount'] : ($tab === 'creators' ? $item['total_raised'] : $item['total_amount']), 0, ',', '.') }}
+                                    Rp {{ format_rupiah_short($tab === 'campaigns' ? $item['collected_amount'] : ($tab === 'creators' ? $item['total_raised'] : $item['total_amount'])) }}
                                 </span>
                             </div>
                         @endforeach

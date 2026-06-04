@@ -141,3 +141,11 @@ Route::get('/campaigns/{slug}', [CampaignController::class, 'show'])->name('camp
 |--------------------------------------------------------------------------
 */
 Route::get('/@{username}', [ProfileController::class, 'show'])->name('profile.show.public');
+
+Route::get('/debug-livewire', function () {
+    return [
+        'base_path' => request()->getBasePath(),
+        'livewire_asset_url' => config('livewire.asset_url'),
+        'update_uri' => app('livewire')->getUpdateUri(),
+    ];
+});

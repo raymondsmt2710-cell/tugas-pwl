@@ -1,4 +1,4 @@
-﻿@php
+@php
     $message = session('success') ?? session('error') ?? session('warning') ?? session('status') ?? null;
     $type = session('success') ? 'success'
         : (session('error') ? 'error'
@@ -23,7 +23,7 @@
          x-transition:leave="transition ease-in duration-300"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
-         class="mb-6 rounded-2xl {{ $s['bg'] }} border {{ $s['border'] }} p-4 flex items-start gap-3 shadow-sm">
+         class="mt-6 mb-6 rounded-2xl {{ $s['bg'] }} border {{ $s['border'] }} p-4 flex items-start gap-3 shadow-sm">
         @if($type === 'success')
             <svg class="w-5 h-5 {{ $s['icon_color'] }} mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         @elseif($type === 'error')
@@ -45,7 +45,7 @@
          x-transition:leave="transition ease-in duration-300"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
-         class="mb-6 rounded-2xl bg-red-50 border border-red-200 p-4 flex items-start gap-3 shadow-sm">
+         class="mt-6 mb-6 rounded-2xl bg-red-50 border border-red-200 p-4 flex items-start gap-3 shadow-sm">
         <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         <div class="space-y-1">
             @foreach($errors->all() as $error)
@@ -70,7 +70,7 @@
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0"
      style="display:none;"
-     class="mb-6 rounded-2xl p-4 flex items-start gap-3 shadow-sm border"
+     class="mt-6 mb-6 rounded-2xl p-4 flex items-start gap-3 shadow-sm border"
      :class="{
          'bg-green-50 border-green-200': type==='success',
          'bg-red-50 border-red-200':     type==='error',

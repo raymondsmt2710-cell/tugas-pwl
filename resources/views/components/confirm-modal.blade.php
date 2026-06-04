@@ -1,4 +1,4 @@
-﻿{{--
+{{--
     Global Confirm Modal — driven by Alpine.js global store.
     Usage from any page:
         $dispatch('confirm', {

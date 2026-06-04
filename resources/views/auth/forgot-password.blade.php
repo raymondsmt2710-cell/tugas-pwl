@@ -1,4 +1,4 @@
-﻿<x-guest-layout>
+<x-guest-layout>
     <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
             <div class="text-center">
@@ -30,7 +30,7 @@
                     @csrf
 
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Alamat Email</label>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Alamat Email</label>
                         <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
                                class="w-full rounded-xl border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm"
                                placeholder="email@contoh.com">

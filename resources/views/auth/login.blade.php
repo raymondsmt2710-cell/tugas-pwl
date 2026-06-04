@@ -1,4 +1,4 @@
-﻿<x-guest-layout>
+<x-guest-layout>
     <div class="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 flex items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
         <div class="w-full max-w-6xl grid overflow-hidden rounded-3xl bg-white shadow-2xl lg:grid-cols-2">
 

@@ -80,30 +80,24 @@
              });
          ">
 
-        {{-- MOBILE HEADER --}}
-        <div class="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 z-40">
-            <div class="flex items-center gap-2">
-                <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover">
-                <span class="text-lg font-bold text-gray-800">Autopahala</span>
-            </div>
-            <button @click="sidebarOpen = !sidebarOpen" class="p-2 text-gray-500 hover:bg-gray-100 rounded-lg">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-        </div>
-
       {{-- SIDEBAR --}}
 <div>
     <!-- Backdrop mobile -->
-    <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-black/20 z-40 lg:hidden"></div>
+    <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed top-0 left-0 right-0 bottom-0 bg-slate-900/40 z-40 lg:hidden"></div>
 
     <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
-         class="fixed lg:sticky top-0 left-0 h-screen w-64 bg-white border-r border-gray-200 flex flex-col justify-between py-6 z-50 transition-transform duration-300">
+         class="fixed lg:sticky top-0 lg:top-16 left-0 h-screen lg:h-[calc(100vh-4rem)] w-64 bg-white border-r border-gray-200 flex flex-col justify-between py-6 z-[10000] lg:z-30 shadow-xl lg:shadow-none transition-transform duration-300">
         
         <div class="px-4">
-            <!-- Logo -->
-            <div class="flex items-center gap-2 px-2 mb-6">
-                <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover">
-                <span class="text-lg font-bold text-gray-800">Autopahala</span>
+            <!-- Logo & Close Button (Mobile) -->
+            <div class="flex items-center justify-between px-2 mb-6">
+                <div class="flex items-center gap-2">
+                    <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover">
+                    <span class="text-lg font-bold text-gray-800">Autopahala</span>
+                </div>
+                <button @click="sidebarOpen = false" class="lg:hidden p-1.5 text-gray-500 hover:bg-gray-100 rounded-lg transition" title="Tutup Menu">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+                </button>
             </div>
 
             {{-- Tombol Buat Kampanye (dipindah ke atas) --}}
@@ -180,7 +174,19 @@
     </div>
 </div>
         {{-- MAIN CONTENT --}}
-        <div class="flex-1 pt-16 lg:pt-0 overflow-y-auto simple-scrollbar">
+        <div class="flex-1 overflow-y-auto simple-scrollbar">
+            <!-- Mobile Menu Bar (inline, no absolute overlap) -->
+            <div class="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-columns text-brand-500"></i>
+                    <span class="text-sm font-semibold text-gray-700">Dashboard Menu</span>
+                </div>
+                <button @click="sidebarOpen = !sidebarOpen" class="px-3 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-600 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 border border-brand-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    <span>Menu</span>
+                </button>
+            </div>
+
             <main class="p-4 lg:p-8 max-w-5xl mx-auto space-y-6">
 
                 {{-- Admin Banner --}}
@@ -195,8 +201,11 @@
                                 <p class="text-xs text-amber-600">Kelola platform, pengguna, dan kampanye.</p>
                             </div>
                         </div>
-                        <a href="{{ url('/admin') }}" class="px-4 py-2 bg-white border border-amber-300 text-xs font-semibold text-amber-800 rounded-lg hover:bg-amber-100 transition">
-                            Buka Admin →
+                        <a href="{{ url('/admin') }}" class="px-4 py-2 bg-white border border-amber-300 text-xs font-semibold text-amber-800 rounded-lg hover:bg-amber-100 transition inline-flex items-center gap-1.5">
+                            Buka Admin
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+                            </svg>
                         </a>
                     </div>
                 @endif
@@ -453,7 +462,12 @@
                                             <td class="p-4 text-right font-semibold text-gray-800">Rp {{ number_format($d->donation_amount, 0, ',', '.') }}</td>
                                             <td class="p-4 text-center text-xs text-gray-500">{{ $d->created_at->translatedFormat('d M Y, H:i') }}</td>
                                             <td class="p-4 text-center">
-                                                <a href="{{ url('/donations/' . $d->order_id . '/track') }}" class="text-brand-500 hover:underline text-xs font-semibold">Lacak →</a>
+                                                <a href="{{ url('/donations/' . $d->order_id . '/track') }}" class="text-brand-500 hover:underline text-xs font-semibold inline-flex items-center gap-1">
+                                                    Lacak
+                                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+                                                    </svg>
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach

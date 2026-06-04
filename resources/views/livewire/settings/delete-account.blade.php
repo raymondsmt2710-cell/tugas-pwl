@@ -12,7 +12,12 @@
             @if(!auth()->user()->hasVerifiedEmail())
                 <div class="rounded-lg bg-amber-50 border border-amber-200 p-3 text-sm text-amber-700">
                     Anda harus memverifikasi email terlebih dahulu sebelum dapat menghapus akun.
-                    <a href="{{ route('verification.notice') }}" class="underline font-medium">Verifikasi sekarang →</a>
+                    <a href="{{ route('verification.notice') }}" class="underline font-medium inline-flex items-center gap-1">
+                        Verifikasi sekarang
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+                        </svg>
+                    </a>
                 </div>
             @else
                 <button wire:click="confirmDeletion" class="px-5 py-2.5 rounded-lg bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition">

@@ -1,4 +1,4 @@
-﻿<div>
+<div>
     @if($this->campaigns->isEmpty())
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
             <h3 class="text-base font-medium text-gray-900">Tidak ada saldo tersedia</h3>
@@ -13,7 +13,7 @@
                 <div class="px-6 py-5 space-y-5">
                     {{-- Campaign --}}
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Pilih Kampanye <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Kampanye <span class="text-red-500">*</span></label>
                         <select wire:model.live="id_campaign" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm">
                             <option value="">— Pilih Kampanye —</option>
                             @foreach($this->campaigns as $c)
@@ -30,7 +30,7 @@
 
                     {{-- Amount --}}
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Jumlah Penarikan <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Penarikan <span class="text-red-500">*</span></label>
                         <div class="relative" x-data>
                             <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">Rp</span>
                             <input
@@ -46,25 +46,25 @@
                     {{-- Bank --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Nama Bank <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Bank <span class="text-red-500">*</span></label>
                             <input wire:model="bank_name" type="text" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm" placeholder="BCA, BNI, dll">
                             @error('bank_name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Nomor Rekening <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Rekening <span class="text-red-500">*</span></label>
                             <input wire:model="account_number" type="text" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm" placeholder="1234567890">
                             @error('account_number') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Nama Pemilik Rekening <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Pemilik Rekening <span class="text-red-500">*</span></label>
                         <input wire:model="account_holder" type="text" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm" placeholder="Sesuai buku tabungan">
                         @error('account_holder') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Tujuan Penarikan Dana <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tujuan Penarikan Dana <span class="text-red-500">*</span></label>
                         <textarea wire:model="purpose" rows="3"
                                   class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm"
                                   placeholder="Contoh: Biaya pengobatan pasien, pembelian alat kesehatan, renovasi sekolah, dll."></textarea>
@@ -72,7 +72,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Catatan <span class="text-xs text-gray-400">(opsional)</span></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Catatan <span class="text-xs text-gray-400">(opsional)</span></label>
                         <textarea wire:model="notes" rows="2" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm" placeholder="Informasi tambahan jika diperlukan"></textarea>
                     </div>
                 </div>
