@@ -16,7 +16,7 @@ class CampaignReportForm
         return $schema
             ->components([
                 Section::make('Informasi Laporan')
-                    ->aside()
+                    ->columnSpanFull()
                     ->schema([
                         Grid::make(2)->schema([
                             Select::make('id_campaign')

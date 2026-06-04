@@ -16,7 +16,7 @@ class CategoryForm
         return $schema
             ->components([
                 Section::make('Informasi Kategori')
-                    ->aside()
+                    ->columnSpanFull()
                     ->schema([
                         Grid::make(2)->schema([
                             TextInput::make('name')
