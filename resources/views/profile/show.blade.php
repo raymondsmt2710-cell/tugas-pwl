@@ -46,7 +46,12 @@
                             <h3 class="text-lg font-semibold text-gray-900">Riwayat Donasi</h3>
                             <p class="text-sm text-gray-500 mt-0.5">Semua donasi yang pernah Anda berikan.</p>
                         </div>
-                        <a href="{{ url('/dashboard?tab=donations') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800">Lihat Semua →</a>
+                        <a href="{{ url('/dashboard?tab=donations') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1">
+                            Lihat Semua
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+                            </svg>
+                        </a>
                     </div>
                     <div class="divide-y divide-gray-50">
                         @forelse ($myDonations as $donation)
@@ -86,7 +91,12 @@
                                 </div>
                                 <div class="text-right shrink-0 ml-3">
                                     <p class="text-sm font-bold text-gray-900">{{ $donation->formatted_amount }}</p>
-                                    <p class="text-[11px] text-indigo-500 font-medium">Detail →</p>
+                                    <p class="text-[11px] text-indigo-500 font-medium inline-flex items-center gap-0.5">
+                                        Detail
+                                        <svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+                                        </svg>
+                                    </p>
                                 </div>
                             </a>
                         @empty
@@ -111,7 +121,12 @@
                             <p class="text-sm text-gray-500 mt-0.5">Kampanye yang Anda buat.</p>
                         </div>
                         <div class="flex gap-2">
-                            <a href="{{ url('/dashboard?tab=campaigns') }}" class="text-sm font-medium text-gray-600 hover:text-gray-800">Kelola →</a>
+                            <a href="{{ url('/dashboard?tab=campaigns') }}" class="text-sm font-medium text-gray-600 hover:text-gray-800 inline-flex items-center gap-1">
+                                Kelola
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+                                </svg>
+                            </a>
                             <a href="{{ url('/campaigns/create') }}" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition">
                                 + Buat Baru
                             </a>
@@ -163,7 +178,12 @@
                             <p class="text-sm text-gray-500 mt-0.5">Riwayat permintaan penarikan dana Anda.</p>
                         </div>
                         <div class="flex gap-2">
-                            <a href="{{ url('/withdrawals/history') }}" class="text-sm font-medium text-gray-600 hover:text-gray-800">Semua →</a>
+                            <a href="{{ url('/withdrawals/history') }}" class="text-sm font-medium text-gray-600 hover:text-gray-800 inline-flex items-center gap-1">
+                                Semua
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+                                </svg>
+                            </a>
                             <a href="{{ url('/withdrawals/create') }}" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition">
                                 + Tarik Dana
                             </a>

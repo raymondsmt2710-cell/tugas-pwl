@@ -9,8 +9,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Update status enum to include new statuses
-        DB::statement("ALTER TABLE campaigns MODIFY COLUMN status ENUM('draft', 'pending', 'approved', 'goal_reached', 'closed', 'rejected', 'archived') DEFAULT 'draft'");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE campaigns MODIFY COLUMN status ENUM('draft', 'pending', 'approved', 'goal_reached', 'closed', 'rejected', 'archived') DEFAULT 'draft'");
+        }
 
         Schema::table('campaigns', function (Blueprint $table) {
             $table->timestamp('goal_reached_at')->nullable()->after('end_date');
@@ -25,6 +26,8 @@ return new class extends Migration
             $table->dropColumn(['goal_reached_at', 'closed_at', 'closed_by']);
         });
 
-        DB::statement("ALTER TABLE campaigns MODIFY COLUMN status ENUM('draft', 'pending', 'approved', 'rejected', 'completed') DEFAULT 'draft'");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE campaigns MODIFY COLUMN status ENUM('draft', 'pending', 'approved', 'rejected', 'completed') DEFAULT 'draft'");
+        }
     }
 };

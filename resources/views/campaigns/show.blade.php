@@ -73,7 +73,7 @@
                     {{-- Title & Meta --}}
                     <div>
                         <div class="flex items-center gap-2 mb-3">
-                            <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">
+                            <span class="text-xs font-medium text-brand-500 bg-brand-50 px-2.5 py-1 rounded-full">
                                 {{ $campaign->category->name ?? 'Umum' }}
                             </span>
                             @if($campaign->isGoalReached() || $campaign->hasReachedGoal())
@@ -105,7 +105,7 @@
                         {{-- Read More / Less Toggle --}}
                         <div x-show="isLong" class="mt-4 text-center">
                             <button @click="expanded = !expanded" 
-                                    class="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 hover:text-indigo-850 transition">
+                                    class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-500 hover:text-brand-700 transition">
                                 <span x-text="expanded ? 'Lihat Lebih Sedikit' : 'Lihat Selengkapnya'"></span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" 
                                      class="w-4 h-4 transform transition-transform duration-200"
@@ -126,7 +126,7 @@
                             </div>
                             <div class="bg-gray-50 rounded-lg p-3 text-center">
                                 <p class="text-xs text-gray-500">Terkumpul</p>
-                                <p class="text-sm font-bold text-green-600">Rp {{ number_format($campaign->collected_amount, 0, ',', '.') }}</p>
+                                <p class="text-sm font-bold text-brand-500">Rp {{ number_format($campaign->collected_amount, 0, ',', '.') }}</p>
                             </div>
                             <div class="bg-gray-50 rounded-lg p-3 text-center">
                                 <p class="text-xs text-gray-500">Ditarik</p>
@@ -168,7 +168,7 @@
                                                     Rp {{ number_format($w->amount, 0, ',', '.') }}
                                                 </span>
                                                 <span class="text-xs font-semibold px-2 py-0.5 rounded-full
-                                                    @if($w->status === 'paid') bg-emerald-50 text-emerald-700
+                                                    @if($w->status === 'paid') bg-brand-50 text-brand-600
                                                     @elseif($w->status === 'approved') bg-blue-50 text-blue-700
                                                     @else bg-gray-100 text-gray-500 @endif">
                                                     {{ $w->status_label }}
@@ -232,7 +232,7 @@
                                             <div class="flex-1 text-left">
                                                 <div class="bg-gray-50 rounded-2xl px-4 py-3 border border-gray-100/30">
                                                     <div class="flex items-baseline flex-wrap gap-x-1.5">
-                                                        <a href="{{ url('/@' . $c->user->username) }}" class="font-bold text-gray-900 text-sm hover:text-indigo-600 transition">
+                                                        <a href="{{ url('/@' . $c->user->username) }}" class="font-bold text-gray-900 text-sm hover:text-brand-500 transition">
                                                             {{ $c->user->username }}
                                                         </a>
                                                         <span class="text-gray-700 text-sm whitespace-pre-wrap leading-relaxed">{{ $c->comment }}</span>
@@ -259,11 +259,11 @@
                                     </div>
                                     <div class="flex-1">
                                         <textarea name="comment" rows="2" required placeholder="Tulis komentar utama..." 
-                                                  class="w-full rounded-2xl border-gray-200 text-sm focus:border-indigo-500 focus:ring-indigo-500 placeholder-gray-400 px-4 py-2.5 resize-none transition duration-200"
+                                                  class="w-full rounded-2xl border-gray-200 text-sm focus:border-brand-500 focus:ring-brand-500 placeholder-gray-400 px-4 py-2.5 resize-none transition duration-200"
                                                   onkeydown="if(event.keyCode === 13 && !event.shiftKey) { event.preventDefault(); this.form.submit(); }"></textarea>
                                         <div class="flex justify-between items-center mt-2">
                                             <span class="text-xs text-gray-400">Tekan Enter untuk mengirim</span>
-                                            <button type="submit" class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm transition">
+                                            <button type="submit" class="px-4 py-2 text-sm font-semibold text-white bg-brand-500 hover:bg-brand-600 rounded-xl shadow-sm transition">
                                                 Kirim
                                             </button>
                                         </div>
@@ -272,7 +272,7 @@
                             @else
                                 <div class="text-center py-4 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                                     <p class="text-sm text-gray-500">
-                                        Silakan <a href="{{ route('login') }}" class="font-semibold text-indigo-600 hover:text-indigo-800 transition">Login</a> untuk menulis komentar.
+                                        Silakan <a href="{{ route('login') }}" class="font-semibold text-brand-500 hover:text-brand-700 transition">Login</a> untuk menulis komentar.
                                     </p>
                                 </div>
                             @endauth
@@ -292,16 +292,16 @@
                             </div>
                             <p class="text-sm text-gray-500 mb-3">terkumpul dari target Rp {{ number_format($campaign->target_amount, 0, ',', '.') }}</p>
                             <div class="w-full bg-gray-100 rounded-full h-3">
-                                <div class="bg-green-500 h-3 rounded-full transition-all" style="width: {{ min(100, $campaign->progress_percentage) }}%"></div>
+                                <div class="bg-brand-500 h-3 rounded-full transition-all" style="width: {{ min(100, $campaign->progress_percentage) }}%"></div>
                             </div>
                             <p class="mt-2 text-xs text-gray-500 text-right">{{ number_format($campaign->progress_percentage, 1) }}%</p>
                         </div>
 
                         {{-- Stats --}}
                         <div class="grid grid-cols-2 gap-3 mb-5">
-                            <a href="{{ route('donation.donors', $campaign->slug) }}" class="text-center p-3 bg-gray-50 rounded-xl hover:bg-indigo-50 hover:border-indigo-100 border border-transparent transition-colors">
+                            <a href="{{ route('donation.donors', $campaign->slug) }}" class="text-center p-3 bg-gray-50 rounded-xl hover:bg-brand-50 hover:border-brand-100 border border-transparent transition-colors">
                                 <p class="text-lg font-bold text-gray-900">{{ $campaign->donor_count }}</p>
-                                <p class="text-xs text-gray-500">Donatur →</p>
+                                <p class="text-xs text-gray-500">Donatur <svg class="inline w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg></p>
                             </a>
                             <div class="text-center p-3 bg-gray-50 rounded-xl">
                                 <p class="text-lg font-bold text-gray-900">{{ $campaign->days_remaining }}</p>
@@ -312,7 +312,7 @@
                         {{-- Donate Button --}}
                         @if ($campaign->canAcceptDonations())
                             <a href="{{ url('/campaigns/' . $campaign->slug . '/donate') }}"
-                               class="block w-full text-center py-3 px-4 rounded-xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 shadow-sm transition">
+                               class="block w-full text-center py-3 px-4 rounded-xl bg-brand-500 text-white font-semibold text-sm hover:bg-brand-600 shadow-sm transition">
                                 Donasi Sekarang
                             </a>
                         @elseif ($campaign->isCompleted())
@@ -332,7 +332,7 @@
                                     <img src="{{ $campaign->user->profile_photo_url }}" alt="{{ $campaign->user->full_name }}" class="w-full h-full object-cover">
                                 </div>
                                 <div>
-                                    <p class="text-sm font-medium text-gray-900 hover:text-indigo-600">{{ $campaign->user->full_name }}</p>
+                                    <p class="text-sm font-medium text-gray-900 hover:text-brand-500">{{ $campaign->user->full_name }}</p>
                                     <p class="text-xs text-gray-500">Penggalang Dana</p>
                                 </div>
                             </a>
@@ -351,7 +351,7 @@
                                     <p class="text-xs font-medium text-gray-500 mb-2">Saldo Tersedia</p>
                                     <p class="text-lg font-bold text-gray-900 mb-3">Rp {{ number_format($campaign->available_balance, 0, ',', '.') }}</p>
                                     <a href="{{ route('withdrawals.create', ['campaign' => $campaign->id_campaign]) }}"
-                                       class="block w-full text-center py-2.5 px-4 rounded-xl border-2 border-indigo-600 text-indigo-600 font-semibold text-sm hover:bg-indigo-50 transition">
+                                       class="block w-full text-center py-2.5 px-4 rounded-xl border-2 border-brand-500 text-brand-500 font-semibold text-sm hover:bg-brand-50 transition">
                                         Tarik Dana
                                     </a>
                                 </div>
@@ -464,19 +464,19 @@
                                             <label class="block text-sm font-semibold text-gray-700 mb-2">Alasan Pelaporan <span class="text-red-500">*</span></label>
                                             <div class="space-y-2">
                                                 <label class="flex items-center gap-3 p-2.5 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition">
-                                                    <input type="radio" name="reason" value="Penipuan / Kecurangan" required class="text-indigo-600 focus:ring-indigo-500">
+                                                    <input type="radio" name="reason" value="Penipuan / Kecurangan" required class="text-brand-500 focus:ring-brand-500">
                                                     <span class="text-sm text-gray-700">Penipuan / Kecurangan</span>
                                                 </label>
                                                 <label class="flex items-center gap-3 p-2.5 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition">
-                                                    <input type="radio" name="reason" value="Konten Tidak Layak / SARA" class="text-indigo-600 focus:ring-indigo-500">
+                                                    <input type="radio" name="reason" value="Konten Tidak Layak / SARA" class="text-brand-500 focus:ring-brand-500">
                                                     <span class="text-sm text-gray-700">Konten Tidak Layak / SARA</span>
                                                 </label>
                                                 <label class="flex items-center gap-3 p-2.5 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition">
-                                                    <input type="radio" name="reason" value="Spam / Iklan" class="text-indigo-600 focus:ring-indigo-500">
+                                                    <input type="radio" name="reason" value="Spam / Iklan" class="text-brand-500 focus:ring-brand-500">
                                                     <span class="text-sm text-gray-700">Spam / Iklan</span>
                                                 </label>
                                                 <label class="flex items-center gap-3 p-2.5 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition">
-                                                    <input type="radio" name="reason" value="Lainnya" class="text-indigo-600 focus:ring-indigo-500">
+                                                    <input type="radio" name="reason" value="Lainnya" class="text-brand-500 focus:ring-brand-500">
                                                     <span class="text-sm text-gray-700">Lainnya</span>
                                                 </label>
                                             </div>
@@ -486,7 +486,7 @@
                                         <div class="mb-5">
                                             <label class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi Tambahan (Opsional)</label>
                                             <textarea name="description" rows="3" 
-                                                      class="w-full rounded-xl border-gray-200 text-sm focus:border-indigo-500 focus:ring-indigo-500 placeholder-gray-400"
+                                                      class="w-full rounded-xl border-gray-200 text-sm focus:border-brand-500 focus:ring-brand-500 placeholder-gray-400"
                                                       placeholder="Berikan detail lebih lanjut mengapa Anda melaporkan kampanye ini..."></textarea>
                                         </div>
                                         

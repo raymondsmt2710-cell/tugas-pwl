@@ -61,7 +61,7 @@
                      'bg-red-100'    : type === 'danger',
                      'bg-amber-100'  : type === 'warning',
                      'bg-blue-100'   : type === 'info',
-                     'bg-emerald-100': type === 'success'
+                     'bg-brand-100': type === 'success'
                  }">
                 {{-- danger --}}
                 <svg x-show="type === 'danger'" class="w-7 h-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -76,7 +76,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/>
                 </svg>
                 {{-- success --}}
-                <svg x-show="type === 'success'" class="w-7 h-7 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg x-show="type === 'success'" class="w-7 h-7 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                 </svg>
             </div>
@@ -99,7 +99,7 @@
                     'bg-red-500 hover:bg-red-600'       : type === 'danger',
                     'bg-amber-500 hover:bg-amber-600'   : type === 'warning',
                     'bg-blue-500 hover:bg-blue-600'     : type === 'info',
-                    'bg-emerald-500 hover:bg-emerald-600': type === 'success'
+                    'bg-brand-500 hover:bg-brand-500': type === 'success'
                 }">
                 <span x-text="confirmText"></span>
             </button>

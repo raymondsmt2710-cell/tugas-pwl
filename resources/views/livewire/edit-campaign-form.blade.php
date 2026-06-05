@@ -7,13 +7,13 @@
             </div>
             <div class="px-6 py-5 space-y-5">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Judul <span class="text-red-500">*</span></label>
-                    <input wire:model="title" type="text" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Judul <span class="text-red-500">*</span></label>
+                    <input wire:model="title" type="text" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm">
                     @error('title') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Kategori <span class="text-red-500">*</span></label>
-                    <select wire:model="id_category" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Kategori <span class="text-red-500">*</span></label>
+                    <select wire:model="id_category" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm">
                         @foreach($categories as $cat)
                             <option value="{{ $cat->id_category }}">{{ $cat->name }}</option>
                         @endforeach
@@ -21,13 +21,13 @@
                     @error('id_category') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Deskripsi Singkat <span class="text-red-500">*</span></label>
-                    <textarea wire:model="short_description" rows="2" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"></textarea>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Singkat <span class="text-red-500">*</span></label>
+                    <textarea wire:model="short_description" rows="2" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm"></textarea>
                     @error('short_description') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Cerita Lengkap <span class="text-red-500">*</span></label>
-                    <textarea wire:model="description" rows="6" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"></textarea>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Cerita Lengkap <span class="text-red-500">*</span></label>
+                    <textarea wire:model="description" rows="6" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm"></textarea>
                     @error('description') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
             </div>
@@ -38,7 +38,7 @@
             <div class="border-b border-gray-100 px-6 py-4"><h3 class="text-base font-semibold text-gray-900">Target & Waktu</h3></div>
             <div class="px-6 py-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Target Donasi <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Target Donasi <span class="text-red-500">*</span></label>
                     <div class="relative" x-data>
                         <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">Rp</span>
                         <input
@@ -46,12 +46,12 @@
                             x-on:input="$el.value = $el.value.replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.')"
                             x-on:change="$wire.set('target_amount', $el.value.replace(/\./g,''))"
                             x-init="$el.value = $wire.target_amount ? Number($wire.target_amount).toLocaleString('id-ID') : ''"
-                            class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="100.000">
+                            class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm" placeholder="100.000">
                     </div>
                     @error('target_amount') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Minimum Donasi</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Donasi</label>
                     <div class="relative" x-data>
                         <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">Rp</span>
                         <input
@@ -59,12 +59,12 @@
                             x-on:input="$el.value = $el.value.replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.')"
                             x-on:change="$wire.set('minimum_donation', $el.value.replace(/\./g,''))"
                             x-init="$el.value = $wire.minimum_donation ? Number($wire.minimum_donation).toLocaleString('id-ID') : ''"
-                            class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="10.000">
+                            class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm" placeholder="10.000">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Tanggal Berakhir <span class="text-red-500">*</span></label>
-                    <input wire:model="end_date" type="date" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Berakhir <span class="text-red-500">*</span></label>
+                    <input wire:model="end_date" type="date" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm">
                     @error('end_date') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
             </div>
@@ -80,8 +80,8 @@
                     <img src="{{ asset('storage/' . $campaign->banner_image) }}" class="w-full h-40 object-cover rounded-lg border mb-3">
                 @endif
                 <input wire:model.live="banner_image" type="file" accept="image/jpeg,image/png,image/webp"
-                       class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer border border-gray-300 rounded-lg">
-                <div wire:loading wire:target="banner_image" class="mt-2 text-sm text-indigo-600">Mengunggah...</div>
+                       class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-600 hover:file:bg-brand-100 cursor-pointer border border-gray-300 rounded-lg">
+                <div wire:loading wire:target="banner_image" class="mt-2 text-sm text-brand-500">Mengunggah...</div>
                 <p class="mt-1.5 text-xs text-gray-400">Kosongkan jika tidak ingin mengubah.</p>
                 @error('banner_image') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
@@ -118,7 +118,7 @@
                 @endif
                 <input wire:model.live="gallery_images" type="file" accept="image/jpeg,image/png,image/webp" multiple
                        class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-50 file:text-gray-700 cursor-pointer border border-gray-300 rounded-lg">
-                <div wire:loading wire:target="gallery_images" class="mt-2 text-sm text-indigo-600">Mengunggah...</div>
+                <div wire:loading wire:target="gallery_images" class="mt-2 text-sm text-brand-500">Mengunggah...</div>
             </div>
         </div>
 
@@ -149,7 +149,7 @@
                 @endif
                 <input wire:model.live="documents" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple
                        class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-green-50 file:text-green-700 cursor-pointer border border-gray-300 rounded-lg">
-                <div wire:loading wire:target="documents" class="mt-2 text-sm text-indigo-600">Mengunggah...</div>
+                <div wire:loading wire:target="documents" class="mt-2 text-sm text-brand-500">Mengunggah...</div>
             </div>
         </div>
 
@@ -157,7 +157,7 @@
         <div class="mt-8 flex items-center justify-between">
             <a href="{{ url('/dashboard?tab=campaigns') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">← Kembali</a>
             <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-50"
-                    class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition">
+                    class="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-brand-600 transition">
                 <span wire:loading.remove wire:target="save">Simpan Perubahan</span>
                 <span wire:loading wire:target="save">Menyimpan...</span>
             </button>

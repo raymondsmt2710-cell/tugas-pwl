@@ -47,7 +47,7 @@
             <div class="flex items-center gap-1.5 flex-wrap">
                 <h1 class="text-xl font-extrabold text-slate-900 leading-tight">{{ $user->name }}</h1>
                 @if($user->is_verified)
-                    <span class="text-indigo-600 text-lg" title="{{ __('Verified') }}">
+                    <span class="text-brand-500 text-lg" title="{{ __('Verified') }}">
                         <i class="fas fa-circle-check"></i>
                     </span>
                 @endif
@@ -190,7 +190,7 @@
                             <h3 class="text-base font-bold text-slate-900">Belum ada kampanye</h3>
                             <p class="text-sm text-slate-500 mt-1.5 max-w-[340px] mx-auto leading-relaxed">Buat kampanye pertama kamu untuk mulai menggalang dana.</p>
                             <a href="{{ url('/campaigns/create') }}"
-                               class="inline-flex items-center gap-1.5 mt-5 px-5 py-2.5 rounded-full bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-700 transition shadow-md shadow-indigo-600/20">
+                               class="inline-flex items-center gap-1.5 mt-5 px-5 py-2.5 rounded-full bg-brand-500 text-white text-sm font-bold hover:bg-brand-600 transition shadow-md shadow-brand-500/20">
                                 <i class="fas fa-plus text-xs"></i>
                                 Buat Kampanye
                             </a>
@@ -214,21 +214,70 @@
 
             @if($isOwner)
                 <div id="tab-content-liked" class="tab-pane" style="display: none;">
-                    <div class="py-12 text-center">
-                        <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-slate-100 text-rose-500 text-2xl mb-4">
-                            <i class="fas fa-heart"></i>
+                    @if($likedCampaigns->isEmpty())
+                        <div class="py-16 text-center">
+                            <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-slate-100 text-rose-400 text-2xl mb-4">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900">Belum ada kampanye yang disukai</h3>
+                            <p class="text-sm text-slate-500 mt-1.5 max-w-[340px] mx-auto leading-relaxed">Kampanye yang kamu sukai akan muncul di sini.</p>
+                            <a href="{{ url('/campaigns') }}"
+                               class="inline-flex items-center gap-1.5 mt-5 px-5 py-2.5 rounded-full bg-rose-500 text-white text-sm font-bold hover:bg-rose-600 transition shadow-md shadow-rose-500/20">
+                                <i class="fas fa-search text-xs"></i>
+                                Jelajahi Kampanye
+                            </a>
                         </div>
-                        <h3 class="text-base font-bold text-slate-900">{{ __('Kampanye yang Disukai') }}</h3>
-                    </div>
+                    @else
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            @foreach($likedCampaigns as $campaign)
+                                <x-campaign-card
+                                    :campaign="$campaign"
+                                    :liked="true"
+                                    :likesCount="$campaign->likes_count"
+                                />
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
 
                 <div id="tab-content-comments" class="tab-pane" style="display: none;">
-                    <div class="py-12 text-center">
-                        <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-slate-100 text-blue-500 text-2xl mb-4">
-                            <i class="fas fa-comments"></i>
+                    @if($userComments->isEmpty())
+                        <div class="py-16 text-center">
+                            <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-slate-100 text-blue-400 text-2xl mb-4">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900">Belum ada komentar</h3>
+                            <p class="text-sm text-slate-500 mt-1.5 max-w-[340px] mx-auto leading-relaxed">Komentar yang kamu tulis pada kampanye akan muncul di sini.</p>
                         </div>
-                        <h3 class="text-base font-bold text-slate-900">{{ __('Komentar Saya') }}</h3>
-                    </div>
+                    @else
+                        <div class="space-y-4">
+                            @foreach($userComments as $comment)
+                                @if($comment->campaign)
+                                    <div class="flex gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition">
+                                        <div class="shrink-0">
+                                            @if($comment->campaign->banner_image)
+                                                <img src="{{ asset('storage/' . $comment->campaign->banner_image) }}"
+                                                     class="w-16 h-16 rounded-xl object-cover border border-slate-200"
+                                                     alt="{{ $comment->campaign->title }}">
+                                            @else
+                                                <div class="w-16 h-16 rounded-xl bg-slate-200 flex items-center justify-center">
+                                                    <i class="fas fa-hand-holding-heart text-slate-400 text-xl"></i>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <a href="{{ url('/campaigns/' . $comment->campaign->slug) }}"
+                                               class="text-sm font-bold text-slate-900 hover:text-brand-600 truncate block leading-tight mb-1">
+                                                {{ $comment->campaign->title }}
+                                            </a>
+                                            <p class="text-[13px] text-slate-700 leading-relaxed line-clamp-2">{{ $comment->comment }}</p>
+                                            <p class="text-xs text-slate-400 mt-1.5">{{ $comment->created_at->diffForHumans() }}</p>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             @endif
 
@@ -244,7 +293,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             @if($user->location)
                                 <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-slate-300 transition">
-                                    <span class="flex items-center justify-center w-[38px] h-[38px] rounded-xl bg-indigo-100 text-indigo-600 text-[15px] shrink-0"><i class="fas fa-location-dot"></i></span>
+                                    <span class="flex items-center justify-center w-[38px] h-[38px] rounded-xl bg-brand-100 text-brand-500 text-[15px] shrink-0"><i class="fas fa-location-dot"></i></span>
                                     <div>
                                         <p class="text-xs text-slate-400 font-medium">{{ __('Location') }}</p>
                                         <p class="text-sm font-semibold text-slate-900 mt-0.5">{{ $user->location }}</p>
@@ -252,7 +301,7 @@
                                 </div>
                             @endif
                             <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-slate-300 transition">
-                                <span class="flex items-center justify-center w-[38px] h-[38px] rounded-xl bg-green-100 text-green-600 text-[15px] shrink-0"><i class="fas fa-calendar-days"></i></span>
+                                <span class="flex items-center justify-center w-[38px] h-[38px] rounded-xl bg-green-100 text-brand-500 text-[15px] shrink-0"><i class="fas fa-calendar-days"></i></span>
                                 <div>
                                     <p class="text-xs text-slate-400 font-medium">{{ __('Joined') }}</p>
                                     <p class="text-sm font-semibold text-slate-900 mt-0.5">{{ $user->created_at->format('d F Y') }}</p>
@@ -278,7 +327,7 @@
                     <div>
                         <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">{{ __('Visibility') }}</h3>
                         <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 max-w-sm">
-                            <span class="flex items-center justify-center w-[38px] h-[38px] rounded-xl bg-green-100 text-green-600 text-[15px] shrink-0">
+                            <span class="flex items-center justify-center w-[38px] h-[38px] rounded-xl bg-green-100 text-brand-500 text-[15px] shrink-0">
                                 <i class="fas fa-{{ $settings->show_profile_publicly ? 'globe' : 'lock' }}"></i>
                             </span>
                             <div>
@@ -293,7 +342,7 @@
     </div>
 
     <div id="custom-toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 translate-y-[100px] opacity-0 pointer-events-none bg-slate-900 text-white px-6 py-3 rounded-full shadow-xl text-sm font-semibold flex items-center gap-2 z-[9999] transition-all duration-400 ease-out">
-        <i class="fas fa-check-circle text-emerald-400 text-[15px]"></i>
+        <i class="fas fa-check-circle text-brand-400 text-[15px]"></i>
         <span class="toast-message">Link profil berhasil disalin!</span>
     </div>
 

@@ -1,5 +1,26 @@
 @import "tailwindcss";
-@plugin "daisyui";
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* ============================================================
+   Brand color: #20bdc4
+============================================================ */
+@theme {
+    --color-brand-50:  #f0fdfd;
+    --color-brand-100: #ccf7f8;
+    --color-brand-200: #99eef1;
+    --color-brand-300: #5cdde2;
+    --color-brand-400: #2ecbcf;
+    --color-brand-500: #20bdc4;
+    --color-brand-600: #179aa0;
+    --color-brand-700: #167b80;
+    --color-brand-800: #166369;
+    --color-brand-900: #165358;
+    --color-brand-950: #07363b;
+}
+
 
 [x-cloak] {
     display: none;
@@ -17,4 +38,35 @@
 /* Hide modal overlay background */
 .fixed.inset-0 > .absolute.inset-0.bg-gray-500 {
     display: none !important;
+}
+
+/* Custom input padding - lebih nyaman untuk form fields */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+select,
+textarea {
+    padding-top: 0.625rem !important;    /* py-2.5 = 10px */
+    padding-bottom: 0.625rem !important; /* py-2.5 = 10px */
+    padding-left: 0.875rem !important;   /* px-3.5 = 14px */
+    padding-right: 0.875rem !important;  /* px-3.5 = 14px */
+}
+
+/* Untuk input dengan icon di kiri (yang punya pl-9 atau pl-10) */
+input[type="text"].pl-9,
+input[type="number"].pl-9 {
+    padding-left: 2.25rem !important; /* tetap pl-9 */
+}
+
+/* Textarea lebih tinggi paddingnya */
+textarea {
+    padding-top: 0.75rem !important;    /* py-3 = 12px */
+    padding-bottom: 0.75rem !important; /* py-3 = 12px */
 }

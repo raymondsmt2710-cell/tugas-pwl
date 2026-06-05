@@ -11,17 +11,17 @@
         <form wire:submit="updatePassword" class="space-y-4">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Password Saat Ini</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password Saat Ini</label>
                     <input wire:model="current_password" type="password" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                     @error('current_password') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Password Baru</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password Baru</label>
                     <input wire:model="password" type="password" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                     @error('password') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Konfirmasi Password</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Konfirmasi Password</label>
                     <input wire:model="password_confirmation" type="password" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                 </div>
             </div>

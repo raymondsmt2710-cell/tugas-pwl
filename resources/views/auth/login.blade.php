@@ -41,7 +41,7 @@
                             <x-authentication-card-logo />
                         </div>
 
-                        <p class="text-sm font-semibold uppercase tracking-wide text-green-600">
+                        <p class="text-sm font-semibold uppercase tracking-wide text-brand-500">
                             Autopahala
                         </p>
 
@@ -51,7 +51,7 @@
 
                         <p class="mt-3 text-sm text-gray-600">
                             Belum punya akun?
-                            <a href="{{ route('register') }}" class="font-semibold text-green-600 hover:text-green-700">
+                            <a href="{{ route('register') }}" class="font-semibold text-brand-500 hover:text-green-700">
                                 Daftar sekarang
                             </a>
                         </p>
@@ -123,7 +123,7 @@
                                 <x-checkbox
                                     id="remember_me"
                                     name="remember"
-                                    class="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                                    class="rounded border-gray-300 text-brand-500 focus:ring-green-500"
                                 />
 
                                 <span class="ml-2 text-sm text-gray-600">
@@ -132,7 +132,7 @@
                             </label>
 
                             @if (Route::has('password.request'))
-                                <a href="{{ route('password.request') }}" class="text-sm font-semibold text-green-600 hover:text-green-700">
+                                <a href="{{ route('password.request') }}" class="text-sm font-semibold text-brand-500 hover:text-green-700">
                                     {{ __('Forgot your password?') }}
                                 </a>
                             @endif

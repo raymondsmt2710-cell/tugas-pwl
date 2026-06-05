@@ -116,6 +116,15 @@ Route::middleware([
 | Donation Routes (Authenticated)
 |--------------------------------------------------------------------------
 */
+Route::get('/@{username}', [ProfileController::class, 'show'])->name('profile.show.public');
+
+Route::get('/debug-livewire', function () {
+    return [
+        'base_path' => request()->getBasePath(),
+        'livewire_asset_url' => config('livewire.asset_url'),
+        'update_uri' => app('livewire')->getUpdateUri(),
+    ];
+});
 Route::middleware(['auth', \App\Http\Middleware\RedirectAdmin::class])->group(function () {
     Route::get('/campaigns/{slug}/donate', [DonationController::class, 'create'])->name('donation.create');
     Route::post('/campaigns/{slug}/donate', [DonationController::class, 'store'])->name('donation.store');

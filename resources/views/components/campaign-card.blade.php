@@ -57,14 +57,17 @@
             }
         }
     }"
-    class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow flex flex-col"
+    class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full"
 >
     {{-- Image --}}
-    <a href="{{ route('campaigns.show', $campaign->slug) }}" class="block aspect-[16/9] overflow-hidden bg-gray-100 group">
+    <a href="{{ route('campaigns.show', $campaign->slug) }}"
+       class="block overflow-hidden bg-gray-100 group shrink-0"
+       style="height: 200px; min-height: 200px; max-height: 200px;">
         @if($campaign->banner_image)
             <img src="{{ asset('storage/' . $campaign->banner_image) }}"
                  alt="{{ $campaign->title }}"
-                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                 style="width:100%; height:100%; object-fit:cover; display:block;"
+                 class="group-hover:scale-105 transition-transform duration-300">
         @else
             <div class="w-full h-full flex items-center justify-center text-gray-300">
                 <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -78,7 +81,7 @@
     <div class="p-4 flex flex-col flex-1">
         {{-- Category + Goal badge --}}
         <div class="flex items-center gap-2 mb-2 flex-wrap">
-            <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">
+            <span class="text-xs font-medium text-brand-500 bg-brand-50 px-2 py-0.5 rounded-full">
                 {{ $campaign->category->name ?? 'Umum' }}
             </span>
             @if($campaign->status === 'goal_reached')
@@ -90,14 +93,14 @@
 
         {{-- Title --}}
         <a href="{{ route('campaigns.show', $campaign->slug) }}"
-           class="text-sm font-semibold text-gray-900 line-clamp-2 hover:text-indigo-600 transition-colors leading-snug">
+           class="text-sm font-semibold text-gray-900 line-clamp-2 hover:text-brand-500 transition-colors leading-snug">
             {{ $campaign->title }}
         </a>
 
         {{-- Progress --}}
-        <div class="mt-3">
+        <div class="mt-auto pt-3">
             <div class="w-full bg-gray-100 rounded-full h-1.5">
-                <div class="bg-green-500 h-1.5 rounded-full transition-all"
+                <div class="bg-brand-500 h-1.5 rounded-full transition-all"
                      style="width: {{ min(100, $campaign->progress_percentage) }}%"></div>
             </div>
             <div class="flex justify-between mt-1.5 text-xs">
@@ -109,7 +112,7 @@
         {{-- Creator + days --}}
         <div class="mt-3 flex items-center justify-between text-xs text-gray-400">
             <a href="{{ url('/@' . $campaign->user->username) }}"
-               class="flex items-center gap-1.5 hover:text-indigo-600 transition min-w-0">
+               class="flex items-center gap-1.5 hover:text-brand-500 transition min-w-0">
                 <img src="{{ $campaign->user->profile_photo_url }}"
                      class="w-5 h-5 rounded-full object-cover border border-gray-200 shrink-0">
                 <span class="truncate max-w-[100px]">{{ $campaign->user->full_name }}</span>
@@ -137,14 +140,14 @@
             {{-- Share --}}
             <button
                 @click.prevent="share()"
-                class="flex items-center gap-1.5 text-gray-400 hover:text-indigo-500 transition focus:outline-none"
+                class="flex items-center gap-1.5 text-gray-400 hover:text-brand-500 transition focus:outline-none"
                 title="Bagikan">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
                           d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z"/>
                 </svg>
                 <span class="text-xs font-semibold" x-show="!copied">Bagikan</span>
-                <span class="text-xs font-semibold text-green-600" x-show="copied" x-cloak>Disalin!</span>
+                <span class="text-xs font-semibold text-brand-500" x-show="copied" x-cloak>Disalin!</span>
             </button>
         </div>
     </div>

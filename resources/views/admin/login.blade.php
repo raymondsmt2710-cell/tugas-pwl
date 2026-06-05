@@ -8,9 +8,7 @@
 
             <div class="text-center mb-10">
 
-                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-black text-white text-2xl font-bold shadow-lg">
-                    A
-                </div>
+                <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="mx-auto h-16 w-16 rounded-2xl object-cover shadow-lg">
 
                 <h1 class="mt-6 text-3xl font-bold text-gray-900">
                     Admin Panel

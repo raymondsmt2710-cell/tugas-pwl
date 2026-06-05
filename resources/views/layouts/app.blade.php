@@ -7,6 +7,9 @@
 
         <title>{{ $title ?? config('app.name', 'AutoPahala') }}</title>
 
+        <link rel="icon" type="image/jpeg" href="{{ asset('images/favicon.jpeg') }}">
+        <link rel="shortcut icon" type="image/jpeg" href="{{ asset('images/favicon.jpeg') }}">
+
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
@@ -29,7 +32,7 @@
             @endif
 
             <main class="flex-1">
-                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <x-flash-alert />
                 </div>
                 @if(isset($slot))
