@@ -21,6 +21,14 @@ class UsersTable
                     ->label('Avatar')
                     ->circular()
                     ->defaultImageUrl(fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->full_name) . '&color=7F9CF5&background=EBF4FF'),
+                ImageColumn::make('cover_photo_path')
+                    ->label('Foto Sampul')
+                    ->disk('public')
+                    ->height(36)
+                    ->width(64)
+                    ->extraImgAttributes(['style' => 'border-radius:6px;object-fit:cover;'])
+                    ->defaultImageUrl('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=60')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('full_name')
                     ->label('Nama Lengkap')
                     ->searchable()

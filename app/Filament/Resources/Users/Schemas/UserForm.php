@@ -7,9 +7,12 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\FileUpload;
+
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\KeyValue;
+use Filament\Forms\Components\Placeholder;
+use Illuminate\Support\HtmlString;
 use Filament\Schemas\Schema;
 
 class UserForm
@@ -18,9 +21,45 @@ class UserForm
     {
         return $schema
             ->components([
+                // Penolong Lightbox Gambar Instan di Halaman yang Sama (Simpel & Pendek)
+                Placeholder::make('lightbox_helper')
+                    ->columnSpanFull()
+                    ->content(fn () => new HtmlString(<<<HTML
+                        <style>[style*="background-image"],.fi-fo-file-upload img{cursor:zoom-in!important}</style>
+                        <div x-data="{ isOpen: false, imageUrl: '', init() {
+                            document.addEventListener('click', (e) => {
+                                let img = e.target.closest('img, [style*=\'background-image\']');
+                                let btn = e.target.closest('a[target=\"_blank\"], a[href*=\"storage\"]');
+                                let container = e.target.closest('.fi-fo-file-upload, .fi-fo-file-upload-preview, .fi-fo-file-upload-item, [class*=\"file-upload\"]');
+                                if (!container) return;
+                                
+                                let url = null;
+                                if (img && img.tagName === 'IMG') {
+                                    url = img.getAttribute('src');
+                                } else if (img) {
+                                    let match = (img.style.backgroundImage || img.getAttribute('style')).match(/url\((['\"]?)(.*?)\1\)/);
+                                    if (match && match[2]) url = match[2];
+                                } else if (btn) {
+                                    url = btn.getAttribute('href');
+                                }
+                                
+                                if (url && !url.endsWith('.svg') && !url.includes('data:image/svg+xml')) {
+                                    e.preventDefault(); e.stopPropagation();
+                                    this.imageUrl = url; this.isOpen = true;
+                                }
+                            }, true);
+                        }}" class="w-full">
+                            <div x-show="isOpen" class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 p-4" @click="isOpen = false" @keydown.escape.window="isOpen = false" style="display:none">
+                                <button type="button" class="absolute top-6 right-6 text-white text-4xl hover:text-gray-300 font-bold">&times;</button>
+                                <img :src="imageUrl" class="max-w-full max-h-[85vh] object-contain rounded-lg border border-gray-800" @click.stop>
+                            </div>
+                        </div>
+HTML
+                    )),
+
                 Section::make('Informasi Utama')
                     ->description('Kredensial login, peran, dan status akun utama pengguna.')
-                    ->aside()
+                    ->columnSpanFull()
                     ->schema([
                         Grid::make(2)
                             ->schema([
@@ -76,7 +115,7 @@ class UserForm
 
                 Section::make('Informasi Tambahan & Profil')
                     ->description('Detail profil personal, biografi, alamat, dan sosial media.')
-                    ->aside()
+                    ->columnSpanFull()
                     ->schema([
                         Grid::make(2)
                             ->schema([
@@ -91,23 +130,32 @@ class UserForm
                                 FileUpload::make('profile_photo')
                                     ->label('Foto Profil Avatar')
                                     ->image()
-                                    ->directory('profile-photos'),
+                                    ->imagePreviewHeight('160')
+                                    ->directory('profile-photos')
+                                    ->disk('public')
+                                    ->openable()
+                                    ->downloadable(),
                                 FileUpload::make('cover_photo_path')
                                     ->label('Foto Sampul Profil')
                                     ->image()
-                                    ->directory('cover-photos'),
+                                    ->imagePreviewHeight('160')
+                                    ->directory('cover-photos')
+                                    ->disk('public')
+                                    ->openable()
+                                    ->downloadable(),
                                 KeyValue::make('social_links')
                                     ->label('Tautan Media Sosial')
                                     ->columnSpanFull()
                                     ->keyLabel('Media Sosial')
                                     ->valueLabel('Tautan / Username')
-                                    ->placeholder('Contoh: instagram -> raymond_smt'),
+                                    ->keyPlaceholder('Contoh: instagram')
+                                    ->valuePlaceholder('Contoh: raymond_smt'),
                             ]),
                     ]),
 
                 Section::make('Integrasi Single Sign-On (OAuth)')
                     ->description('ID eksternal dari provider Google dan GitHub.')
-                    ->aside()
+                    ->columnSpanFull()
                     ->collapsed()
                     ->schema([
                         Grid::make(2)

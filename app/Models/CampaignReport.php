@@ -12,6 +12,8 @@ class CampaignReport extends Model
         'id_user',
         'reason',
         'description',
+        'status',
+        'admin_notes',
     ];
 
     public function campaign(): BelongsTo
@@ -22,5 +24,21 @@ class CampaignReport extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id_user', 'id_user');
+    }
+
+    public function getStatusLabelAttribute(): string
+    {
+        return match ($this->status) {
+            'pending'   => 'Menunggu',
+            'reviewed'  => 'Sedang Ditinjau',
+            'resolved'  => 'Diselesaikan',
+            'dismissed' => 'Ditolak',
+            default     => ucfirst($this->status),
+        };
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
     }
 }
