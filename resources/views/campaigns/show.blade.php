@@ -185,14 +185,25 @@
                                                 <p class="text-xs text-gray-400 italic">{{ $w->notes }}</p>
                                             @endif
 
-                                            {{-- Date --}}
-                                            <p class="text-xs text-gray-400 mt-1.5">
-                                                @if($w->paid_at)
-                                                    Dibayarkan {{ $w->paid_at->translatedFormat('d M Y') }}
-                                                @else
-                                                    Diajukan {{ $w->created_at->translatedFormat('d M Y') }}
+                                            {{-- Date & Proof --}}
+                                            <div class="flex items-center justify-between mt-1.5 flex-wrap gap-2">
+                                                <p class="text-xs text-gray-400">
+                                                    @if($w->paid_at)
+                                                        Dibayarkan {{ $w->paid_at->translatedFormat('d M Y') }}
+                                                    @else
+                                                        Diajukan {{ $w->created_at->translatedFormat('d M Y') }}
+                                                    @endif
+                                                </p>
+                                                @if($w->status === 'paid' && $w->transfer_proof)
+                                                    <a href="{{ asset('storage/' . $w->transfer_proof) }}" target="_blank" class="inline-flex items-center gap-1 text-xs font-semibold text-brand-500 hover:text-brand-700 transition">
+                                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/>
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                                        </svg>
+                                                        Bukti Transfer
+                                                    </a>
                                                 @endif
-                                            </p>
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach

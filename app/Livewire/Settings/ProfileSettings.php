@@ -36,7 +36,7 @@ class ProfileSettings extends Component
             'phone_number' => 'nullable|string|max:20',
             'bio' => 'nullable|string|max:500',
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'cover_photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'cover_photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $user = auth()->user();
@@ -65,6 +65,20 @@ class ProfileSettings extends Component
         $this->cover_photo = null;
 
         $this->dispatch('flash', message: 'Profil berhasil disimpan.', type: 'success');
+    }
+
+    public function updatedCoverPhoto(): void
+    {
+        $this->validateOnly('cover_photo', [
+            'cover_photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+    }
+
+    public function updatedAvatar(): void
+    {
+        $this->validateOnly('avatar', [
+            'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
     }
 
     public function render()

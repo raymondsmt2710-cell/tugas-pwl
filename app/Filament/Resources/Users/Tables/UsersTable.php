@@ -8,6 +8,8 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\SelectColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
@@ -48,27 +50,24 @@ class UsersTable
                     ->label('No. Telepon')
                     ->searchable()
                     ->placeholder('-'),
-                TextColumn::make('role')
+                SelectColumn::make('role')
                     ->label('Peran')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'super_admin' => 'primary',
-                        'admin' => 'danger',
-                        'user' => 'success',
-                    })
+                    ->options([
+                        'super_admin' => 'Super Admin',
+                        'admin' => 'Admin',
+                        'user' => 'User',
+                    ])
                     ->sortable(),
-                TextColumn::make('account_status')
+                SelectColumn::make('account_status')
                     ->label('Status')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'active' => 'success',
-                        'suspended' => 'danger',
-                        'pending' => 'warning',
-                    })
+                    ->options([
+                        'active' => 'Active',
+                        'suspended' => 'Suspended',
+                        'pending' => 'Pending',
+                    ])
                     ->sortable(),
-                IconColumn::make('is_verified')
+                ToggleColumn::make('is_verified')
                     ->label('Centang Biru')
-                    ->boolean()
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Terdaftar Pada')

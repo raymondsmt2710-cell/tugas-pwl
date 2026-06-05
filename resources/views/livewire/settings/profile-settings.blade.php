@@ -13,12 +13,14 @@
                     <img src="{{ $avatar ? $avatar->temporaryUrl() : auth()->user()->profile_photo_url }}" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200">
                     <input wire:model.live="avatar" type="file" accept="image/*" class="text-sm text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-600 cursor-pointer">
                 </div>
+                <p class="mt-1 text-xs text-gray-400">JPG, PNG, WEBP. Maks. 2MB.</p>
                 <div wire:loading wire:target="avatar" class="mt-1 text-xs text-brand-500">Mengunggah...</div>
                 @error('avatar') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Foto Sampul</label>
                 <input wire:model.live="cover_photo" type="file" accept="image/*" class="text-sm text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-50 file:text-gray-700 cursor-pointer">
+                <p class="mt-1 text-xs text-gray-400">JPG, PNG, WEBP. Maks. 2MB.</p>
                 <div wire:loading wire:target="cover_photo" class="mt-1 text-xs text-brand-500">Mengunggah...</div>
                 @error('cover_photo') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>

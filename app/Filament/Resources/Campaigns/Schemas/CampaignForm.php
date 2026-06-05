@@ -183,6 +183,45 @@ HTML
                             ->columnSpanFull()
                             ->helperText('Maksimal 5 gambar pendukung. Format: JPG, PNG, WebP. Masing-masing maks 2MB.'),
 
+                        // Repeater untuk Dokumen Pendukung
+                        Repeater::make('documents')
+                            ->relationship('documents')
+                            ->label('Dokumen Pendukung')
+                            ->schema([
+                                FileUpload::make('file_path')
+                                    ->label('Berkas Dokumen')
+                                    ->directory('campaigns/documents')
+                                    ->disk('public')
+                                    ->openable()
+                                    ->downloadable()
+                                    ->required()
+                                    ->live()
+                                    ->afterStateUpdated(function ($state, callable $set) {
+                                        if (is_object($state) && method_exists($state, 'getClientOriginalName')) {
+                                            $set('original_name', $state->getClientOriginalName());
+                                            $set('mime_type', $state->getMimeType());
+                                            $set('file_size', $state->getSize());
+                                        }
+                                    }),
+                                TextInput::make('original_name')
+                                    ->label('Nama Berkas')
+                                    ->disabled()
+                                    ->dehydrated(),
+                                TextInput::make('mime_type')
+                                    ->label('Tipe MIME')
+                                    ->disabled()
+                                    ->dehydrated(),
+                                TextInput::make('file_size')
+                                    ->label('Ukuran Berkas')
+                                    ->disabled()
+                                    ->dehydrated()
+                                    ->formatStateUsing(fn ($state) => $state !== null ? number_format($state / 1024, 2) . ' KB' : null),
+                            ])
+                            ->columns(2)
+                            ->maxItems(5)
+                            ->columnSpanFull()
+                            ->helperText('Maksimal 5 dokumen pendukung (KTP, Surat Rekomendasi, Proposal, dll). Format: PDF, Word, Excel, PPT. Masing-masing maks 5MB.'),
+
                         // Baris Status Administrasi (Diubah ke 2 kolom agar seimbang dan rapi)
                         Grid::make(2)
                             ->schema([

@@ -544,7 +544,45 @@
                                             </td>
                                             <td class="p-4 text-center text-xs text-gray-500">{{ $w->created_at->translatedFormat('d M Y, H:i') }}</td>
                                             <td class="p-4 text-center">
-                                                @if($w->canBeCancelled())
+                                                @if($w->status === 'paid' && $w->transfer_proof)
+                                                    <div x-data="{ open: false }">
+                                                        <button @click="open = true" class="text-xs text-brand-500 hover:underline font-semibold inline-flex items-center gap-1">
+                                                            <i class="fas fa-receipt"></i> Bukti
+                                                        </button>
+                                                        
+                                                        {{-- Modal Lightbox --}}
+                                                        <div x-show="open" 
+                                                             x-transition:enter="transition ease-out duration-300"
+                                                             x-transition:enter-start="opacity-0"
+                                                             x-transition:enter-end="opacity-100"
+                                                             x-transition:leave="transition ease-in duration-200"
+                                                             x-transition:leave-start="opacity-100"
+                                                             x-transition:leave-end="opacity-0"
+                                                             class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
+                                                             @click.self="open = false"
+                                                             @keydown.escape.window="open = false"
+                                                             style="display: none;">
+                                                            
+                                                            <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl relative border border-gray-100 text-left font-normal">
+                                                                <div class="flex items-center justify-between mb-4">
+                                                                    <h3 class="text-sm font-bold text-gray-900">Bukti Transfer Penarikan</h3>
+                                                                    <button @click="open = false" class="text-gray-400 hover:text-gray-600 font-bold text-lg">&times;</button>
+                                                                </div>
+                                                                <div class="flex justify-center bg-gray-50 rounded-xl p-2 border border-gray-100">
+                                                                    <img src="{{ asset('storage/' . $w->transfer_proof) }}" class="max-w-full max-h-[50vh] object-contain rounded-lg" />
+                                                                </div>
+                                                                <div class="mt-4 flex gap-2 justify-end">
+                                                                    <a href="{{ asset('storage/' . $w->transfer_proof) }}" target="_blank" class="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-semibold hover:bg-indigo-100 transition">
+                                                                        Buka Tab Baru
+                                                                    </a>
+                                                                    <button @click="open = false" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl text-xs font-semibold hover:bg-gray-200 transition">
+                                                                        Tutup
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @elseif($w->canBeCancelled())
                                                     <form id="form-cancel-withdrawal-{{ $w->id_withdrawal }}"
                                                           action="{{ route('withdrawals.cancel', $w->id_withdrawal) }}" method="POST">
                                                         @csrf
@@ -660,15 +698,81 @@
                                             </td>
                                             <td class="p-4 text-center">
                                                 @if($r->admin_notes)
-                                                    <span x-data="{ open: false }" class="relative">
-                                                        <button @click="open = !open"
+                                                    <span x-data="{ open: false }">
+                                                        <button @click="open = true"
                                                                 class="text-xs text-indigo-600 hover:underline font-semibold">
                                                             Catatan Admin
                                                         </button>
-                                                        <div x-show="open" @click.away="open = false"
-                                                             class="absolute right-0 z-10 mt-1 w-64 bg-white border border-gray-200 rounded-xl shadow-lg p-3 text-left">
-                                                            <p class="text-xs font-semibold text-gray-700 mb-1">Catatan Admin:</p>
-                                                            <p class="text-xs text-gray-600 leading-relaxed">{{ $r->admin_notes }}</p>
+                                                        
+                                                        {{-- Modal Lightbox untuk Detail Laporan & Catatan Admin --}}
+                                                        <div x-show="open" 
+                                                             x-transition:enter="transition ease-out duration-300"
+                                                             x-transition:enter-start="opacity-0"
+                                                             x-transition:enter-end="opacity-100"
+                                                             x-transition:leave="transition ease-in duration-200"
+                                                             x-transition:leave-start="opacity-100"
+                                                             x-transition:leave-end="opacity-0"
+                                                             class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
+                                                             @click.self="open = false"
+                                                             @keydown.escape.window="open = false"
+                                                             style="display: none;">
+                                                            
+                                                            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative border border-gray-100 text-left font-normal">
+                                                                <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                                                                    <h3 class="text-base font-bold text-gray-900">Detail Laporan Kampanye</h3>
+                                                                    <button @click="open = false" class="text-gray-400 hover:text-gray-600 font-bold text-xl">&times;</button>
+                                                                </div>
+                                                                
+                                                                <div class="space-y-3">
+                                                                    <div>
+                                                                        <span class="text-xs text-gray-400 block">Kampanye</span>
+                                                                        <span class="text-sm font-semibold text-gray-800">
+                                                                            {{ $r->campaign->title ?? 'Kampanye Dihapus' }}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span class="text-xs text-gray-400 block">Alasan Pelaporan</span>
+                                                                        <span class="text-sm text-gray-800 font-medium">
+                                                                            {{ $r->reason }}
+                                                                        </span>
+                                                                    </div>
+                                                                    @if($r->description)
+                                                                        <div>
+                                                                            <span class="text-xs text-gray-400 block">Deskripsi Detail</span>
+                                                                            <p class="text-xs text-gray-600 bg-gray-50 rounded-lg p-2.5 mt-1 border border-gray-100 leading-relaxed max-h-[100px] overflow-y-auto">
+                                                                                {{ $r->description }}
+                                                                            </p>
+                                                                        </div>
+                                                                    @endif
+                                                                    <div class="flex justify-between items-center pt-2">
+                                                                        <div>
+                                                                            <span class="text-xs text-gray-400 block">Tanggal Laporan</span>
+                                                                            <span class="text-xs text-gray-600 font-medium">{{ $r->created_at->translatedFormat('d M Y, H:i') }}</span>
+                                                                        </div>
+                                                                        <div>
+                                                                            <span class="text-xs text-gray-400 block text-right">Status</span>
+                                                                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold {{ $rs['bg'] }} {{ $rs['text'] }} inline-block">
+                                                                                {{ $rs['label'] }}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    <div class="border-t border-gray-100 pt-3 mt-1">
+                                                                        <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-3.5 text-indigo-950">
+                                                                            <p class="text-xs font-semibold flex items-center gap-1">
+                                                                                <i class="fas fa-comment-dots text-indigo-500"></i> Tanggapan/Catatan Admin:
+                                                                            </p>
+                                                                            <p class="text-xs mt-1.5 leading-relaxed font-medium whitespace-pre-wrap">{{ $r->admin_notes }}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="mt-5 flex justify-end">
+                                                                    <button @click="open = false" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl text-xs font-semibold transition">
+                                                                        Tutup
+                                                                    </button>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </span>
                                                 @else

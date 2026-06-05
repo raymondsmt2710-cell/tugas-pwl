@@ -19,46 +19,9 @@ Route::post('/midtrans/webhook', [MidtransWebhookController::class, 'handle'])
 
 /*
 |--------------------------------------------------------------------------
-| Public Routes Protected from Admin Users
-|--------------------------------------------------------------------------
-*/
-Route::middleware([\App\Http\Middleware\RedirectAdmin::class])->group(function () {
-    // Public & Homepage Routes
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-
-    // Email Verified Success Page
-    Route::get('/email/verified', function () {
-        return view('auth.email-verified');
-    })->middleware('auth')->name('email.verified');
-
-    Route::view('/about', 'about', ['title' => 'About - Autopahala'])->name('about');
-    Route::view('/contact', 'contact', ['title' => 'Contact - Autopahala'])->name('contact');
-    Route::view('/faq', 'faq', ['title' => 'FAQ - Autopahala'])->name('faq');
-
-    // OAuth / Socialite Routes
-    Route::get('/auth/{provider}', [SocialiteController::class, 'redirectToProvider'])
-        ->where('provider', 'google')
-        ->name('social.login');
-
-    Route::get('/auth/{provider}/callback', [SocialiteController::class, 'handleProviderCallback'])
-        ->where('provider', 'google');
-
-    // Public Campaign Routes
-    Route::get('/search', [\App\Http\Controllers\SearchController::class, 'index'])->name('search');
-    Route::get('/leaderboard', [\App\Http\Controllers\LeaderboardController::class, 'index'])->name('leaderboard');
-    Route::get('/campaigns', [CampaignController::class, 'index'])->name('campaigns.index');
-    Route::get('/campaigns/{slug}', [CampaignController::class, 'show'])->name('campaigns.show');
-    Route::get('/campaigns/{slug}/donors', [DonationController::class, 'donors'])->name('donation.donors');
-    Route::get('/campaigns/{slug}/withdrawals', [\App\Http\Controllers\CampaignWithdrawalController::class, 'index'])->name('campaign.withdrawals');
-    Route::get('/donations/{orderId}/track', [DonationController::class, 'track'])->name('donation.track');
-
-    // Public Profile Route
-    Route::get('/@{username}', [ProfileController::class, 'show'])->name('profile.show.public');
-});
-
-/*
-|--------------------------------------------------------------------------
 | Authenticated User Routes
+| (Declared BEFORE wildcard public routes to avoid /campaigns/create
+|  being caught by /campaigns/{slug})
 |--------------------------------------------------------------------------
 */
 Route::middleware([
@@ -97,7 +60,6 @@ Route::middleware([
 
     // Notifications
     Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
-    // Notification Actions
     Route::post('/notifications/{id}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
     Route::get('/notifications/unread-count', [\App\Http\Controllers\NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
@@ -116,7 +78,52 @@ Route::middleware([
 | Donation Routes (Authenticated)
 |--------------------------------------------------------------------------
 */
-Route::get('/@{username}', [ProfileController::class, 'show'])->name('profile.show.public');
+Route::middleware(['auth', \App\Http\Middleware\RedirectAdmin::class])->group(function () {
+    Route::get('/campaigns/{slug}/donate', [DonationController::class, 'create'])->name('donation.create');
+    Route::post('/campaigns/{slug}/donate', [DonationController::class, 'store'])->name('donation.store');
+    Route::get('/donations/{orderId}/finish', [DonationController::class, 'finish'])->name('donation.finish');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Public Routes Protected from Admin Users
+| (Wildcard /campaigns/{slug} is declared LAST to avoid catching
+|  specific routes like /campaigns/create)
+|--------------------------------------------------------------------------
+*/
+Route::middleware([\App\Http\Middleware\RedirectAdmin::class])->group(function () {
+    // Public & Homepage Routes
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+
+    // Email Verified Success Page
+    Route::get('/email/verified', function () {
+        return view('auth.email-verified');
+    })->middleware('auth')->name('email.verified');
+
+    Route::view('/about', 'about', ['title' => 'About - Autopahala'])->name('about');
+    Route::view('/contact', 'contact', ['title' => 'Contact - Autopahala'])->name('contact');
+    Route::view('/faq', 'faq', ['title' => 'FAQ - Autopahala'])->name('faq');
+
+    // OAuth / Socialite Routes
+    Route::get('/auth/{provider}', [SocialiteController::class, 'redirectToProvider'])
+        ->where('provider', 'google')
+        ->name('social.login');
+
+    Route::get('/auth/{provider}/callback', [SocialiteController::class, 'handleProviderCallback'])
+        ->where('provider', 'google');
+
+    // Public Campaign Routes (wildcard {slug} declared last)
+    Route::get('/search', [\App\Http\Controllers\SearchController::class, 'index'])->name('search');
+    Route::get('/leaderboard', [\App\Http\Controllers\LeaderboardController::class, 'index'])->name('leaderboard');
+    Route::get('/campaigns', [CampaignController::class, 'index'])->name('campaigns.index');
+    Route::get('/campaigns/{slug}/donors', [DonationController::class, 'donors'])->name('donation.donors');
+    Route::get('/campaigns/{slug}/withdrawals', [\App\Http\Controllers\CampaignWithdrawalController::class, 'index'])->name('campaign.withdrawals');
+    Route::get('/donations/{orderId}/track', [DonationController::class, 'track'])->name('donation.track');
+    Route::get('/campaigns/{slug}', [CampaignController::class, 'show'])->name('campaigns.show');
+
+    // Public Profile Route
+    Route::get('/@{username}', [ProfileController::class, 'show'])->name('profile.show.public');
+});
 
 Route::get('/debug-livewire', function () {
     return [
@@ -124,9 +131,4 @@ Route::get('/debug-livewire', function () {
         'livewire_asset_url' => config('livewire.asset_url'),
         'update_uri' => app('livewire')->getUpdateUri(),
     ];
-});
-Route::middleware(['auth', \App\Http\Middleware\RedirectAdmin::class])->group(function () {
-    Route::get('/campaigns/{slug}/donate', [DonationController::class, 'create'])->name('donation.create');
-    Route::post('/campaigns/{slug}/donate', [DonationController::class, 'store'])->name('donation.store');
-    Route::get('/donations/{orderId}/finish', [DonationController::class, 'finish'])->name('donation.finish');
 });

@@ -89,8 +89,8 @@ class CampaignController extends Controller
             ->with(['category', 'user', 'galleries'])
             ->firstOrFail();
 
-        // Check view permission (approved campaigns are public, others need auth)
-        if (!$campaign->isApproved() && !$campaign->isCompleted()) {
+        // Check view permission (approved, goal reached, or completed campaigns are public, others need auth)
+        if (!$campaign->isApproved() && !$campaign->isCompleted() && !$campaign->isGoalReached()) {
             $this->authorize('view', $campaign);
         }
 

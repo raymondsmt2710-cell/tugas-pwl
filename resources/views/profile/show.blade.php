@@ -211,6 +211,45 @@
                                                     @default bg-red-50 text-red-700
                                                 @endswitch
                                             ">{{ $withdrawal->status_label }}</span>
+                                            @if($withdrawal->status === 'paid' && $withdrawal->transfer_proof)
+                                                <span x-data="{ open: false }">
+                                                    <button @click="open = true" class="text-[10px] bg-indigo-50 text-indigo-600 px-1.5 py-0.5 rounded font-medium hover:bg-indigo-100 transition inline-flex items-center gap-0.5">
+                                                        <i class="fas fa-receipt text-[9px]"></i> Bukti
+                                                    </button>
+                                                    
+                                                    {{-- Modal Lightbox --}}
+                                                    <div x-show="open" 
+                                                         x-transition:enter="transition ease-out duration-300"
+                                                         x-transition:enter-start="opacity-0"
+                                                         x-transition:enter-end="opacity-100"
+                                                         x-transition:leave="transition ease-in duration-200"
+                                                         x-transition:leave-start="opacity-100"
+                                                         x-transition:leave-end="opacity-0"
+                                                         class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
+                                                         @click.self="open = false"
+                                                         @keydown.escape.window="open = false"
+                                                         style="display: none;">
+                                                        
+                                                        <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl relative border border-gray-100 text-left font-normal">
+                                                            <div class="flex items-center justify-between mb-4">
+                                                                <h3 class="text-sm font-bold text-gray-900">Bukti Transfer Penarikan</h3>
+                                                                <button @click="open = false" class="text-gray-400 hover:text-gray-600 font-bold text-lg">&times;</button>
+                                                            </div>
+                                                            <div class="flex justify-center bg-gray-50 rounded-xl p-2 border border-gray-100">
+                                                                <img src="{{ asset('storage/' . $withdrawal->transfer_proof) }}" class="max-w-full max-h-[50vh] object-contain rounded-lg" />
+                                                            </div>
+                                                            <div class="mt-4 flex gap-2 justify-end">
+                                                                <a href="{{ asset('storage/' . $withdrawal->transfer_proof) }}" target="_blank" class="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-semibold hover:bg-indigo-100 transition">
+                                                                    Buka Tab Baru
+                                                                </a>
+                                                                <button @click="open = false" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl text-xs font-semibold hover:bg-gray-200 transition">
+                                                                    Tutup
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

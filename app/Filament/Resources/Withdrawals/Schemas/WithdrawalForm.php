@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Withdrawals\Schemas;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -76,6 +77,20 @@ class WithdrawalForm
                             ->rows(3)
                             ->helperText('Catatan ini akan terlihat oleh pengguna.'),
                     ]),
+
+                Section::make('Bukti Transfer')
+                    ->columnSpanFull()
+                    ->schema([
+                        FileUpload::make('transfer_proof')
+                            ->label('Bukti Transfer (Resi/Screenshot)')
+                            ->image()
+                            ->directory('withdrawals/proofs')
+                            ->disk('public')
+                            ->disabled()
+                            ->openable()
+                            ->downloadable(),
+                    ])
+                    ->visible(fn ($record) => $record !== null && $record->status === 'paid'),
             ]);
     }
 }

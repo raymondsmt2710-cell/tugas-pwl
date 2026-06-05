@@ -154,6 +154,11 @@
             'hewan'        => 'fa-solid fa-paw',
             'seni'         => 'fa-solid fa-palette',
             'olahraga'     => 'fa-solid fa-futbol',
+            'difabel'      => 'fa-solid fa-wheelchair',
+            'panti'        => 'fa-solid fa-people-roof',
+            'balita'       => 'fa-solid fa-baby',
+            'anak sakit'   => 'fa-solid fa-baby',
+            'anak-anak'    => 'fa-solid fa-child',
             'umum'         => 'fa-solid fa-circle-dot',
         ];
         $defaultIcon = 'fa-solid fa-tag';

@@ -20,6 +20,12 @@ class DatabaseSeeder extends Seeder
 
         // Bersihkan data lama di tabel terkait agar tidak menumpuk double
         DB::table('donations')->truncate();
+        DB::table('withdrawals')->truncate();
+        DB::table('campaign_galleries')->truncate();
+        DB::table('campaign_documents')->truncate();
+        DB::table('campaign_likes')->truncate();
+        DB::table('campaign_comments')->truncate();
+        DB::table('campaign_reports')->truncate();
         DB::table('campaigns')->truncate();
         DB::table('categories')->truncate();
         DB::table('users')->truncate();
@@ -30,41 +36,67 @@ class DatabaseSeeder extends Seeder
         $users = [
             [
                 'id_user' => 1,
-                'name' => 'Yayasan Lentera Bangsa',
+                'full_name' => 'Yayasan Lentera Bangsa',
+                'username' => 'lentera_bangsa',
                 'email' => 'lentera.bangsa@gmail.com',
                 'password' => Hash::make('password123'),
+                'role' => 'user',
+                'email_verified_at' => now(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id_user' => 2,
-                'name' => 'Rahmat Hidayat',
+                'full_name' => 'Rahmat Hidayat',
+                'username' => 'rahmat_hidayat',
                 'email' => 'rahmat.hidayat@gmail.com',
                 'password' => Hash::make('password123'),
+                'role' => 'user',
+                'email_verified_at' => now(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id_user' => 3,
-                'name' => 'Komunitas Pemuda Sukamaju',
+                'full_name' => 'Komunitas Pemuda Sukamaju',
+                'username' => 'pemuda_sukamaju',
                 'email' => 'pemuda.sukamaju@gmail.com',
                 'password' => Hash::make('password123'),
+                'role' => 'user',
+                'email_verified_at' => now(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id_user' => 4,
-                'name' => 'Budi Santoso',
+                'full_name' => 'Budi Santoso',
+                'username' => 'budi_santoso',
                 'email' => 'budi.santoso@gmail.com',
                 'password' => Hash::make('password123'),
+                'role' => 'user',
+                'email_verified_at' => now(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id_user' => 5,
-                'name' => 'Sarah Amalia',
+                'full_name' => 'Sarah Amalia',
+                'username' => 'sarah_amalia',
                 'email' => 'sarah.amalia@gmail.com',
                 'password' => Hash::make('password123'),
+                'role' => 'user',
+                'email_verified_at' => now(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id_user' => 6,
+                'full_name' => 'Admin Autopahala',
+                'username' => 'admin',
+                'email' => 'admin@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'super_admin',
+                'email_verified_at' => now(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -105,6 +137,55 @@ class DatabaseSeeder extends Seeder
                 'id_category' => 5,
                 'name' => 'Fasilitas Umum',
                 'slug' => 'fasilitas-umum',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id_category' => 6,
+                'name' => 'Lingkungan',
+                'slug' => 'lingkungan',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id_category' => 7,
+                'name' => 'Menolong Hewan',
+                'slug' => 'menolong-hewan',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id_category' => 8,
+                'name' => 'Difabel',
+                'slug' => 'difabel',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id_category' => 9,
+                'name' => 'Panti Asuhan',
+                'slug' => 'panti-asuhan',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id_category' => 10,
+                'name' => 'Balita & Anak Sakit',
+                'slug' => 'balita-anak-sakit',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id_category' => 11,
+                'name' => 'Anak-anak',
+                'slug' => 'anak-anak',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id_category' => 12,
+                'name' => 'Program Sosial',
+                'slug' => 'program-sosial',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
