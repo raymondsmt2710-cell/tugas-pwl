@@ -60,8 +60,8 @@ class ProfileController extends Controller
         }
 
         // Stats
-        $totalDonationsReceived = $user->campaigns()->sum('collected_amount');
-        $campaignCount = $user->campaigns()->count();
+        $totalDonationsReceived = $campaigns->sum('collected_amount'); 
+        $campaignCount = $campaigns->count();
 
         // Respect privacy settings for follower/following counts + lists
         $showFollowers = $settings->show_followers_count || $isOwner;
