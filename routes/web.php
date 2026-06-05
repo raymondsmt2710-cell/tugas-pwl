@@ -149,3 +149,8 @@ Route::get('/debug-livewire', function () {
         'update_uri' => app('livewire')->getUpdateUri(),
     ];
 });
+Route::middleware(['auth', \App\Http\Middleware\RedirectAdmin::class])->group(function () {
+    Route::get('/campaigns/{slug}/donate', [DonationController::class, 'create'])->name('donation.create');
+    Route::post('/campaigns/{slug}/donate', [DonationController::class, 'store'])->name('donation.store');
+    Route::get('/donations/{orderId}/finish', [DonationController::class, 'finish'])->name('donation.finish');
+});
