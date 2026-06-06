@@ -36,11 +36,10 @@
 
             <div class="bg-gray-100 p-6 rounded-2xl shadow">
                 <h2 class="text-xl font-bold mb-2">
-                    Mengapa navbar dipisahkan?
+                    Bagaimana cara membuat kampanye galang dana?
                 </h2>
                 <p class="text-gray-600">
-                    Navbar dipisahkan agar bisa dipakai ulang di banyak halaman dan mengurangi
-                    duplikasi kode.
+                    Anda harus mendaftar akun terlebih dahulu, melengkapi data profil Anda (seperti nomor telepon, alamat, foto profil, dan biografi), kemudian mengeklik tombol 'Mulai Galang Dana' untuk mengisi formulir pembuatan kampanye.
                 </p>
             </div>
 

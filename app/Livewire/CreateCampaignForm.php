@@ -24,6 +24,7 @@ class CreateCampaignForm extends Component
 
     // File uploads
     public $banner_image = null;
+    public $identity_card = null;
     public array $gallery_images = [];
     public array $documents = [];
 
@@ -42,6 +43,7 @@ class CreateCampaignForm extends Component
             'video_url' => 'nullable|url|max:500',
             'end_date' => 'required|date|after:today',
             'banner_image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'identity_card' => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:2048',
             'gallery_images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
             'documents.*' => 'file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:5120',
         ];
@@ -58,6 +60,9 @@ class CreateCampaignForm extends Component
             'end_date.after' => 'Tanggal berakhir harus setelah hari ini.',
             'banner_image.required' => 'Gambar sampul wajib diunggah.',
             'banner_image.max' => 'Gambar sampul maksimal 2MB.',
+            'identity_card.required' => 'Kartu identitas wajib diunggah.',
+            'identity_card.max' => 'Kartu identitas maksimal 2MB.',
+            'identity_card.mimes' => 'Format kartu identitas: JPG, JPEG, PNG, WEBP, atau PDF.',
             'gallery_images.*.max' => 'Setiap gambar galeri maksimal 2MB.',
             'documents.*.max' => 'Setiap dokumen maksimal 5MB.',
             'documents.*.mimes' => 'Format dokumen: PDF, Word, Excel, atau PowerPoint.',
@@ -67,6 +72,11 @@ class CreateCampaignForm extends Component
     public function updatedBannerImage(): void
     {
         $this->validateOnly('banner_image');
+    }
+
+    public function updatedIdentityCard(): void
+    {
+        $this->validateOnly('identity_card');
     }
 
     public function updatedGalleryImages(): void
@@ -105,6 +115,11 @@ class CreateCampaignForm extends Component
         $this->banner_image = null;
     }
 
+    public function removeIdentityCard(): void
+    {
+        $this->identity_card = null;
+    }
+
     public function save(): void
     {
         $this->validate();
@@ -119,6 +134,7 @@ class CreateCampaignForm extends Component
             'video_url' => $this->video_url ?: null,
             'end_date' => $this->end_date,
             'banner_image' => $this->banner_image,
+            'identity_card' => $this->identity_card,
             'gallery' => $this->gallery_images,
             'documents' => $this->documents,
         ];

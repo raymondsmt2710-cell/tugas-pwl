@@ -157,6 +157,13 @@ HTML
                                     ->openable()
                                     ->downloadable()
                                     ->required(),
+                                FileUpload::make('identity_card')
+                                    ->label('Kartu Identitas Pembuat Kampanye')
+                                    ->directory('campaigns/identities')
+                                    ->disk('public')
+                                    ->openable()
+                                    ->downloadable()
+                                    ->required(),
                                 TextInput::make('video_url')
                                     ->label('URL Video Pendukung')
                                     ->url()

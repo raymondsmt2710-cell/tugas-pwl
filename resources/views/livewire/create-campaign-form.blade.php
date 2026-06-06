@@ -120,6 +120,40 @@
             </div>
         </div>
 
+        {{-- Card: Kartu Identitas --}}
+        <div class="mt-6 bg-white shadow-sm rounded-2xl border border-gray-100 overflow-hidden">
+            <div class="border-b border-gray-100 px-6 py-4">
+                <h3 class="text-base font-semibold text-gray-900">Kartu Identitas Pembuat Kampanye <span class="text-red-500">*</span></h3>
+                <p class="text-sm text-gray-500 mt-0.5">KTP / Passport / SIM. JPG, PNG, WebP, PDF. Maksimal 2MB.</p>
+            </div>
+            <div class="px-6 py-5">
+                @if($identity_card)
+                    <div class="relative mb-4">
+                        @if(in_array($identity_card->getClientOriginalExtension(), ['pdf']))
+                            <div class="flex items-center gap-2 bg-gray-50 rounded-lg px-4 py-2.5 border border-gray-200">
+                                <svg class="w-8 h-8 text-red-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6l-4-4H9z"/></svg>
+                                <span class="text-sm text-gray-700 truncate">{{ $identity_card->getClientOriginalName() }}</span>
+                            </div>
+                        @else
+                            <img src="{{ $identity_card->temporaryUrl() }}" class="max-h-48 rounded-lg border border-gray-200 object-contain">
+                        @endif
+                        <button type="button" wire:click="removeIdentityCard"
+                                class="absolute top-2 right-2 w-7 h-7 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600 transition">✕</button>
+                    </div>
+                @endif
+
+                <div>
+                    <input wire:model.live="identity_card" type="file" id="identity_card" accept="image/jpeg,image/png,image/webp,application/pdf"
+                           class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-600 hover:file:bg-brand-100 cursor-pointer border border-gray-300 rounded-lg">
+                    <div wire:loading wire:target="identity_card" class="mt-2 flex items-center gap-2 text-sm text-brand-500">
+                        <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                        Mengunggah...
+                    </div>
+                </div>
+                @error('identity_card') <p class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
+            </div>
+        </div>
+
         {{-- Card: Gallery --}}
         <div class="mt-6 bg-white shadow-sm rounded-2xl border border-gray-100 overflow-hidden">
             <div class="border-b border-gray-100 px-6 py-4">

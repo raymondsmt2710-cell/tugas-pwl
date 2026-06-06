@@ -48,6 +48,11 @@
                 <input wire:model="phone_number" type="text" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                 @error('phone_number') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">NIK (16 Digit) <span class="text-red-500 font-bold">*</span></label>
+                <input wire:model="nik" type="text" maxlength="16" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" placeholder="Masukkan 16 digit NIK Anda">
+                @error('nik') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+            </div>
             <div class="sm:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Alamat <span class="text-red-500 font-bold">*</span></label>
                 <input wire:model="address" type="text" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" placeholder="Masukkan alamat lengkap Anda">

@@ -63,6 +63,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         'provider_id',
         'avatar_url',
         'email_verified_at',
+        'nik',
     ];
 
     /**
@@ -382,7 +383,9 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
      */
     public function isProfileComplete(): bool
     {
-        return !empty($this->phone_number)
+        return !empty($this->nik)
+            && strlen($this->nik) === 16
+            && !empty($this->phone_number)
             && !empty($this->address)
             && !empty($this->profile_photo)
             && !empty($this->bio)
@@ -395,6 +398,9 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     public function missingProfileFields(): array
     {
         $missing = [];
+        if (empty($this->nik))           $missing[] = 'NIK';
+        elseif (strlen($this->nik) !== 16) $missing[] = 'NIK (Harus 16 digit)';
+        
         if (empty($this->phone_number))  $missing[] = 'Nomor HP';
         if (empty($this->address))       $missing[] = 'Alamat';
         if (empty($this->profile_photo)) $missing[] = 'Foto Profil';

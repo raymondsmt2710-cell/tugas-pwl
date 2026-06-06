@@ -7,6 +7,7 @@ use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
@@ -51,6 +52,11 @@ class UsersTable
                 TextColumn::make('phone_number')
                     ->label('No. Telepon')
                     ->searchable()
+                    ->placeholder('-'),
+                TextColumn::make('nik')
+                    ->label('NIK')
+                    ->searchable()
+                    ->copyable()
                     ->placeholder('-'),
                 TextColumn::make('role')
                     ->label('Peran')
@@ -187,7 +193,7 @@ class UsersTable
                             ->send();
                     }),
 
-                EditAction::make(),
+                ViewAction::make()->label('Review'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
