@@ -324,28 +324,104 @@
     {{-- ============================================================
          6. CARA KERJA
     ============================================================ --}}
-    <section id="cara-kerja" class="py-16 bg-gray-50 border-t border-gray-100">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-            <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-2">Cara Kerja</h2>
-            <p class="text-sm text-gray-500 mb-12">Tiga langkah mudah untuk mulai berbagi</p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                @foreach([
-                    ['num'=>'1','icon'=>'fa-solid fa-pen-to-square','title'=>'Buat Kampanye','desc'=>'Atur judul, target dana, dan ceritakan kisah atau rencana baik Anda kepada dunia.'],
-                    ['num'=>'2','icon'=>'fa-solid fa-share-nodes','title'=>'Bagikan ke Kerabat','desc'=>'Kirimkan link kampanye ke teman, keluarga, dan media sosial untuk menjangkau lebih banyak donatur.'],
-                    ['num'=>'3','icon'=>'fa-solid fa-wallet','title'=>'Terima Dana','desc'=>'Donasi dipantau secara transparan dan dapat dicairkan kapan saja ke rekening bank Anda.'],
-                ] as $step)
-                    <div class="flex flex-col items-center text-center gap-4">
-                        <div class="w-14 h-14 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center shadow-sm">
-                            <i class="{{ $step['icon'] }} text-brand-500 text-xl"></i>
-                        </div>
-                        <div class="w-7 h-7 rounded-full bg-brand-500 text-white flex items-center justify-center text-xs font-black">
-                            {{ $step['num'] }}
-                        </div>
-                        <h3 class="text-base font-bold text-gray-900">{{ $step['title'] }}</h3>
-                        <p class="text-sm text-gray-500 leading-relaxed">{{ $step['desc'] }}</p>
-                    </div>
-                @endforeach
+    <section id="cara-kerja" class="py-20 bg-gray-50 border-t border-gray-100">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-14">
+                <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-2">Cara Kerja</h2>
+                <p class="text-sm text-gray-500">Mudah, transparan, dan terpercaya</p>
             </div>
+
+            {{-- Tabs + Content --}}
+            <div x-data="{ tab: 'galang' }">
+
+                {{-- Tab Switcher --}}
+                <div class="flex justify-center mb-10">
+                    <div class="inline-flex bg-white border border-gray-200 rounded-xl p-1 gap-1 shadow-sm">
+                        <button @click="tab = 'galang'"
+                                :class="tab === 'galang' ? 'bg-brand-500 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                                class="px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200">
+                            <i class="fa-solid fa-hand-holding-heart mr-1.5"></i>Galang Dana
+                        </button>
+                        <button @click="tab = 'donasi'"
+                                :class="tab === 'donasi' ? 'bg-brand-500 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                                class="px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200">
+                            <i class="fa-solid fa-coins mr-1.5"></i>Berdonasi
+                        </button>
+                    </div>
+                </div>
+
+                {{-- Galang Dana Steps --}}
+                <div x-show="tab === 'galang'"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 translate-y-2"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     style="display:none;">
+                    <div class="relative grid grid-cols-1 md:grid-cols-4 gap-6">
+                        @foreach([
+                            ['num'=>'1','icon'=>'fa-solid fa-id-card-clip','color'=>'bg-blue-50 border-blue-100','icolor'=>'text-blue-500','title'=>'Daftar & Verifikasi','desc'=>'Buat akun dan lengkapi data diri untuk memulai penggalangan dana yang terpercaya.'],
+                            ['num'=>'2','icon'=>'fa-solid fa-file-pen','color'=>'bg-brand-50 border-brand-100','icolor'=>'text-brand-500','title'=>'Buat Kampanye','desc'=>'Isi judul, cerita, target dana, dan unggah foto kampanye Anda dengan mudah.'],
+                            ['num'=>'3','icon'=>'fa-solid fa-share-nodes','color'=>'bg-purple-50 border-purple-100','icolor'=>'text-purple-500','title'=>'Sebarkan','desc'=>'Bagikan link kampanye ke media sosial dan ajak kerabat untuk ikut mendukung.'],
+                            ['num'=>'4','icon'=>'fa-solid fa-building-columns','color'=>'bg-green-50 border-green-100','icolor'=>'text-green-500','title'=>'Cairkan Dana','desc'=>'Dana yang terkumpul dapat dicairkan ke rekening bank Anda kapan saja secara transparan.'],
+                        ] as $step)
+                            <div class="relative z-10 flex flex-col items-center text-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-brand-500 text-white flex items-center justify-center text-xs font-black shadow-sm ring-4 ring-white">
+                                    {{ $step['num'] }}
+                                </div>
+                                <div class="w-16 h-16 rounded-2xl {{ $step['color'] }} border flex items-center justify-center shadow-sm">
+                                    <i class="{{ $step['icon'] }} {{ $step['icolor'] }} text-2xl"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-gray-900">{{ $step['title'] }}</h3>
+                                <p class="text-xs text-gray-500 leading-relaxed max-w-[160px]">{{ $step['desc'] }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- Berdonasi Steps --}}
+                <div x-show="tab === 'donasi'"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 translate-y-2"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     style="display:none;">
+                    <div class="relative grid grid-cols-1 md:grid-cols-4 gap-6">
+                        @foreach([
+                            ['num'=>'1','icon'=>'fa-solid fa-magnifying-glass-dollar','color'=>'bg-blue-50 border-blue-100','icolor'=>'text-blue-500','title'=>'Temukan Kampanye','desc'=>'Telusuri ratusan kampanye berdasarkan kategori seperti medis, pendidikan, atau bencana.'],
+                            ['num'=>'2','icon'=>'fa-solid fa-circle-check','color'=>'bg-brand-50 border-brand-100','icolor'=>'text-brand-500','title'=>'Pilih & Pastikan','desc'=>'Baca cerita kampanye, lihat transparansi dana, dan pastikan kampanye yang ingin Anda dukung.'],
+                            ['num'=>'3','icon'=>'fa-solid fa-money-bill-wave','color'=>'bg-purple-50 border-purple-100','icolor'=>'text-purple-500','title'=>'Bayar Aman','desc'=>'Donasikan nominal berapapun melalui berbagai metode pembayaran yang aman dan terpercaya.'],
+                            ['num'=>'4','icon'=>'fa-solid fa-chart-line','color'=>'bg-green-50 border-green-100','icolor'=>'text-green-500','title'=>'Pantau Dampak','desc'=>'Lacak perkembangan kampanye dan lihat bagaimana donasi Anda memberikan dampak nyata.'],
+                        ] as $step)
+                            <div class="relative z-10 flex flex-col items-center text-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-brand-500 text-white flex items-center justify-center text-xs font-black shadow-sm ring-4 ring-white">
+                                    {{ $step['num'] }}
+                                </div>
+                                <div class="w-16 h-16 rounded-2xl {{ $step['color'] }} border flex items-center justify-center shadow-sm">
+                                    <i class="{{ $step['icon'] }} {{ $step['icolor'] }} text-2xl"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-gray-900">{{ $step['title'] }}</h3>
+                                <p class="text-xs text-gray-500 leading-relaxed max-w-[160px]">{{ $step['desc'] }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- CTA --}}
+                <div class="mt-12 text-center">
+                    @auth
+                        <a :href="tab === 'galang' ? '{{ url('/campaigns/create') }}' : '{{ route('campaigns.index') }}'"
+                           class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 shadow-sm transition">
+                            <i class="fa-solid fa-rocket"></i>
+                            <span x-text="tab === 'galang' ? 'Mulai Galang Dana Sekarang' : 'Mulai Donasi Sekarang'">Mulai Galang Dana Sekarang</span>
+                        </a>
+                    @else
+                        <a :href="tab === 'galang' ? '{{ route('register') }}' : '{{ route('campaigns.index') }}'"
+                           class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 shadow-sm transition">
+                            <i class="fa-solid fa-rocket"></i>
+                            <span x-text="tab === 'galang' ? 'Mulai Galang Dana Sekarang' : 'Mulai Donasi Sekarang'">Mulai Galang Dana Sekarang</span>
+                        </a>
+                    @endauth
+                </div>
+
+            </div>{{-- end x-data --}}
         </div>
     </section>
 

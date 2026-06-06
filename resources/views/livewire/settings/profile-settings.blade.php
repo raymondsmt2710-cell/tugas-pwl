@@ -8,7 +8,7 @@
         {{-- Avatar & Cover --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Foto Profil</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Foto Profil <span class="text-red-500 font-bold">*</span></label>
                 <div class="flex items-center gap-4">
                     <img src="{{ $avatar ? $avatar->temporaryUrl() : auth()->user()->profile_photo_url }}" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200">
                     <input wire:model.live="avatar" type="file" accept="image/*" class="text-sm text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-600 cursor-pointer">
@@ -44,21 +44,29 @@
                 @error('email') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Telepon</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Telepon <span class="text-red-500 font-bold">*</span></label>
                 <input wire:model="phone_number" type="text" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                @error('phone_number') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+            </div>
+            <div class="sm:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Alamat <span class="text-red-500 font-bold">*</span></label>
+                <input wire:model="address" type="text" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" placeholder="Masukkan alamat lengkap Anda">
+                @error('address') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
         </div>
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Biografi</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Biografi <span class="text-red-500 font-bold">*</span></label>
             <textarea wire:model="bio" rows="3" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" placeholder="Ceritakan tentang diri Anda..."></textarea>
+            <p class="mt-1 text-xs text-gray-400">Minimal 50 karakter.</p>
             @error('bio') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
         </div>
 
-        <div class="pt-4 border-t border-gray-100">
+        <div class="pt-4 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <button type="submit" wire:loading.attr="disabled" class="px-5 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition disabled:opacity-50">
                 <span wire:loading.remove wire:target="save">Simpan Perubahan</span>
                 <span wire:loading wire:target="save">Menyimpan...</span>
             </button>
+            <span class="text-xs text-gray-500"><span class="text-red-500 font-bold">*</span> Wajib diisi untuk dapat membuat kampanye galang dana.</span>
         </div>
     </form>
 </div>

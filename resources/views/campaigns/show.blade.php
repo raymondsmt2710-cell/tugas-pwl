@@ -21,7 +21,12 @@
 
                     @if($slides->count() > 0)
                         <div class="mb-4">
-                            <a href="{{ route('home') }}" onclick="event.preventDefault(); window.history.length > 1 ? window.history.back() : window.location.href='{{ route('home') }}';" class="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">← Kembali</a>
+                            <a href="{{ route('home') }}" onclick="event.preventDefault(); window.history.length > 1 ? window.history.back() : window.location.href='{{ route('home') }}';" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-500 hover:text-brand-700 transition">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
+                                </svg>
+                                Kembali
+                            </a>
                         </div>
                         <div class="rounded-2xl overflow-hidden bg-gray-100 shadow-sm relative" x-data="{ current: 0, total: {{ $slides->count() }} }">
                             {{-- Slides --}}

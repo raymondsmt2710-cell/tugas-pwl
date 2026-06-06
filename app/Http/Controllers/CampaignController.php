@@ -59,6 +59,15 @@ class CampaignController extends Controller
     {
         $this->authorize('create', Campaign::class);
 
+        $user = auth()->user();
+
+        // Cek kelengkapan profil sebelum bisa membuat kampanye
+        if (!$user->isProfileComplete()) {
+            $missing = implode(', ', $user->missingProfileFields());
+            return redirect()->route('settings')
+                ->with('error', "Lengkapi profil Anda terlebih dahulu sebelum membuat kampanye. Data yang belum diisi: {$missing}.");
+        }
+
         $categories = Category::all();
 
         return view('campaigns.create', compact('categories'));

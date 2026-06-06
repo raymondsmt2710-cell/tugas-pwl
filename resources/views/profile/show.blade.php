@@ -335,24 +335,34 @@
             const tabs = document.querySelectorAll('.profile-tab-btn');
             const panes = document.querySelectorAll('.profile-tab-content');
 
+            function activateTab(tabName) {
+                tabs.forEach(function(t) {
+                    t.classList.remove('active', 'text-gray-900', 'border-indigo-600');
+                    t.classList.add('text-gray-500', 'border-transparent');
+                });
+                panes.forEach(function(p) { p.classList.add('hidden'); });
+
+                const targetBtn = document.querySelector('[data-tab="' + tabName + '"]');
+                const targetPane = document.getElementById('tab-' + tabName);
+                if (targetBtn) {
+                    targetBtn.classList.add('active', 'text-gray-900', 'border-indigo-600');
+                    targetBtn.classList.remove('text-gray-500', 'border-transparent');
+                }
+                if (targetPane) targetPane.classList.remove('hidden');
+            }
+
             tabs.forEach(function(tab) {
                 tab.addEventListener('click', function() {
-                    // Remove active from all tabs
-                    tabs.forEach(function(t) {
-                        t.classList.remove('active', 'text-gray-900', 'border-indigo-600');
-                        t.classList.add('text-gray-500', 'border-transparent');
-                    });
-                    // Add active to clicked tab
-                    this.classList.add('active', 'text-gray-900', 'border-indigo-600');
-                    this.classList.remove('text-gray-500', 'border-transparent');
-
-                    // Hide all panes
-                    panes.forEach(function(p) { p.classList.add('hidden'); });
-                    // Show target pane
-                    var target = document.getElementById('tab-' + this.getAttribute('data-tab'));
-                    if (target) target.classList.remove('hidden');
+                    activateTab(this.getAttribute('data-tab'));
                 });
             });
+
+            // Auto-activate tab from URL param ?tab=xxx
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabParam = urlParams.get('tab');
+            if (tabParam) {
+                activateTab(tabParam);
+            }
         });
     </script>
 </x-app-layout>

@@ -375,4 +375,31 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 
         return ! is_null($this->email_verified_at);
     }
+
+    /**
+     * Check if user profile is complete enough to create a campaign.
+     * Requires: phone_number, address, profile_photo, bio.
+     */
+    public function isProfileComplete(): bool
+    {
+        return !empty($this->phone_number)
+            && !empty($this->address)
+            && !empty($this->profile_photo)
+            && !empty($this->bio)
+            && mb_strlen($this->bio) >= 50;
+    }
+
+    /**
+     * Get list of missing profile fields needed to create a campaign.
+     */
+    public function missingProfileFields(): array
+    {
+        $missing = [];
+        if (empty($this->phone_number))  $missing[] = 'Nomor HP';
+        if (empty($this->address))       $missing[] = 'Alamat';
+        if (empty($this->profile_photo)) $missing[] = 'Foto Profil';
+        if (empty($this->bio))           $missing[] = 'Biografi';
+        elseif (mb_strlen($this->bio) < 50) $missing[] = 'Biografi (Min. 50 karakter)';
+        return $missing;
+    }
 }

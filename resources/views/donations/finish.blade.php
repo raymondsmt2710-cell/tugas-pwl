@@ -56,7 +56,10 @@
                 {{-- Actions --}}
                 <div class="mt-6 flex flex-col gap-3">
                     <a href="{{ route('campaigns.show', $donation->campaign->slug) }}"
-                       class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 transition text-center">
+                       class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-brand-500 text-white font-semibold text-sm hover:bg-brand-600 transition text-center">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
+                        </svg>
                         Kembali ke Kampanye
                     </a>
                     <a href="{{ route('donation.track', $donation->order_id) }}"
