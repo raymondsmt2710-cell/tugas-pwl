@@ -1,0 +1,82 @@
+================================================================================
+PENJELASAN DETAIL PERUBAHAN SISTEM SOFT-DELETE USER & SOLUSI ERROR CRASH
+================================================================================
+
+Dokumen ini menjelaskan kendala pendaftaran ulang akun yang telah dihapus,
+kejadian error crash setelahnya, serta solusi lengkap yang telah diterapkan.
+
+--------------------------------------------------------------------------------
+1. MASALAH UTAMA: REGISTRASI DENGAN EMAIL YANG SAMA SETELAH HAPUS AKUN
+--------------------------------------------------------------------------------
+* Gejala:
+  - User menghapus akun (Soft-Delete). Data di phpMyAdmin masih ada, namun kolom
+    `deleted_at` terisi tanggal penghapusan.
+  - Ketika user ingin mendaftar ulang dengan email yang sama, validasi Laravel
+    menolak dengan pesan "email sudah digunakan" (email already taken).
+  - Ketika mencoba login, sistem menolak karena status akun sudah nonaktif.
+
+* Penyebab:
+  - Laravel Soft-Delete hanya menyembunyikan data dari query biasa, tetapi baris
+    data fisik di database tetap ada.
+  - Database MySQL memiliki aturan UNIQUE constraint pada kolom `email` dan
+    `username`. Selama data fisik email masih ada di database, pendaftaran baru
+    menggunakan email tersebut akan ditolak.
+
+* Solusi:
+  - Di file `app/Models/User.php`, kita menambahkan event `booted()` pada saat
+    proses penghapusan (`static::deleting`).
+  - Sebelum akun di-softdelete, sistem akan otomatis mengubah email, username,
+    dan provider ID sosial media dengan ditambahi akhiran '_del_' + timestamp.
+    (Contoh: `asep@gmail.com` -> `asep@gmail.com_del_1717676767`).
+  - Ini membebaskan email asli (`asep@gmail.com`) sehingga bisa dipakai daftar kembali.
+
+--------------------------------------------------------------------------------
+2. MASALAH KEDUA: WEB CRASH (INTERNAL SERVER ERROR - 500)
+--------------------------------------------------------------------------------
+* Gejala:
+  - Setelah akun dihapus dan email dibebaskan, saat membuka Halaman Utama (Home)
+    atau Detail Campaign, web mengalami crash dengan pesan:
+    "Attempt to read property 'username' on null" di `campaign-card.blade.php`.
+
+* Penyebab:
+  - User tersebut pernah membuat campaign, menyukai, atau menulis komentar.
+  - Karena data akunnya sudah di-softdelete, relasi `$campaign->user` atau
+    `$comment->user` mengembalikan nilai NULL (kosong).
+  - Ketika template Blade memanggil `$campaign->user->username` untuk menampilkan
+    nama pembuat campaign, terjadilah error karena mencoba membaca properti pada
+    nilai null.
+
+* Solusi:
+  - Kita memperbarui relasi di model-model yang terhubung agar tetap dapat
+    membaca data user yang sudah di-softdelete dengan menambahkan `->withTrashed()`.
+  - Relasi yang diperbarui meliputi:
+    * `Campaign.php` -> relasi `user()`
+    * `CampaignComment.php` -> relasi `user()`
+    * `CampaignLike.php` -> relasi `user()`
+    * `CampaignReport.php` -> relasi `user()`
+    * `Donation.php` -> relasi `user()`
+    * `Withdrawal.php` -> relasi `user()`
+    * `WithdrawalOtp.php` -> relasi `user()`
+    * `UserSetting.php` -> relasi `user()`
+    * `AdminLog.php` -> relasi `admin()`
+
+--------------------------------------------------------------------------------
+3. PENANGANAN ELEMEN VIEW (UI GRACEFUL HANDLING)
+--------------------------------------------------------------------------------
+Agar tampilan web tetap profesional dan tidak mengarah ke halaman kosong (404)
+saat diklik:
+* Di file `resources/views/components/campaign-card.blade.php`:
+  Ditambahkan pengecekan `@if($campaign->user && !$campaign->user->trashed())`.
+  Jika pembuat campaign sudah terhapus, maka akan memunculkan tulisan "Akun Dihapus"
+  dengan foto profil default (?) tanpa tautan link aktif.
+
+* Di file `resources/views/campaigns/show.blade.php`:
+  Hal serupa diterapkan pada nama penggalang dana di sidebar detail campaign, serta
+  pada daftar komentar kampanye. Komentar dari akun yang sudah dihapus akan tetap
+  muncul namun nama pengirimnya berubah menjadi "Akun Dihapus".
+
+================================================================================
+STATUS SAAT INI:
+Semua solusi di atas sudah diimplementasikan dan diuji. Sistem saat ini berjalan
+lancar tanpa crash, serta mendukung registrasi ulang dengan email yang sama.
+================================================================================
