@@ -35,6 +35,42 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     protected $primaryKey = 'id_user';
 
     /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::deleting(function (User $user) {
+            if (method_exists($user, 'isForceDeleting') && !$user->isForceDeleting()) {
+                $suffix = '_del_' . time();
+                
+                $email = substr($user->email, 0, 100 - strlen($suffix)) . $suffix;
+                $username = $user->username ? (substr($user->username, 0, 255 - strlen($suffix)) . $suffix) : null;
+                $googleId = $user->google_id ? ($user->google_id . $suffix) : null;
+                $githubId = $user->github_id ? ($user->github_id . $suffix) : null;
+                $providerId = $user->provider_id ? ($user->provider_id . $suffix) : null;
+
+                // Update model attributes so they are correct in memory
+                $user->email = $email;
+                $user->username = $username;
+                $user->google_id = $googleId;
+                $user->github_id = $githubId;
+                $user->provider_id = $providerId;
+
+                // Force update database record
+                \Illuminate\Support\Facades\DB::table($user->getTable())
+                    ->where($user->getKeyName(), $user->getKey())
+                    ->update([
+                        'email' => $email,
+                        'username' => $username,
+                        'google_id' => $googleId,
+                        'github_id' => $githubId,
+                        'provider_id' => $providerId,
+                    ]);
+            }
+        });
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
