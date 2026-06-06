@@ -211,6 +211,45 @@
                                                     @default bg-red-50 text-red-700
                                                 @endswitch
                                             ">{{ $withdrawal->status_label }}</span>
+                                            @if($withdrawal->status === 'paid' && $withdrawal->transfer_proof)
+                                                <span x-data="{ open: false }">
+                                                    <button @click="open = true" class="text-[10px] bg-indigo-50 text-indigo-600 px-1.5 py-0.5 rounded font-medium hover:bg-indigo-100 transition inline-flex items-center gap-0.5">
+                                                        <i class="fas fa-receipt text-[9px]"></i> Bukti
+                                                    </button>
+                                                    
+                                                    {{-- Modal Lightbox --}}
+                                                    <div x-show="open" 
+                                                         x-transition:enter="transition ease-out duration-300"
+                                                         x-transition:enter-start="opacity-0"
+                                                         x-transition:enter-end="opacity-100"
+                                                         x-transition:leave="transition ease-in duration-200"
+                                                         x-transition:leave-start="opacity-100"
+                                                         x-transition:leave-end="opacity-0"
+                                                         class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
+                                                         @click.self="open = false"
+                                                         @keydown.escape.window="open = false"
+                                                         style="display: none;">
+                                                        
+                                                        <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl relative border border-gray-100 text-left font-normal">
+                                                            <div class="flex items-center justify-between mb-4">
+                                                                <h3 class="text-sm font-bold text-gray-900">Bukti Transfer Penarikan</h3>
+                                                                <button @click="open = false" class="text-gray-400 hover:text-gray-600 font-bold text-lg">&times;</button>
+                                                            </div>
+                                                            <div class="flex justify-center bg-gray-50 rounded-xl p-2 border border-gray-100">
+                                                                <img src="{{ asset('storage/' . $withdrawal->transfer_proof) }}" class="max-w-full max-h-[50vh] object-contain rounded-lg" />
+                                                            </div>
+                                                            <div class="mt-4 flex gap-2 justify-end">
+                                                                <a href="{{ asset('storage/' . $withdrawal->transfer_proof) }}" target="_blank" class="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-semibold hover:bg-indigo-100 transition">
+                                                                    Buka Tab Baru
+                                                                </a>
+                                                                <button @click="open = false" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl text-xs font-semibold hover:bg-gray-200 transition">
+                                                                    Tutup
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -296,24 +335,34 @@
             const tabs = document.querySelectorAll('.profile-tab-btn');
             const panes = document.querySelectorAll('.profile-tab-content');
 
+            function activateTab(tabName) {
+                tabs.forEach(function(t) {
+                    t.classList.remove('active', 'text-gray-900', 'border-indigo-600');
+                    t.classList.add('text-gray-500', 'border-transparent');
+                });
+                panes.forEach(function(p) { p.classList.add('hidden'); });
+
+                const targetBtn = document.querySelector('[data-tab="' + tabName + '"]');
+                const targetPane = document.getElementById('tab-' + tabName);
+                if (targetBtn) {
+                    targetBtn.classList.add('active', 'text-gray-900', 'border-indigo-600');
+                    targetBtn.classList.remove('text-gray-500', 'border-transparent');
+                }
+                if (targetPane) targetPane.classList.remove('hidden');
+            }
+
             tabs.forEach(function(tab) {
                 tab.addEventListener('click', function() {
-                    // Remove active from all tabs
-                    tabs.forEach(function(t) {
-                        t.classList.remove('active', 'text-gray-900', 'border-indigo-600');
-                        t.classList.add('text-gray-500', 'border-transparent');
-                    });
-                    // Add active to clicked tab
-                    this.classList.add('active', 'text-gray-900', 'border-indigo-600');
-                    this.classList.remove('text-gray-500', 'border-transparent');
-
-                    // Hide all panes
-                    panes.forEach(function(p) { p.classList.add('hidden'); });
-                    // Show target pane
-                    var target = document.getElementById('tab-' + this.getAttribute('data-tab'));
-                    if (target) target.classList.remove('hidden');
+                    activateTab(this.getAttribute('data-tab'));
                 });
             });
+
+            // Auto-activate tab from URL param ?tab=xxx
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabParam = urlParams.get('tab');
+            if (tabParam) {
+                activateTab(tabParam);
+            }
         });
     </script>
 </x-app-layout>

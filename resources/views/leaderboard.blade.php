@@ -6,6 +6,16 @@
     <div class="py-8 sm:py-12">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
+            {{-- Back Button --}}
+            <div class="mb-4">
+                <a href="{{ url('/') }}" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-500 hover:text-brand-700 transition">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
+                    </svg>
+                    Kembali ke Beranda
+                </a>
+            </div>
+
             {{-- Period Filter --}}
             <div class="mb-6 flex flex-wrap gap-2">
                 @foreach(['all' => 'Semua', 'weekly' => 'Minggu Ini', 'monthly' => 'Bulan Ini', 'yearly' => 'Tahun Ini'] as $key => $label)

@@ -21,6 +21,12 @@ class CampaignService
             // Upload banner image
             $bannerPath = $this->uploadImage($data['banner_image'], 'campaigns/banners');
 
+            // Upload identity card if provided
+            $identityCardPath = null;
+            if (!empty($data['identity_card']) && $data['identity_card'] instanceof UploadedFile) {
+                $identityCardPath = $this->uploadImage($data['identity_card'], 'campaigns/identities');
+            }
+
             // Create campaign
             $campaign = Campaign::create([
                 'id_user' => $user->id_user,
@@ -35,6 +41,7 @@ class CampaignService
                 'withdrawal_amount' => 0,
                 'available_balance' => 0,
                 'banner_image' => $bannerPath,
+                'identity_card' => $identityCardPath,
                 'video_url' => $data['video_url'] ?? null,
                 'campaign_status' => 'draft',
                 'verification_status' => 'draft',
@@ -82,6 +89,14 @@ class CampaignService
                 $updateData['banner_image'] = $this->uploadImage($data['banner_image'], 'campaigns/banners');
             }
 
+            // Upload new identity card if provided
+            if (!empty($data['identity_card']) && $data['identity_card'] instanceof UploadedFile) {
+                if ($campaign->identity_card) {
+                    $this->deleteImage($campaign->identity_card);
+                }
+                $updateData['identity_card'] = $this->uploadImage($data['identity_card'], 'campaigns/identities');
+            }
+
             // If campaign was rejected, reset to draft on edit
             if ($campaign->isRejected()) {
                 $updateData['status'] = 'draft';
@@ -123,6 +138,11 @@ class CampaignService
         return DB::transaction(function () use ($campaign) {
             // Delete banner image
             $this->deleteImage($campaign->banner_image);
+
+            // Delete identity card
+            if ($campaign->identity_card) {
+                $this->deleteImage($campaign->identity_card);
+            }
 
             // Delete all gallery images
             foreach ($campaign->galleries as $gallery) {

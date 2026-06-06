@@ -13,6 +13,8 @@ class ProfileSettings extends Component
     public string $username = '';
     public string $email = '';
     public string $phone_number = '';
+    public string $nik = '';
+    public string $address = '';
     public string $bio = '';
     public $avatar = null;
     public $cover_photo = null;
@@ -24,6 +26,8 @@ class ProfileSettings extends Component
         $this->username = $user->username ?? '';
         $this->email = $user->email ?? '';
         $this->phone_number = $user->phone_number ?? '';
+        $this->nik = $user->nik ?? '';
+        $this->address = $user->address ?? '';
         $this->bio = $user->bio ?? '';
     }
 
@@ -34,15 +38,19 @@ class ProfileSettings extends Component
             'username' => 'required|string|max:50|unique:users,username,' . auth()->user()->id_user . ',id_user',
             'email' => 'required|email|max:100|unique:users,email,' . auth()->user()->id_user . ',id_user',
             'phone_number' => 'nullable|string|max:20',
-            'bio' => 'nullable|string|max:500',
+            'nik' => 'nullable|numeric|digits:16|unique:users,nik,' . auth()->user()->id_user . ',id_user',
+            'address' => 'nullable|string|max:255',
+            'bio' => 'nullable|string|min:50|max:500',
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'cover_photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'cover_photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $user = auth()->user();
         $user->full_name = $this->full_name;
         $user->username = $this->username;
         $user->phone_number = $this->phone_number;
+        $user->nik = $this->nik;
+        $user->address = $this->address;
         $user->bio = $this->bio;
 
         if ($this->email !== $user->email) {
@@ -64,7 +72,26 @@ class ProfileSettings extends Component
         $this->avatar = null;
         $this->cover_photo = null;
 
+        $this->dispatch('profile-updated', 
+            isComplete: $user->isProfileComplete(),
+            missingFields: implode(', ', $user->missingProfileFields())
+        );
+
         $this->dispatch('flash', message: 'Profil berhasil disimpan.', type: 'success');
+    }
+
+    public function updatedCoverPhoto(): void
+    {
+        $this->validateOnly('cover_photo', [
+            'cover_photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+    }
+
+    public function updatedAvatar(): void
+    {
+        $this->validateOnly('avatar', [
+            'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
     }
 
     public function render()

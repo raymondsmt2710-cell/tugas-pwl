@@ -37,6 +37,7 @@ class Campaign extends Model
         'goal_reached_at',
         'closed_at',
         'closed_by',
+        'identity_card',
     ];
 
     protected $casts = [

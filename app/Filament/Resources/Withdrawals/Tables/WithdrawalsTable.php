@@ -6,10 +6,11 @@ use App\Models\Withdrawal;
 use App\Services\WithdrawalService;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Filament\Forms\Components\FileUpload;
 
 class WithdrawalsTable
 {
@@ -20,13 +21,15 @@ class WithdrawalsTable
                 TextColumn::make('user.full_name')
                     ->label('Pengguna')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->placeholder('-'),
                 TextColumn::make('campaign.title')
                     ->label('Kampanye')
                     ->searchable()
                     ->sortable()
                     ->wrap()
-                    ->limit(40),
+                    ->limit(40)
+                    ->placeholder('-'),
                 TextColumn::make('amount')
                     ->label('Jumlah')
                     ->money('IDR')
@@ -120,16 +123,35 @@ class WithdrawalsTable
                     ->label('Tandai Dibayar')
                     ->icon('heroicon-o-banknotes')
                     ->color('primary')
-                    ->requiresConfirmation()
+                    ->form([
+                        FileUpload::make('transfer_proof')
+                            ->label('Bukti Transfer')
+                            ->image()
+                            ->directory('withdrawals/proofs')
+                            ->disk('public')
+                            ->required(),
+                    ])
                     ->modalHeading('Tandai Sudah Dibayar')
-                    ->modalDescription(fn (Withdrawal $record): string => "Konfirmasi bahwa Rp " . number_format($record->amount, 0, ',', '.') . " sudah ditransfer ke rekening {$record->account_holder} ({$record->bank_name})?")
+                    ->modalDescription(fn (Withdrawal $record): string => "Konfirmasi bahwa Rp " . number_format($record->amount, 0, ',', '.') . " sudah ditransfer ke rekening {$record->account_holder} ({$record->bank_name}). Silakan unggah bukti transfer di bawah ini:")
                     ->visible(fn (Withdrawal $record): bool => $record->status === 'approved')
-                    ->action(function (Withdrawal $record): void {
-                        app(WithdrawalService::class)->markAsPaid($record);
-                        \Filament\Notifications\Notification::make()->title('Penarikan Ditandai Dibayar')->success()->send();
+                    ->action(function (Withdrawal $record, array $data): void {
+                        app(WithdrawalService::class)->markAsPaid($record, $data['transfer_proof']);
+                        \Filament\Notifications\Notification::make()->title('Penarikan Ditandai Dibayar dengan Bukti Transfer')->success()->send();
                     }),
 
-                EditAction::make(),
+                // View transfer proof action
+                Action::make('viewProof')
+                    ->label('Bukti Transfer')
+                    ->icon('heroicon-o-eye')
+                    ->color('success')
+                    ->visible(fn (Withdrawal $record): bool => $record->status === 'paid' && !empty($record->transfer_proof))
+                    ->modalContent(fn (Withdrawal $record) => new \Illuminate\Support\HtmlString(
+                        '<div class="flex justify-center"><img src="' . asset('storage/' . $record->transfer_proof) . '" class="max-w-full max-h-[70vh] rounded-lg shadow" /></div>'
+                    ))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Tutup'),
+
+                ViewAction::make()->label('Review'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([]),

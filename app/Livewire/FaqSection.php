@@ -18,8 +18,8 @@ class FaqSection extends Component
             'a' => 'Autopahala berkomitmen untuk menyalurkan kebaikan secara maksimal tanpa potongan tersembunyi. Kami hanya mengenakan biaya operasional sistem sebesar 5% khusus untuk kampanye kategori umum guna menunjang pemeliharaan server dan biaya gerbang pembayaran (payment gateway). Sedangkan khusus untuk kampanye kategori tanggap darurat, medis kemanusiaan kritis, dan bencana alam nasional, kami mengenakan potongan 0% alias sepenuhnya gratis tanpa biaya administrasi apa pun.'
         ],
         [
-            'q' => 'Bagaimana proses verifikasi medis untuk kampanye kesehatan?',
-            'a' => 'Keamanan dan transparansi adalah prioritas utama kami. Untuk penggalangan dana kategori medis/kesehatan, penggalang dana wajib mengunggah dokumen administrasi berupa foto KTP/kartu identitas penggalang, foto kartu identitas pasien (bisa menggunakan KIA/Akte jika anak-anak), Surat Keterangan Medis resmi yang ditandatangani oleh dokter penanggung jawab dari Rumah Sakit, serta rincian estimasi biaya pengobatan. Hal ini kami lakukan demi menjamin keaslian kampanye dan menghindari tindak penipuan.'
+            'q' => 'Bagaimana proses verifikasi untuk kampanye yang diajukan?',
+            'a' => 'Keamanan dan transparansi adalah prioritas utama kami. Setiap kampanye yang diajukan akan melalui proses verifikasi oleh tim kami. Penggalang dana wajib mengunggah dokumen identitas diri (KTP) serta dokumen pendukung atau bukti resmi yang relevan dengan tujuan penggalangan dana tersebut. Hal ini kami lakukan demi menjamin keaslian kampanye dan menghindari segala bentuk tindak penipuan.'
         ],
         [
             'q' => 'Bagaimana cara mencairkan dana yang telah terkumpul?',

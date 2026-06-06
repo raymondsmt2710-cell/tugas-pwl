@@ -81,6 +81,9 @@ HTML
                                     ->label('Nomor Telepon')
                                     ->tel()
                                     ->maxLength(20),
+                                TextInput::make('nik')
+                                    ->label('NIK')
+                                    ->maxLength(16),
                                 TextInput::make('password')
                                     ->label('Password Baru')
                                     ->password()

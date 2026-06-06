@@ -59,6 +59,15 @@ class CampaignController extends Controller
     {
         $this->authorize('create', Campaign::class);
 
+        $user = auth()->user();
+
+        // Cek kelengkapan profil sebelum bisa membuat kampanye
+        if (!$user->isProfileComplete()) {
+            $missing = implode(', ', $user->missingProfileFields());
+            return redirect()->route('settings')
+                ->with('error', "Lengkapi profil Anda terlebih dahulu sebelum membuat kampanye. Data yang belum diisi: {$missing}.");
+        }
+
         $categories = Category::all();
 
         return view('campaigns.create', compact('categories'));
@@ -89,8 +98,8 @@ class CampaignController extends Controller
             ->with(['category', 'user', 'galleries'])
             ->firstOrFail();
 
-        // Check view permission (approved campaigns are public, others need auth)
-        if (!$campaign->isApproved() && !$campaign->isCompleted()) {
+        // Check view permission (approved, goal reached, or completed campaigns are public, others need auth)
+        if (!$campaign->isApproved() && !$campaign->isCompleted() && !$campaign->isGoalReached()) {
             $this->authorize('view', $campaign);
         }
 
