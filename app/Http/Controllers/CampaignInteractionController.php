@@ -78,4 +78,25 @@ class CampaignInteractionController extends Controller
         return redirect()->back()
             ->with('success', 'Laporan kampanye berhasil dikirim. Terima kasih atas masukan Anda.');
     }
+
+    /**
+     * Delete a comment for a campaign.
+     */
+    public function destroyComment(CampaignComment $comment)
+    {
+        $user = auth()->user();
+
+        // Check if user is the comment owner, the campaign owner, or an admin
+        if ($user->id_user === $comment->id_user || 
+            $user->id_user === $comment->campaign->id_user || 
+            $user->isAdmin()) {
+            
+            $comment->delete();
+
+            return redirect()->to(url()->previous() . '#comments')
+                ->with('success', 'Komentar berhasil dihapus!');
+        }
+
+        abort(403, 'Anda tidak memiliki akses untuk menghapus komentar ini.');
+    }
 }

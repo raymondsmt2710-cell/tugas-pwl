@@ -39,7 +39,7 @@
     @confirm.window="open($event.detail)"
     x-show="show"
     x-transition.opacity
-    class="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/40 backdrop-blur-[2px]"
+    class="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/10"
     style="display: none;"
     @keydown.escape.window="cancel()"
 >
