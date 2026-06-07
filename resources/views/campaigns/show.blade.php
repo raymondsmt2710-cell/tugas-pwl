@@ -267,15 +267,25 @@
 
                         {{-- Campaign Info --}}
                         <div class="mt-5 pt-5 border-t border-gray-100 space-y-3">
-                            <a href="{{ url('/@' . $campaign->user->username) }}" class="flex items-center gap-3 hover:bg-gray-50 -mx-2 px-2 py-1 rounded-lg transition">
-                                <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-                                    <img src="{{ $campaign->user->profile_photo_url }}" alt="{{ $campaign->user->full_name }}" class="w-full h-full object-cover">
+                            @if($campaign->user && !$campaign->user->trashed())
+                                <a href="{{ url('/@' . $campaign->user->username) }}" class="flex items-center gap-3 hover:bg-gray-50 -mx-2 px-2 py-1 rounded-lg transition">
+                                    <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                                        <img src="{{ $campaign->user->profile_photo_url }}" alt="{{ $campaign->user->full_name }}" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900 hover:text-brand-500">{{ $campaign->user->full_name }}</p>
+                                        <p class="text-xs text-gray-500">Penggalang Dana</p>
+                                    </div>
+                                </a>
+                            @else
+                                <div class="flex items-center gap-3 -mx-2 px-2 py-1 rounded-lg">
+                                    <div class="w-8 h-8 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-xs text-gray-400 font-bold">?</div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-400">Akun Dihapus</p>
+                                        <p class="text-xs text-gray-500">Penggalang Dana</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-900 hover:text-brand-500">{{ $campaign->user->full_name }}</p>
-                                    <p class="text-xs text-gray-500">Penggalang Dana</p>
-                                </div>
-                            </a>
+                            @endif
                             <div class="flex items-center gap-2 text-xs text-gray-500">
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/>

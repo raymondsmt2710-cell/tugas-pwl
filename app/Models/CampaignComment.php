@@ -22,6 +22,6 @@ class CampaignComment extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id_user', 'id_user');
+        return $this->belongsTo(User::class, 'id_user', 'id_user')->withTrashed();
     }
 }
