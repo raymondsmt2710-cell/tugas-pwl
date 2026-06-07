@@ -18,7 +18,7 @@
     {{-- ============================================================
          1. HERO — background slider otomatis, teks di tengah
     ============================================================ --}}
-    <section class="relative overflow-hidden"
+    <section class="relative overflow-hidden bg-gray-950"
              x-data="{
                  current: 0,
                  total: 5,
@@ -49,7 +49,7 @@
                  x-transition:enter="transition-opacity duration-1000"
                  x-transition:enter-start="opacity-0"
                  x-transition:enter-end="opacity-100"
-                 x-transition:leave="transition-opacity duration-700"
+                 x-transition:leave="transition-opacity duration-1000"
                  x-transition:leave-start="opacity-100"
                  x-transition:leave-end="opacity-0"
                  class="absolute inset-0">

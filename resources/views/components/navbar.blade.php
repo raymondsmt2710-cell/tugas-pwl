@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between h-16">
             {{-- Logo --}}
             <a href="/" class="flex items-center gap-2 text-xl font-bold text-gray-900 shrink-0">
-                <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover">
+                <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover shadow-sm">
                 <span>Auto<span class="text-brand-500">pahala</span></span>
             </a>
 

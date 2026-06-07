@@ -79,7 +79,7 @@ Route::middleware([
 | Donation Routes (Authenticated)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', \App\Http\Middleware\RedirectAdmin::class])->group(function () {
+Route::middleware(['auth', 'verified', \App\Http\Middleware\RedirectAdmin::class])->group(function () {
     Route::get('/campaigns/{slug}/donate', [DonationController::class, 'create'])->name('donation.create');
     Route::post('/campaigns/{slug}/donate', [DonationController::class, 'store'])->name('donation.store');
     Route::get('/donations/{orderId}/finish', [DonationController::class, 'finish'])->name('donation.finish');
@@ -93,6 +93,14 @@ Route::middleware(['auth', \App\Http\Middleware\RedirectAdmin::class])->group(fu
 |--------------------------------------------------------------------------
 */
 Route::middleware([\App\Http\Middleware\RedirectAdmin::class])->group(function () {
+    // Logout and redirect to register (used by unverified users to change email)
+    Route::get('/logout-to-register', function () {
+        auth()->logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        return redirect()->route('register');
+    })->name('logout-to-register');
+
     // Public & Homepage Routes
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
