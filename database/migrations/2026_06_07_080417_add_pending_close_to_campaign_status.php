@@ -12,7 +12,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement("ALTER TABLE campaigns MODIFY COLUMN campaign_status ENUM('draft', 'active', 'finished', 'closed', 'suspended', 'pending_close') DEFAULT 'draft'");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE campaigns MODIFY COLUMN campaign_status ENUM('draft', 'active', 'finished', 'closed', 'suspended', 'pending_close') DEFAULT 'draft'");
+        }
     }
 
     /**
@@ -20,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement("ALTER TABLE campaigns MODIFY COLUMN campaign_status ENUM('draft', 'active', 'finished', 'closed', 'suspended') DEFAULT 'draft'");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE campaigns MODIFY COLUMN campaign_status ENUM('draft', 'active', 'finished', 'closed', 'suspended') DEFAULT 'draft'");
+        }
     }
 };

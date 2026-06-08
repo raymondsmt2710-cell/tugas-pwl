@@ -34,6 +34,11 @@ class CategoryForm
                                 ->maxLength(255)
                                 ->helperText('Slug dibuat otomatis dari nama untuk alamat URL kategori.'),
                         ]),
+                        TextInput::make('logo')
+                            ->label('Icon FontAwesome')
+                            ->placeholder('Contoh: fa-solid fa-graduation-cap')
+                            ->maxLength(100)
+                            ->nullable(),
                         Textarea::make('description')
                             ->label('Deskripsi')
                             ->rows(4)

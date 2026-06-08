@@ -42,7 +42,7 @@
         </div>
 
         <div class="mt-10 pt-6 border-t border-gray-800 text-center">
-            <p class="text-xs text-gray-500">&copy; {{ date('Y') }} Autopahala. All rights reserved.</p>
+            <p class="text-xs text-gray-500">&copy; {{ date('Y') }} {{ $siteSetting->footer_text ?? 'Autopahala. All rights reserved.' }}</p>
         </div>
     </div>
 </footer>

@@ -29,5 +29,15 @@ class AppServiceProvider extends ServiceProvider
         if (!app()->runningInConsole()) {
             config(['livewire.asset_url' => request()->getBasePath()]);
         }
+
+        // Share site settings with all views
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('site_settings')) {
+                $siteSetting = \App\Models\SiteSetting::first();
+                view()->share('siteSetting', $siteSetting);
+            }
+        } catch (\Exception $e) {
+            // Ignore database connection failures during build/pre-migration phases
+        }
     }
 }

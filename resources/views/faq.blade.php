@@ -14,44 +14,18 @@
         </p>
 
         <div class="space-y-5">
-            <div class="bg-gray-100 p-6 rounded-2xl shadow">
-                <h2 class="text-xl font-bold mb-2">
-                    Apa itu Autopahala?
-                </h2>
-                <p class="text-gray-600">
-                    Autopahala adalah website crowdfunding dan donasi untuk membantu pengguna
-                    menemukan dan mendukung campaign sosial.
-                </p>
-            </div>
-
-            <div class="bg-gray-100 p-6 rounded-2xl shadow">
-                <h2 class="text-xl font-bold mb-2">
-                    Apakah homepage sudah terhubung ke database?
-                </h2>
-                <p class="text-gray-600">
-                    Saat ini homepage belum mengambil data dari database secara langsung,
-                    tetapi struktur akan disiapkan agar campaign bisa dibuat dinamis.
-                </p>
-            </div>
-
-            <div class="bg-gray-100 p-6 rounded-2xl shadow">
-                <h2 class="text-xl font-bold mb-2">
-                    Bagaimana cara membuat kampanye galang dana?
-                </h2>
-                <p class="text-gray-600">
-                    Anda harus mendaftar akun terlebih dahulu, melengkapi data profil Anda (seperti nomor telepon, alamat, foto profil, dan biografi), kemudian mengeklik tombol 'Mulai Galang Dana' untuk mengisi formulir pembuatan kampanye.
-                </p>
-            </div>
-
-            <div class="bg-gray-100 p-6 rounded-2xl shadow">
-                <h2 class="text-xl font-bold mb-2">
-                    Apa pengembangan berikutnya?
-                </h2>
-                <p class="text-gray-600">
-                    Tahap berikutnya adalah membuat data campaign dari database menggunakan
-                    model, migration, dan seeder Laravel.
-                </p>
-            </div>
+            @forelse(\App\Models\Faq::where('is_active', true)->orderBy('order', 'asc')->get() as $faq)
+                <div class="bg-gray-100 p-6 rounded-2xl shadow">
+                    <h2 class="text-xl font-bold mb-2">
+                        {{ $faq->question }}
+                    </h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        {{ $faq->answer }}
+                    </p>
+                </div>
+            @empty
+                <p class="text-gray-500 py-6 text-center">Belum ada pertanyaan yang diajukan.</p>
+            @endforelse
         </div>
     </div>
 </section>

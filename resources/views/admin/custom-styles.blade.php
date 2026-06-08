@@ -1,3 +1,5 @@
+@vite(['resources/css/admin-tailwind.css'])
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -220,6 +222,18 @@ h1, h2, h3, h4, h5, h6,
     transform: translateY(-1px) !important;
 }
 
+/* Force primary buttons to be tosca */
+.fi-btn.fi-color-primary {
+    background-color: #20bdc4 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(32, 189, 196, 0.2) !important;
+}
+
+.fi-btn.fi-color-primary:hover {
+    background-color: #179aa0 !important;
+    color: #ffffff !important;
+}
+
 /* Badges styling */
 .fi-badge {
     border-radius: 8px !important;
@@ -287,6 +301,18 @@ button.fi-toggle[aria-checked="false"] {
 .fi-toggle[aria-checked="false"] > span,
 button.fi-toggle[aria-checked="false"] > span {
     background-color: #ffffff !important;
+}
+
+/* Force checked checkbox visibility and make it red */
+input[type="checkbox"]:checked,
+.fi-ta-record-checkbox:checked,
+.fi-checkbox:checked {
+    background-color: #dc2626 !important; /* Red-600 background */
+    border-color: #dc2626 !important;
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e") !important;
+    background-size: 100% 100% !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
 }
 </style>
 

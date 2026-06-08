@@ -22,7 +22,7 @@
                 @foreach($comments as $c)
                     <div class="flex items-start gap-3" wire:key="comment-{{ $c->id }}">
                         {{-- Profile Photo --}}
-                        @if($c->user)
+                        @if($c->user && !$c->user->trashed())
                             <a href="{{ url('/@' . $c->user->username) }}" class="w-9 h-9 rounded-full bg-gray-100 overflow-hidden flex-shrink-0 border border-gray-100 hover:opacity-95 transition">
                                 <img src="{{ $c->user->profile_photo_url }}" alt="{{ $c->user->full_name }}" class="w-full h-full object-cover">
                             </a>
@@ -37,7 +37,7 @@
                         <div class="flex-1 text-left">
                             <div class="bg-gray-50 rounded-2xl px-4 py-3 border border-gray-100/30">
                                 <div class="flex items-baseline flex-wrap gap-x-1.5">
-                                    @if($c->user)
+                                    @if($c->user && !$c->user->trashed())
                                         <a href="{{ url('/@' . $c->user->username) }}" class="font-bold text-gray-900 text-sm hover:text-brand-500 transition">
                                             {{ $c->user->username }}
                                         </a>

@@ -24,8 +24,9 @@ class ContactForm extends Component
         $this->validate();
 
         try {
-            // Kirim email ke tubespwlkel999@gmail.com
-            Mail::to('tubespwlkel999@gmail.com')->send(
+            // Kirim email ke email di SiteSetting
+            $destination = \App\Models\SiteSetting::first()->email ?? 'tubespwlkel999@gmail.com';
+            Mail::to($destination)->send(
                 new ContactFormMail(
                     senderName: $this->name,
                     senderEmail: $this->email,
