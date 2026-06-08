@@ -98,7 +98,7 @@
             <!-- Logo & Close Button (Mobile) -->
             <div class="flex items-center justify-between px-2 mb-6">
                 <div class="flex items-center gap-2">
-                    <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover">
+                    <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover shadow-sm">
                     <span class="text-lg font-bold text-gray-800">Autopahala</span>
                 </div>
                 <button @click="sidebarOpen = false" class="lg:hidden p-1.5 text-gray-500 hover:bg-gray-100 rounded-lg transition" title="Tutup Menu">

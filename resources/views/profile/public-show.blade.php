@@ -21,22 +21,22 @@
                         @if(auth()->user()->id_user !== $user->id_user)
                             @livewire('follow-button', ['user' => $user])
                             <button id="btn-share-profile"
-                                    class="flex items-center justify-center w-9 h-9 rounded-full border border-slate-200 bg-white text-slate-900 text-[15px] hover:bg-slate-50 transition cursor-pointer"
+                                    class="group flex items-center justify-center w-9 h-9 rounded-full border border-slate-200 bg-white text-slate-600 hover:text-brand-500 hover:border-brand-300 hover:bg-brand-50/20 transition-all duration-300 shadow-sm active:scale-95 cursor-pointer"
                                     title="{{ __('Share') }}">
-                                <i class="fas fa-share-from-square"></i>
+                                <i class="fas fa-share-from-square text-[14px] transition-transform duration-300 group-hover:scale-110"></i>
                             </button>
                         @else
                             <a href="{{ url('/settings') }}"
-                               class="inline-flex items-center gap-1.5 px-[18px] py-2 rounded-full border border-slate-200 bg-white text-sm font-bold text-slate-900 hover:bg-slate-50 transition">
-                                <i class="fas fa-gear text-xs"></i>
-                                {{ __('Pengaturan') }}
+                               class="group inline-flex items-center justify-center gap-2 px-5 h-9 rounded-full border border-slate-200 bg-white text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 hover:border-slate-300 transition-all duration-300 active:scale-95 shadow-sm">
+                                <i class="fas fa-gear text-xs transition-transform duration-500 group-hover:rotate-45"></i>
+                                <span>{{ __('Pengaturan') }}</span>
                             </a>
                         @endif
                     @else
                         <a href="{{ route('login') }}"
-                           class="btn-follow inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-slate-900 text-white text-sm font-bold hover:bg-slate-800 transition">
+                           class="btn-follow inline-flex items-center justify-center gap-2 px-5 h-9 rounded-full bg-brand-500 hover:bg-brand-600 text-white text-sm font-bold shadow-sm shadow-brand-500/10 transition-all duration-300 active:scale-95 cursor-pointer">
                             <i class="fas fa-user-plus text-xs"></i>
-                            <span class="text">{{ __('Follow') }}</span>
+                            <span>Follow</span>
                         </a>
                     @endauth
                 </div>
