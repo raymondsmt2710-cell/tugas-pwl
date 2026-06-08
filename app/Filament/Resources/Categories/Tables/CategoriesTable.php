@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Categories\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -14,6 +15,9 @@ class CategoriesTable
     {
         return $table
             ->columns([
+                TextColumn::make('logo')
+                    ->label('Icon Kategori')
+                    ->placeholder('-'),
                 TextColumn::make('name')
                     ->label('Nama Kategori')
                     ->searchable()
@@ -22,14 +26,6 @@ class CategoriesTable
                     ->label('Slug')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('description')
-                    ->label('Deskripsi')
-                    ->limit(50)
-                    ->placeholder('-'),
-                TextColumn::make('created_at')
-                    ->label('Dibuat Pada')
-                    ->dateTime('d M Y H:i')
-                    ->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
@@ -37,6 +33,7 @@ class CategoriesTable
             ])
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

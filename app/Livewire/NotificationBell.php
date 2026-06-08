@@ -5,11 +5,18 @@ namespace App\Livewire;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class NotificationBell extends Component
 {
     public bool $showDropdown = false;
+
+    #[On('notification-updated')]
+    public function refreshBell()
+    {
+        // Simply triggers rendering
+    }
 
     private function user(): ?User
     {

@@ -19,9 +19,19 @@
                 <h2 class="text-xl font-bold mb-4">Informasi Kontak</h2>
 
                 <div class="space-y-3 text-gray-700">
-                    <p>Email: support@autopahala.com</p>
-                    <p>Instagram: @autopahala</p>
-                    <p>Lokasi: Indonesia</p>
+                    <p>Email: <a href="mailto:{{ $siteSetting->email ?? 'support@autopahala.com' }}" class="text-green-600 hover:underline">{{ $siteSetting->email ?? 'support@autopahala.com' }}</a></p>
+                    @if(!empty($siteSetting->phone))
+                        <p>Telepon: <a href="tel:{{ $siteSetting->phone }}" class="text-green-600 hover:underline">{{ $siteSetting->phone }}</a></p>
+                    @endif
+                    @if(!empty($siteSetting->social_media))
+                        @foreach($siteSetting->social_media as $social)
+                            @php
+                                $platformLabel = ucfirst($social['platform'] === 'twitter' ? 'Twitter / X' : $social['platform']);
+                            @endphp
+                            <p>{{ $platformLabel }}: <a href="{{ $social['url'] }}" target="_blank" class="text-green-600 hover:underline">{{ $social['label'] ?? $social['url'] }}</a></p>
+                        @endforeach
+                    @endif
+                    <p>Lokasi: <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($siteSetting->address ?? 'Medan, Sumatera Utara, Indonesia') }}" target="_blank" class="text-green-600 hover:underline">{{ $siteSetting->address ?? 'Indonesia' }}</a></p>
                 </div>
             </div>
 

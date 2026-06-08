@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id('id_category');
             $table->string('name');
             $table->string('slug')->unique();
+            $table->string('logo')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
         });
