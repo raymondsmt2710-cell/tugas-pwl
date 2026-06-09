@@ -63,18 +63,10 @@
     <a href="{{ route('campaigns.show', $campaign->slug) }}"
        class="block overflow-hidden bg-gray-100 group shrink-0"
        style="height: 200px; min-height: 200px; max-height: 200px;">
-        @if($campaign->banner_image)
-            <img src="{{ $campaign->banner_image_url }}"
-                 alt="{{ $campaign->title }}"
-                 style="width:100%; height:100%; object-fit:cover; display:block;"
-                 class="group-hover:scale-105 transition-transform duration-300">
-        @else
-            <div class="w-full h-full flex items-center justify-center text-gray-300">
-                <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909"/>
-                </svg>
-            </div>
-        @endif
+        <img src="{{ $campaign->banner_image_url }}"
+             alt="{{ $campaign->title }}"
+             style="width:100%; height:100%; object-fit:cover; display:block;"
+             class="group-hover:scale-105 transition-transform duration-300">
     </a>
 
     {{-- Content --}}
@@ -154,7 +146,7 @@
                           d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z"/>
                 </svg>
                 <span class="text-xs font-semibold" x-show="!copied">Bagikan</span>
-                <span class="text-xs font-semibold text-brand-500" x-show="copied" x-cloak>Disalin!</span>
+                <span class="text-xs font-semibold text-brand-500" x-show="copied" x-cloak>Link telah disalin</span>
             </button>
         </div>
     </div>
