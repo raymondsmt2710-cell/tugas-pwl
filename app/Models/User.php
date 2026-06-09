@@ -35,6 +35,42 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     protected $primaryKey = 'id_user';
 
     /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::deleting(function (User $user) {
+            if (method_exists($user, 'isForceDeleting') && !$user->isForceDeleting()) {
+                $suffix = '_del_' . time();
+                
+                $email = substr($user->email, 0, 100 - strlen($suffix)) . $suffix;
+                $username = $user->username ? (substr($user->username, 0, 255 - strlen($suffix)) . $suffix) : null;
+                $googleId = $user->google_id ? ($user->google_id . $suffix) : null;
+                $githubId = $user->github_id ? ($user->github_id . $suffix) : null;
+                $providerId = $user->provider_id ? ($user->provider_id . $suffix) : null;
+
+                // Update model attributes so they are correct in memory
+                $user->email = $email;
+                $user->username = $username;
+                $user->google_id = $googleId;
+                $user->github_id = $githubId;
+                $user->provider_id = $providerId;
+
+                // Force update database record
+                \Illuminate\Support\Facades\DB::table($user->getTable())
+                    ->where($user->getKeyName(), $user->getKey())
+                    ->update([
+                        'email' => $email,
+                        'username' => $username,
+                        'google_id' => $googleId,
+                        'github_id' => $githubId,
+                        'provider_id' => $providerId,
+                    ]);
+            }
+        });
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -63,6 +99,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         'provider_id',
         'avatar_url',
         'email_verified_at',
+        'nik',
     ];
 
     /**
@@ -374,5 +411,37 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         }
 
         return ! is_null($this->email_verified_at);
+    }
+
+    /**
+     * Check if user profile is complete enough to create a campaign.
+     * Requires: phone_number, address, profile_photo, bio.
+     */
+    public function isProfileComplete(): bool
+    {
+        return !empty($this->nik)
+            && strlen($this->nik) === 16
+            && !empty($this->phone_number)
+            && !empty($this->address)
+            && !empty($this->profile_photo)
+            && !empty($this->bio)
+            && mb_strlen($this->bio) >= 50;
+    }
+
+    /**
+     * Get list of missing profile fields needed to create a campaign.
+     */
+    public function missingProfileFields(): array
+    {
+        $missing = [];
+        if (empty($this->nik))           $missing[] = 'NIK';
+        elseif (strlen($this->nik) !== 16) $missing[] = 'NIK (Harus 16 digit)';
+        
+        if (empty($this->phone_number))  $missing[] = 'Nomor HP';
+        if (empty($this->address))       $missing[] = 'Alamat';
+        if (empty($this->profile_photo)) $missing[] = 'Foto Profil';
+        if (empty($this->bio))           $missing[] = 'Biografi';
+        elseif (mb_strlen($this->bio) < 50) $missing[] = 'Biografi (Min. 50 karakter)';
+        return $missing;
     }
 }

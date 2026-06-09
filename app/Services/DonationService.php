@@ -149,8 +149,7 @@ class DonationService
                 Log::info("Donation [{$donation->order_id}] synced to [{$newStatus}]");
 
                 return $donation->fresh();
-            });
-        }
+            });        }
 
         return $donation;
     }
@@ -256,6 +255,27 @@ class DonationService
         // Notify campaign owner
         $campaign->user->notify(new \App\Notifications\DonationReceived($donation));
 
+        // Flush leaderboard cache so home & leaderboard pages reflect new data
+        $this->flushLeaderboardCache();
+
         Log::info("Campaign [{$campaign->id_campaign}] balance credited +{$donation->donation_amount}");
+    }
+
+    /**
+     * Flush all leaderboard cache keys so pages reflect updated data.
+     */
+    private function flushLeaderboardCache(): void
+    {
+        $periods = ['all', 'weekly', 'monthly', 'yearly'];
+        $limits  = [3, 5, 10];
+        $types   = ['donors', 'campaigns', 'creators'];
+
+        foreach ($periods as $period) {
+            foreach ($limits as $limit) {
+                foreach ($types as $type) {
+                    \Illuminate\Support\Facades\Cache::forget("leaderboard:{$type}:{$period}:{$limit}");
+                }
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CampaignReports\Tables;
 
+use App\Filament\Resources\Campaigns\CampaignResource;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -25,9 +26,8 @@ class CampaignReportsTable
                     ->wrap()
                     ->limit(40)
                     ->url(fn ($record) => $record->campaign
-                        ? url('/campaigns/' . $record->campaign->slug)
-                        : null)
-                    ->openUrlInNewTab(),
+                        ? CampaignResource::getUrl('view', ['record' => $record->id_campaign])
+                        : null),
 
                 TextColumn::make('user.full_name')
                     ->label('Pelapor')
@@ -85,9 +85,8 @@ class CampaignReportsTable
                     ->icon('heroicon-o-eye')
                     ->color('info')
                     ->url(fn ($record) => $record->campaign
-                        ? url('/campaigns/' . $record->campaign->slug)
+                        ? CampaignResource::getUrl('view', ['record' => $record->id_campaign])
                         : null)
-                    ->openUrlInNewTab()
                     ->visible(fn ($record) => $record->campaign !== null),
 
                 Action::make('update_status')

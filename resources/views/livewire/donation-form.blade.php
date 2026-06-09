@@ -1,8 +1,8 @@
-﻿<div>
+<div>
     <form wire:submit="donate">
         {{-- Amount --}}
         <div class="mb-5">
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Jumlah Donasi <span class="text-red-500">*</span></label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Donasi <span class="text-red-500">*</span></label>
             <div class="relative" x-data>
                 <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm font-medium">Rp</span>
                 <input
@@ -29,21 +29,21 @@
 
         {{-- Name --}}
         <div class="mb-5">
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Nama <span class="text-red-500">*</span></label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Nama <span class="text-red-500">*</span></label>
             <input wire:model="donor_name" type="text" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm" placeholder="Nama Anda">
             @error('donor_name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
         </div>
 
         {{-- Email --}}
         <div class="mb-5">
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Email <span class="text-red-500">*</span></label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Email <span class="text-red-500">*</span></label>
             <input wire:model="donor_email" type="email" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm" placeholder="email@contoh.com">
             @error('donor_email') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
         </div>
 
         {{-- Message --}}
         <div class="mb-5">
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Pesan / Doa</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Pesan / Doa</label>
             <textarea wire:model="donor_message" rows="3" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm" placeholder="Semoga cepat tercapai..."></textarea>
         </div>
 

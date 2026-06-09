@@ -36,9 +36,32 @@ class ProfileController extends Controller
                 ->toArray()
             : [];
 
+        // Liked campaigns (kampanye yang disukai oleh user ini)
+        $likedCampaigns = collect();
+        $userComments = collect();
+        if ($isOwner && auth()->check()) {
+            $likedCampaignIds = \App\Models\CampaignLike::where('id_user', $user->id_user)
+                ->pluck('id_campaign')
+                ->toArray();
+
+            $likedCampaigns = \App\Models\Campaign::whereIn('id_campaign', $likedCampaignIds)
+                ->whereIn('status', ['approved', 'goal_reached'])
+                ->with('category')
+                ->withCount('likes')
+                ->latest()
+                ->get();
+
+            $userComments = \App\Models\CampaignComment::where('id_user', $user->id_user)
+                ->with(['campaign' => function ($q) {
+                    $q->with('category')->withCount('likes');
+                }])
+                ->latest()
+                ->get();
+        }
+
         // Stats
-        $totalDonationsReceived = $user->campaigns()->sum('collected_amount');
-        $campaignCount = $user->campaigns()->count();
+        $totalDonationsReceived = $campaigns->sum('collected_amount'); 
+        $campaignCount = $campaigns->count();
 
         // Respect privacy settings for follower/following counts + lists
         $showFollowers = $settings->show_followers_count || $isOwner;
@@ -57,6 +80,8 @@ class ProfileController extends Controller
             'user' => $user,
             'campaigns' => $campaigns,
             'likedIds' => $likedIds,
+            'likedCampaigns' => $likedCampaigns,
+            'userComments' => $userComments,
             'totalDonationsReceived' => $totalDonationsReceived,
             'campaignCount' => $campaignCount,
             'followersCount' => $followersCount,

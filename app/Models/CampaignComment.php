@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CampaignComment extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'id_campaign',
         'id_user',
@@ -20,6 +22,6 @@ class CampaignComment extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id_user', 'id_user');
+        return $this->belongsTo(User::class, 'id_user', 'id_user')->withTrashed();
     }
 }

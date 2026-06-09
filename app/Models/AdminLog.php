@@ -44,6 +44,6 @@ class AdminLog extends Model
      */
     public function admin(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'admin_id', 'id_user');
+        return $this->belongsTo(User::class, 'admin_id', 'id_user')->withTrashed();
     }
 }

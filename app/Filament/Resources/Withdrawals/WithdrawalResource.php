@@ -3,8 +3,8 @@
 namespace App\Filament\Resources\Withdrawals;
 
 use App\Filament\Resources\Withdrawals\Pages\CreateWithdrawal;
-use App\Filament\Resources\Withdrawals\Pages\EditWithdrawal;
 use App\Filament\Resources\Withdrawals\Pages\ListWithdrawals;
+use App\Filament\Resources\Withdrawals\Pages\ViewWithdrawal;
 use App\Filament\Resources\Withdrawals\Schemas\WithdrawalForm;
 use App\Filament\Resources\Withdrawals\Tables\WithdrawalsTable;
 use App\Models\Withdrawal;
@@ -67,7 +67,7 @@ class WithdrawalResource extends Resource
         return [
             'index' => ListWithdrawals::route('/'),
             'create' => CreateWithdrawal::route('/create'),
-            'edit' => EditWithdrawal::route('/{record}/edit'),
+            'view' => ViewWithdrawal::route('/{record}'),
         ];
     }
 }

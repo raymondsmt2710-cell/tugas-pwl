@@ -37,6 +37,7 @@ class Campaign extends Model
         'goal_reached_at',
         'closed_at',
         'closed_by',
+        'identity_card',
     ];
 
     protected $casts = [
@@ -59,7 +60,7 @@ class Campaign extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id_user', 'id_user');
+        return $this->belongsTo(User::class, 'id_user', 'id_user')->withTrashed();
     }
 
     public function category(): BelongsTo

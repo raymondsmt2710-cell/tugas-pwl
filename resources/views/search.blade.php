@@ -4,6 +4,12 @@
 
             {{-- Search Header --}}
             <div class="mb-8">
+                <a href="{{ url('/') }}" onclick="event.preventDefault(); window.history.length > 1 ? window.history.back() : window.location.href='{{ url('/') }}';" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-500 hover:text-brand-700 transition mb-3">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
+                    </svg>
+                    Kembali
+                </a>
                 <h1 class="text-2xl font-bold text-gray-900">Hasil Pencarian</h1>
                 @if($query)
                     <p class="mt-1 text-sm text-gray-500">Menampilkan hasil untuk "<strong>{{ $query }}</strong>"</p>

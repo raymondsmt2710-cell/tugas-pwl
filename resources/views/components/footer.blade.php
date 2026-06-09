@@ -18,7 +18,7 @@
                 <div class="mt-3 space-y-2">
                     <a href="{{ url('/campaigns') }}" class="block text-sm text-gray-400 hover:text-white transition">Kampanye</a>
                     <a href="{{ url('/leaderboard') }}" class="block text-sm text-gray-400 hover:text-white transition">Leaderboard</a>
-                    <a href="{{ url('/#how-it-works') }}" class="block text-sm text-gray-400 hover:text-white transition">Cara Kerja</a>
+                    <a href="{{ url('/#cara-kerja') }}" class="block text-sm text-gray-400 hover:text-white transition">Cara Kerja</a>
                     <a href="{{ url('/#faq') }}" class="block text-sm text-gray-400 hover:text-white transition">FAQ</a>
                     <a href="{{ url('/#contact') }}" class="block text-sm text-gray-400 hover:text-white transition">Kontak</a>
                 </div>
@@ -42,7 +42,7 @@
         </div>
 
         <div class="mt-10 pt-6 border-t border-gray-800 text-center">
-            <p class="text-xs text-gray-500">&copy; {{ date('Y') }} Autopahala. All rights reserved.</p>
+            <p class="text-xs text-gray-500">&copy; {{ date('Y') }} {{ $siteSetting->footer_text ?? 'Autopahala. All rights reserved.' }}</p>
         </div>
     </div>
 </footer>

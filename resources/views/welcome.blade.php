@@ -20,7 +20,7 @@
     <nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-2.5">
-                <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover">
+                <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover shadow-sm">
                 <span class="font-black text-2xl tracking-tight">Auto<span style="color: #20BDC4;">pahala</span></span>
             </div>
             

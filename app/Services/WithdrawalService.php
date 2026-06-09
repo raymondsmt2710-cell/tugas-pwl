@@ -116,12 +116,13 @@ class WithdrawalService
     /**
      * Mark withdrawal as paid and deduct from campaign balance (admin action).
      */
-    public function markAsPaid(Withdrawal $withdrawal): Withdrawal
+    public function markAsPaid(Withdrawal $withdrawal, ?string $transferProof = null): Withdrawal
     {
-        return DB::transaction(function () use ($withdrawal) {
+        return DB::transaction(function () use ($withdrawal, $transferProof) {
             $withdrawal->update([
                 'status' => 'paid',
                 'paid_at' => now(),
+                'transfer_proof' => $transferProof,
             ]);
 
             // Deduct from campaign balance

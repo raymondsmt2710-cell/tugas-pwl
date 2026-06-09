@@ -37,7 +37,10 @@ class DeleteAccount extends Component
         $deleter = app(DeletesUsers::class);
         $deleter->delete(auth()->user()->fresh());
 
-        Auth::logout();
+        Auth::guard('web')->logout();
+        session()->invalidate();
+        session()->regenerateToken();
+
         $this->redirect('/');
     }
 

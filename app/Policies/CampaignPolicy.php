@@ -20,8 +20,8 @@ class CampaignPolicy
      */
     public function view(?User $user, Campaign $campaign): bool
     {
-        // Approved campaigns are publicly visible
-        if ($campaign->isApproved() || $campaign->isCompleted()) {
+        // Approved, goal reached, or completed campaigns are publicly visible
+        if ($campaign->isApproved() || $campaign->isCompleted() || $campaign->isGoalReached()) {
             return true;
         }
 

@@ -86,30 +86,24 @@
              });
          ">
 
-        {{-- MOBILE HEADER --}}
-        <div class="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 z-40">
-            <div class="flex items-center gap-2">
-                <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover">
-                <span class="text-lg font-bold text-gray-800">Autopahala</span>
-            </div>
-            <button @click="sidebarOpen = !sidebarOpen" class="p-2 text-gray-500 hover:bg-gray-100 rounded-lg">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-        </div>
-
       {{-- SIDEBAR --}}
 <div>
     <!-- Backdrop mobile -->
-    <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-black/20 z-40 lg:hidden"></div>
+    <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed top-0 left-0 right-0 bottom-0 bg-slate-900/40 z-40 lg:hidden"></div>
 
     <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
-         class="fixed lg:sticky top-0 left-0 h-screen w-64 bg-white border-r border-gray-200 flex flex-col justify-between py-6 z-50 transition-transform duration-300">
+         class="fixed lg:sticky top-0 lg:top-16 left-0 h-screen lg:h-[calc(100vh-4rem)] w-64 bg-white border-r border-gray-200 flex flex-col justify-between py-6 z-[10000] lg:z-30 shadow-xl lg:shadow-none transition-transform duration-300">
         
         <div class="px-4">
-            <!-- Logo -->
-            <div class="flex items-center gap-2 px-2 mb-6">
-                <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover">
-                <span class="text-lg font-bold text-gray-800">Autopahala</span>
+            <!-- Logo & Close Button (Mobile) -->
+            <div class="flex items-center justify-between px-2 mb-6">
+                <div class="flex items-center gap-2">
+                    <img src="{{ asset('images/logo-icon.jpeg') }}" alt="Logo AutoPahala" class="w-8 h-8 rounded-lg object-cover shadow-sm">
+                    <span class="text-lg font-bold text-gray-800">Autopahala</span>
+                </div>
+                <button @click="sidebarOpen = false" class="lg:hidden p-1.5 text-gray-500 hover:bg-gray-100 rounded-lg transition" title="Tutup Menu">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+                </button>
             </div>
 
             {{-- Tombol Buat Kampanye (dipindah ke atas) --}}
@@ -197,7 +191,19 @@
     </div>
 </div>
         {{-- MAIN CONTENT --}}
-        <div class="flex-1 pt-16 lg:pt-0 overflow-y-auto simple-scrollbar">
+        <div class="flex-1 overflow-y-auto simple-scrollbar">
+            <!-- Mobile Menu Bar (inline, no absolute overlap) -->
+            <div class="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-columns text-brand-500"></i>
+                    <span class="text-sm font-semibold text-gray-700">Dashboard Menu</span>
+                </div>
+                <button @click="sidebarOpen = !sidebarOpen" class="px-3 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-600 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 border border-brand-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    <span>Menu</span>
+                </button>
+            </div>
+
             <main class="p-4 lg:p-8 max-w-5xl mx-auto space-y-6">
 
                 {{-- Admin Banner --}}
@@ -212,8 +218,11 @@
                                 <p class="text-xs text-amber-600">Kelola platform, pengguna, dan kampanye.</p>
                             </div>
                         </div>
-                        <a href="{{ url('/admin') }}" class="px-4 py-2 bg-white border border-amber-300 text-xs font-semibold text-amber-800 rounded-lg hover:bg-amber-100 transition">
-                            Buka Admin →
+                        <a href="{{ url('/admin') }}" class="px-4 py-2 bg-white border border-amber-300 text-xs font-semibold text-amber-800 rounded-lg hover:bg-amber-100 transition inline-flex items-center gap-1.5">
+                            Buka Admin
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+                            </svg>
                         </a>
                     </div>
                 @endif
@@ -470,7 +479,12 @@
                                             <td class="p-4 text-right font-semibold text-gray-800">Rp {{ number_format($d->donation_amount, 0, ',', '.') }}</td>
                                             <td class="p-4 text-center text-xs text-gray-500">{{ $d->created_at->translatedFormat('d M Y, H:i') }}</td>
                                             <td class="p-4 text-center">
-                                                <a href="{{ url('/donations/' . $d->order_id . '/track') }}" class="text-brand-500 hover:underline text-xs font-semibold">Lacak →</a>
+                                                <a href="{{ url('/donations/' . $d->order_id . '/track') }}" class="text-brand-500 hover:underline text-xs font-semibold inline-flex items-center gap-1">
+                                                    Lacak
+                                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+                                                    </svg>
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -530,7 +544,45 @@
                                             </td>
                                             <td class="p-4 text-center text-xs text-gray-500">{{ $w->created_at->translatedFormat('d M Y, H:i') }}</td>
                                             <td class="p-4 text-center">
-                                                @if($w->canBeCancelled())
+                                                @if($w->status === 'paid' && $w->transfer_proof)
+                                                    <div x-data="{ open: false }">
+                                                        <button @click="open = true" class="text-xs text-brand-500 hover:underline font-semibold inline-flex items-center gap-1">
+                                                            <i class="fas fa-receipt"></i> Bukti
+                                                        </button>
+                                                        
+                                                        {{-- Modal Lightbox --}}
+                                                        <div x-show="open" 
+                                                             x-transition:enter="transition ease-out duration-300"
+                                                             x-transition:enter-start="opacity-0"
+                                                             x-transition:enter-end="opacity-100"
+                                                             x-transition:leave="transition ease-in duration-200"
+                                                             x-transition:leave-start="opacity-100"
+                                                             x-transition:leave-end="opacity-0"
+                                                             class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
+                                                             @click.self="open = false"
+                                                             @keydown.escape.window="open = false"
+                                                             style="display: none;">
+                                                            
+                                                            <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl relative border border-gray-100 text-left font-normal">
+                                                                <div class="flex items-center justify-between mb-4">
+                                                                    <h3 class="text-sm font-bold text-gray-900">Bukti Transfer Penarikan</h3>
+                                                                    <button @click="open = false" class="text-gray-400 hover:text-gray-600 font-bold text-lg">&times;</button>
+                                                                </div>
+                                                                <div class="flex justify-center bg-gray-50 rounded-xl p-2 border border-gray-100">
+                                                                    <img src="{{ asset('storage/' . $w->transfer_proof) }}" class="max-w-full max-h-[50vh] object-contain rounded-lg" />
+                                                                </div>
+                                                                <div class="mt-4 flex gap-2 justify-end">
+                                                                    <a href="{{ asset('storage/' . $w->transfer_proof) }}" target="_blank" class="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-semibold hover:bg-indigo-100 transition">
+                                                                        Buka Tab Baru
+                                                                    </a>
+                                                                    <button @click="open = false" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl text-xs font-semibold hover:bg-gray-200 transition">
+                                                                        Tutup
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @elseif($w->canBeCancelled())
                                                     <form id="form-cancel-withdrawal-{{ $w->id_withdrawal }}"
                                                           action="{{ route('withdrawals.cancel', $w->id_withdrawal) }}" method="POST">
                                                         @csrf
@@ -646,15 +698,81 @@
                                             </td>
                                             <td class="p-4 text-center">
                                                 @if($r->admin_notes)
-                                                    <span x-data="{ open: false }" class="relative">
-                                                        <button @click="open = !open"
+                                                    <span x-data="{ open: false }">
+                                                        <button @click="open = true"
                                                                 class="text-xs text-indigo-600 hover:underline font-semibold">
                                                             Catatan Admin
                                                         </button>
-                                                        <div x-show="open" @click.away="open = false"
-                                                             class="absolute right-0 z-10 mt-1 w-64 bg-white border border-gray-200 rounded-xl shadow-lg p-3 text-left">
-                                                            <p class="text-xs font-semibold text-gray-700 mb-1">Catatan Admin:</p>
-                                                            <p class="text-xs text-gray-600 leading-relaxed">{{ $r->admin_notes }}</p>
+                                                        
+                                                        {{-- Modal Lightbox untuk Detail Laporan & Catatan Admin --}}
+                                                        <div x-show="open" 
+                                                             x-transition:enter="transition ease-out duration-300"
+                                                             x-transition:enter-start="opacity-0"
+                                                             x-transition:enter-end="opacity-100"
+                                                             x-transition:leave="transition ease-in duration-200"
+                                                             x-transition:leave-start="opacity-100"
+                                                             x-transition:leave-end="opacity-0"
+                                                             class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
+                                                             @click.self="open = false"
+                                                             @keydown.escape.window="open = false"
+                                                             style="display: none;">
+                                                            
+                                                            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative border border-gray-100 text-left font-normal">
+                                                                <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                                                                    <h3 class="text-base font-bold text-gray-900">Detail Laporan Kampanye</h3>
+                                                                    <button @click="open = false" class="text-gray-400 hover:text-gray-600 font-bold text-xl">&times;</button>
+                                                                </div>
+                                                                
+                                                                <div class="space-y-3">
+                                                                    <div>
+                                                                        <span class="text-xs text-gray-400 block">Kampanye</span>
+                                                                        <span class="text-sm font-semibold text-gray-800">
+                                                                            {{ $r->campaign->title ?? 'Kampanye Dihapus' }}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span class="text-xs text-gray-400 block">Alasan Pelaporan</span>
+                                                                        <span class="text-sm text-gray-800 font-medium">
+                                                                            {{ $r->reason }}
+                                                                        </span>
+                                                                    </div>
+                                                                    @if($r->description)
+                                                                        <div>
+                                                                            <span class="text-xs text-gray-400 block">Deskripsi Detail</span>
+                                                                            <p class="text-xs text-gray-600 bg-gray-50 rounded-lg p-2.5 mt-1 border border-gray-100 leading-relaxed max-h-[100px] overflow-y-auto">
+                                                                                {{ $r->description }}
+                                                                            </p>
+                                                                        </div>
+                                                                    @endif
+                                                                    <div class="flex justify-between items-center pt-2">
+                                                                        <div>
+                                                                            <span class="text-xs text-gray-400 block">Tanggal Laporan</span>
+                                                                            <span class="text-xs text-gray-600 font-medium">{{ $r->created_at->translatedFormat('d M Y, H:i') }}</span>
+                                                                        </div>
+                                                                        <div>
+                                                                            <span class="text-xs text-gray-400 block text-right">Status</span>
+                                                                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold {{ $rs['bg'] }} {{ $rs['text'] }} inline-block">
+                                                                                {{ $rs['label'] }}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    <div class="border-t border-gray-100 pt-3 mt-1">
+                                                                        <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-3.5 text-indigo-950">
+                                                                            <p class="text-xs font-semibold flex items-center gap-1">
+                                                                                <i class="fas fa-comment-dots text-indigo-500"></i> Tanggapan/Catatan Admin:
+                                                                            </p>
+                                                                            <p class="text-xs mt-1.5 leading-relaxed font-medium whitespace-pre-wrap">{{ $r->admin_notes }}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="mt-5 flex justify-end">
+                                                                    <button @click="open = false" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl text-xs font-semibold transition">
+                                                                        Tutup
+                                                                    </button>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </span>
                                                 @else

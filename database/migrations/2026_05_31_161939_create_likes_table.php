@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-       if (!Schema::hasTable('likes')) {
-           Schema::create('likes', function (Blueprint $table) {
+        if (!Schema::hasTable('likes')) {
+            Schema::create('likes', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('user_id')->constrained()->onDelete('cascade');
+                $table->unsignedBigInteger('id_user');
                 $table->morphs('likeable'); 
                 $table->timestamps();
-                $table->unique(['user_id', 'likeable_id', 'likeable_type']);
+
+                $table->foreign('id_user')->references('id_user')->on('users')->onDelete('cascade');
+                $table->unique(['id_user', 'likeable_id', 'likeable_type']);
             });
-       }
+        }
     }
 
     /**

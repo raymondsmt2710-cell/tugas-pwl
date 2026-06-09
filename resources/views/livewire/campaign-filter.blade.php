@@ -1,4 +1,4 @@
-﻿<div>
+<div>
     {{-- Search & Filter --}}
     <div class="mb-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
         <div class="flex flex-col sm:flex-row gap-3">

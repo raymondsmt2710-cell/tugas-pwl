@@ -111,12 +111,19 @@
 
         {{-- Creator + days --}}
         <div class="mt-3 flex items-center justify-between text-xs text-gray-400">
-            <a href="{{ url('/@' . $campaign->user->username) }}"
-               class="flex items-center gap-1.5 hover:text-brand-500 transition min-w-0">
-                <img src="{{ $campaign->user->profile_photo_url }}"
-                     class="w-5 h-5 rounded-full object-cover border border-gray-200 shrink-0">
-                <span class="truncate max-w-[100px]">{{ $campaign->user->full_name }}</span>
-            </a>
+            @if($campaign->user && !$campaign->user->trashed())
+                <a href="{{ url('/@' . $campaign->user->username) }}"
+                   class="flex items-center gap-1.5 hover:text-brand-500 transition min-w-0">
+                    <img src="{{ $campaign->user->profile_photo_url }}"
+                         class="w-5 h-5 rounded-full object-cover border border-gray-200 shrink-0">
+                    <span class="truncate max-w-[100px]">{{ $campaign->user->full_name }}</span>
+                </a>
+            @else
+                <span class="flex items-center gap-1.5 min-w-0 text-gray-400">
+                    <div class="w-5 h-5 rounded-full bg-gray-100 border border-gray-200 shrink-0 flex items-center justify-center text-[10px] font-bold">?</div>
+                    <span class="truncate max-w-[100px]">Akun Dihapus</span>
+                </span>
+            @endif
             <span>{{ $campaign->days_remaining }} hari lagi</span>
         </div>
 

@@ -25,6 +25,11 @@ class CampaignsTable
                 ImageColumn::make('banner_image')
                     ->label('Sampul')
                     ->square(),
+                ImageColumn::make('identity_card')
+                    ->label('Kartu Identitas')
+                    ->disk('public')
+                    ->square()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('title')
                     ->label('Judul Kampanye')
                     ->searchable()
