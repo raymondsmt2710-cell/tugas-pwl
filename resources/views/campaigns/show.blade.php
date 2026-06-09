@@ -9,9 +9,7 @@
                     {{-- Image Slider (Banner + Gallery) --}}
                     @php
                         $slides = collect();
-                        if ($campaign->banner_image) {
-                            $slides->push($campaign->banner_image_url);
-                        }
+                        $slides->push($campaign->banner_image_url);
                         if ($campaign->galleries) {
                             foreach ($campaign->galleries as $g) {
                                 $slides->push(asset('storage/' . $g->image_path));
@@ -199,15 +197,7 @@
                                                         Diajukan {{ $w->created_at->translatedFormat('d M Y') }}
                                                     @endif
                                                 </p>
-                                                @if($w->status === 'paid' && $w->transfer_proof)
-                                                    <a href="{{ asset('storage/' . $w->transfer_proof) }}" target="_blank" class="inline-flex items-center gap-1 text-xs font-semibold text-brand-500 hover:text-brand-700 transition">
-                                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/>
-                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-                                                        </svg>
-                                                        Bukti Transfer
-                                                    </a>
-                                                @endif
+
                                             </div>
                                         </div>
                                     </div>
@@ -316,15 +306,16 @@
                         </div>
 
                         {{-- Share --}}
-                        <div class="mt-5 pt-5 border-t border-gray-100">
+                        <div class="mt-5 pt-5 border-t border-gray-100" x-data="{ copied: false }">
                             <p class="text-xs font-medium text-gray-500 mb-2">Bagikan Kampanye</p>
                             <div class="flex gap-2">
-                                <button onclick="navigator.clipboard.writeText(window.location.href); alert('Link disalin!')"
-                                        class="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border border-gray-200 text-xs font-medium text-gray-600 hover:bg-gray-50 transition">
+                                <button @click="navigator.clipboard.writeText(window.location.href); copied = true; setTimeout(() => copied = false, 3000)"
+                                        class="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border text-xs font-semibold transition-all duration-300 active:scale-98"
+                                        :class="copied ? 'border-brand-300 bg-brand-50/30 text-brand-600' : 'border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-gray-900'">
                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m9.86-2.06a4.5 4.5 0 0 0-1.242-7.244l-4.5-4.5a4.5 4.5 0 0 0-6.364 6.364L5.25 9.94"/>
                                     </svg>
-                                    Salin Link
+                                    <span x-text="copied ? 'Link telah disalin' : 'Salin Link'"></span>
                                 </button>
                             </div>
                         </div>

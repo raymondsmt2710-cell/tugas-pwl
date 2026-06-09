@@ -126,9 +126,15 @@ class Campaign extends Model
         return ($this->collected_amount / $this->target_amount) * 100;
     }
 
-    public function getBannerImageUrlAttribute(): ?string
+    public function getBannerImageUrlAttribute(): string
     {
-        return $this->banner_image ? asset('storage/' . $this->banner_image) : null;
+        if ($this->banner_image) {
+            return str_starts_with($this->banner_image, 'http')
+                ? $this->banner_image
+                : asset('storage/' . $this->banner_image);
+        }
+
+        return 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&h=400&fit=crop';
     }
 
     public function getDaysRemainingAttribute(): int

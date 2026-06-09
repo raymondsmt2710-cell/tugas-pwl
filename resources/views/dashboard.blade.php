@@ -286,7 +286,7 @@
                                     @foreach($myCampaigns->take(3) as $c)
                                         <div class="flex items-center justify-between border-b border-gray-100 pb-3 last:border-0 last:pb-0">
                                             <div class="flex items-center gap-3 min-w-0">
-                                                <img class="w-10 h-10 rounded-lg object-cover bg-gray-100" src="{{ $c->banner_image_url ?? 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=100&h=100&fit=crop' }}" alt="">
+                                                    <img class="w-10 h-10 rounded-lg object-cover bg-gray-100" src="{{ $c->banner_image_url }}" alt="">
                                                 <div class="min-w-0">
                                                     <h4 class="text-sm font-semibold text-gray-800 truncate">{{ $c->title }}</h4>
                                                     <p class="text-xs text-gray-400">Rp {{ number_format($c->collected_amount, 0, ',', '.') }}</p>
@@ -340,7 +340,7 @@
                                     $st = $statusMap[$c->status] ?? ['label' => ucfirst($c->status), 'bg' => 'bg-gray-100', 'text' => 'text-gray-500'];
                                 @endphp
                                 <div class="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col h-full">
-                                    <img class="w-full h-40 object-cover bg-gray-100" src="{{ $c->banner_image_url ?? 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400&h=200&fit=crop' }}" alt="">
+                                    <img class="w-full h-40 object-cover bg-gray-100" src="{{ $c->banner_image_url }}" alt="">
                                     <div class="p-4 flex-1 flex flex-col">
                                         {{-- Category + Status badge --}}
                                         <div class="flex items-center gap-2 flex-wrap mb-2">
@@ -461,7 +461,7 @@
                                         <tr class="hover:bg-gray-50">
                                             <td class="p-4">
                                                 <div class="flex items-center gap-3">
-                                                    <img class="w-10 h-10 rounded-lg object-cover bg-gray-100" src="{{ $d->campaign->banner_image_url ?? 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=100&h=100&fit=crop' }}" alt="">
+                                                        <img class="w-10 h-10 rounded-lg object-cover bg-gray-100" src="{{ $d->campaign->banner_image_url }}" alt="">
                                                     <div>
                                                         <h4 class="font-semibold text-gray-800 truncate max-w-[200px]">{{ $d->campaign->title ?? 'Kampanye Dihapus' }}</h4>
                                                         <span class="text-xs text-gray-400">Order ID: {{ $d->order_id }}</span>
