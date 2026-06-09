@@ -10,7 +10,7 @@
                     @php
                         $slides = collect();
                         if ($campaign->banner_image) {
-                            $slides->push(asset('storage/' . $campaign->banner_image));
+                            $slides->push($campaign->banner_image_url);
                         }
                         if ($campaign->galleries) {
                             foreach ($campaign->galleries as $g) {

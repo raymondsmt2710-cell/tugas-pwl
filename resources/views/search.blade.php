@@ -52,7 +52,7 @@
                                 <a href="{{ route('campaigns.show', $campaign->slug) }}" class="group block bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md hover:border-gray-300 transition">
                                     <div class="aspect-[16/10] overflow-hidden bg-gray-100">
                                         @if($campaign->banner_image)
-                                            <img src="{{ asset('storage/' . $campaign->banner_image) }}" alt="{{ $campaign->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                            <img src="{{ $campaign->banner_image_url }}" alt="{{ $campaign->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                         @else
                                             <div class="w-full h-full flex items-center justify-center text-gray-300">
                                                 <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909"/></svg>

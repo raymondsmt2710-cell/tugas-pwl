@@ -64,7 +64,7 @@
        class="block overflow-hidden bg-gray-100 group shrink-0"
        style="height: 200px; min-height: 200px; max-height: 200px;">
         @if($campaign->banner_image)
-            <img src="{{ asset('storage/' . $campaign->banner_image) }}"
+            <img src="{{ $campaign->banner_image_url }}"
                  alt="{{ $campaign->title }}"
                  style="width:100%; height:100%; object-fit:cover; display:block;"
                  class="group-hover:scale-105 transition-transform duration-300">

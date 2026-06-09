@@ -28,7 +28,7 @@ class CampaignDonorsList extends Component
     public function updatingSearch()
     {
         $this->resetPage();
-        $this->perPage = 20; // Reset items count when searching
+        $this->perPage = 20;
     }
 
     public function render()
@@ -39,7 +39,7 @@ class CampaignDonorsList extends Component
 
         if (!empty($this->search)) {
             $query->where(function ($q) {
-                $q->where('display_name', 'like', '%' . $this->search . '%')
+                $q->where('donor_name', 'like', '%' . $this->search . '%')
                   ->orWhere('donor_message', 'like', '%' . $this->search . '%');
             });
         }

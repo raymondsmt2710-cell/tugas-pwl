@@ -15,7 +15,7 @@
             {{-- Campaign Info Header --}}
             <div class="mb-6 flex items-center gap-4 bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
                 @if ($campaign->banner_image)
-                    <img src="{{ asset('storage/' . $campaign->banner_image) }}" alt="{{ $campaign->title }}" class="w-16 h-16 rounded-lg object-cover">
+                    <img src="{{ $campaign->banner_image_url }}" alt="{{ $campaign->title }}" class="w-16 h-16 rounded-lg object-cover">
                 @endif
                 <div class="flex-1 min-w-0">
                     <h2 class="text-base font-semibold text-gray-900 truncate">{{ $campaign->title }}</h2>
