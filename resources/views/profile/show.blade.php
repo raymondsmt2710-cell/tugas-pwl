@@ -137,7 +137,7 @@
                             <div class="px-6 py-4 flex items-center justify-between">
                                 <div class="flex items-center gap-3 min-w-0">
                                     @if ($campaign->banner_image)
-                                        <img src="{{ asset('storage/' . $campaign->banner_image) }}" class="w-12 h-12 rounded-lg object-cover shrink-0">
+                                        <img src="{{ $campaign->banner_image_url }}" class="w-12 h-12 rounded-lg object-cover shrink-0">
                                     @else
                                         <div class="w-12 h-12 rounded-lg bg-gray-100 shrink-0"></div>
                                     @endif
