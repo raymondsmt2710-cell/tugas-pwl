@@ -26,11 +26,15 @@
                 </div>
             </div>
             <div class="flex items-center justify-between">
-                <button type="submit" class="px-5 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition">
-                    Ubah Password
+                <button type="submit" wire:loading.attr="disabled" wire:target="updatePassword" class="px-5 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition disabled:opacity-50 inline-flex items-center gap-2">
+                    <span wire:loading.remove wire:target="updatePassword">Ubah Password</span>
+                    <span wire:loading wire:target="updatePassword">Memproses...</span>
+                    <div wire:loading wire:target="updatePassword" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 </button>
-                <button type="button" wire:click="sendResetLink" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
-                    Lupa password? Kirim reset link
+                <button type="button" wire:click="sendResetLink" wire:loading.attr="disabled" wire:target="sendResetLink" class="text-sm text-blue-600 hover:text-blue-800 font-medium disabled:opacity-50 inline-flex items-center gap-2">
+                    <span wire:loading.remove wire:target="sendResetLink">Lupa password? Kirim reset link</span>
+                    <span wire:loading wire:target="sendResetLink">Mengirim link...</span>
+                    <div wire:loading wire:target="sendResetLink" class="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
                 </button>
             </div>
         </form>

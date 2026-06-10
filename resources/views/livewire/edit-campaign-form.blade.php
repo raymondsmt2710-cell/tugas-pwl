@@ -77,7 +77,7 @@
                 @if($banner_image)
                     <img src="{{ $banner_image->temporaryUrl() }}" class="w-full h-40 object-cover rounded-lg border mb-3">
                 @elseif($campaign->banner_image)
-                    <img src="{{ asset('storage/' . $campaign->banner_image) }}" class="w-full h-40 object-cover rounded-lg border mb-3">
+                    <img src="{{ $campaign->banner_image_url }}" class="w-full h-40 object-cover rounded-lg border mb-3">
                 @endif
                 <input wire:model.live="banner_image" type="file" accept="image/jpeg,image/png,image/webp"
                        class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-600 hover:file:bg-brand-100 cursor-pointer border border-gray-300 rounded-lg">
