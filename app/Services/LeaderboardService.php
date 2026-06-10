@@ -94,7 +94,7 @@ class LeaderboardService
                 ->map(fn ($c) => [
                     'title' => $c->title,
                     'slug' => $c->slug,
-                    'banner_image' => $c->banner_image,
+                    'banner_image' => $c->banner_image_url,
                     'collected_amount' => (float) $c->collected_amount,
                     'donor_count' => $c->donations()->where('payment_status', 'paid')->count(),
                     'progress' => $c->progress_percentage,

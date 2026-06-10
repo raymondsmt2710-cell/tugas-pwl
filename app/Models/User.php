@@ -349,7 +349,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return in_array($this->role, ['admin', 'super_admin']);
+        return in_array($this->role, ['admin', 'super_admin']) && $this->account_status !== 'suspended';
     }
 
     /**

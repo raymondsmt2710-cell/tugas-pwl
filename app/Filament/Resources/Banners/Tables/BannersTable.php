@@ -38,6 +38,12 @@ class BannersTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->reorderable('order')
+            ->reorderRecordsTriggerAction(
+                fn ($action, bool $isReordering) => $action
+                    ->button()
+                    ->label($isReordering ? 'Selesai Mengurutkan' : 'Ubah Urutan')
+            )
             ->defaultSort('order', 'asc')
             ->filters([
                 //

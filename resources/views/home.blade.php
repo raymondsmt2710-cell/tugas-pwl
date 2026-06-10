@@ -285,17 +285,13 @@
                             <a href="{{ url('/campaigns/' . ($c['slug'] ?? '')) }}"
                                class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-brand-200 hover:shadow-sm transition">
                                 <span class="text-base w-6 text-center shrink-0">{{ $medals[$i] ?? ($i+1) }}</span>
-                                @if(!empty($c['banner_image']))
-                                    <img src="{{ asset('storage/' . $c['banner_image']) }}" class="w-9 h-9 rounded-lg object-cover shrink-0">
-                                @else
-                                    <div class="w-9 h-9 rounded-lg bg-gray-100 shrink-0"></div>
-                                @endif
+                                <img src="{{ $c['banner_image'] }}" class="w-9 h-9 rounded-lg object-cover shrink-0">
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-semibold text-gray-900 truncate">{{ $c['title'] ?? '-' }}</p>
                                     <p class="text-xs text-gray-400">{{ $c['donor_count'] ?? 0 }} donatur</p>
                                 </div>
                                 <span class="text-xs font-bold text-brand-500 shrink-0">
-                                    {{ number_format($c['progress'] ?? 0, 0) }}%
+                                    Rp {{ format_rupiah_short($c['collected_amount'] ?? 0) }}
                                 </span>
                             </a>
                         @empty

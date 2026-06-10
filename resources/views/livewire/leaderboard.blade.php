@@ -77,7 +77,7 @@
                                     <div class="relative">
                                         <div class="w-16 h-16 rounded-full border-4 border-gray-300 overflow-hidden bg-gray-100">
                                             @if($tab === 'campaigns')
-                                                <img src="{{ $top3[1]['banner_image'] ? asset('storage/' . $top3[1]['banner_image']) : '' }}" class="w-full h-full object-cover">
+                                                <img src="{{ $top3[1]['banner_image'] }}" class="w-full h-full object-cover">
                                             @else
                                                 <img src="{{ $top3[1]['avatar'] }}" class="w-full h-full object-cover">
                                             @endif
@@ -97,7 +97,7 @@
                                 <div class="relative">
                                     <div class="w-20 h-20 rounded-full border-4 border-yellow-400 overflow-hidden bg-gray-100 shadow-lg">
                                         @if($tab === 'campaigns')
-                                            <img src="{{ $top3[0]['banner_image'] ? asset('storage/' . $top3[0]['banner_image']) : '' }}" class="w-full h-full object-cover">
+                                            <img src="{{ $top3[0]['banner_image'] }}" class="w-full h-full object-cover">
                                         @else
                                             <img src="{{ $top3[0]['avatar'] }}" class="w-full h-full object-cover">
                                         @endif
@@ -117,7 +117,7 @@
                                     <div class="relative">
                                         <div class="w-16 h-16 rounded-full border-4 border-orange-300 overflow-hidden bg-gray-100">
                                             @if($tab === 'campaigns')
-                                                <img src="{{ $top3[2]['banner_image'] ? asset('storage/' . $top3[2]['banner_image']) : '' }}" class="w-full h-full object-cover">
+                                                <img src="{{ $top3[2]['banner_image'] }}" class="w-full h-full object-cover">
                                             @else
                                                 <img src="{{ $top3[2]['avatar'] }}" class="w-full h-full object-cover">
                                             @endif
@@ -145,7 +145,7 @@
                                     <span class="text-2xl">{{ $badges[$i] }}</span>
                                     <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-200 shrink-0">
                                         @if($tab === 'campaigns')
-                                            <img src="{{ $item['banner_image'] ? asset('storage/' . $item['banner_image']) : '' }}" class="w-full h-full object-cover">
+                                            <img src="{{ $item['banner_image'] }}" class="w-full h-full object-cover">
                                         @else
                                             <img src="{{ $item['avatar'] }}" class="w-full h-full object-cover">
                                         @endif
@@ -181,7 +181,7 @@
                                     </div>
                                     <div class="w-9 h-9 rounded-full overflow-hidden bg-gray-100 shrink-0">
                                         @if($tab === 'campaigns')
-                                            <img src="{{ $item['banner_image'] ? asset('storage/' . $item['banner_image']) : '' }}" class="w-full h-full object-cover">
+                                            <img src="{{ $item['banner_image'] }}" class="w-full h-full object-cover">
                                         @else
                                             <img src="{{ $item['avatar'] }}" class="w-full h-full object-cover">
                                         @endif
