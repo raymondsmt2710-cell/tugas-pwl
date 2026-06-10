@@ -30,7 +30,9 @@ class FaqForm
                             TextInput::make('order')
                                 ->label('Urutan Tampilan')
                                 ->numeric()
-                                ->default(0)
+                                ->default(fn () => \App\Models\Faq::max('order') + 1)
+                                ->disabled()
+                                ->dehydrated()
                                 ->required(),
                         ]),
                     ]),

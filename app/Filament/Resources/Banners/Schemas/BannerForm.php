@@ -49,7 +49,9 @@ class BannerForm
                             TextInput::make('order')
                                 ->label('Urutan Tampilan')
                                 ->numeric()
-                                ->default(0)
+                                ->default(fn () => \App\Models\Banner::max('order') + 1)
+                                ->disabled()
+                                ->dehydrated()
                                 ->required(),
                         ]),
                     ]),

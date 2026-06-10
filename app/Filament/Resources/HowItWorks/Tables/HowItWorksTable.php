@@ -37,6 +37,13 @@ class HowItWorksTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->reorderable('step_number')
+            ->defaultGroup('type')
+            ->reorderRecordsTriggerAction(
+                fn ($action, bool $isReordering) => $action
+                    ->button()
+                    ->label($isReordering ? 'Selesai Mengurutkan' : 'Ubah Urutan')
+            )
             ->defaultSort('step_number', 'asc')
             ->filters([
                 //
