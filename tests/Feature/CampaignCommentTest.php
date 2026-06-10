@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\CampaignComment;
 use App\Livewire\CampaignComments;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -52,6 +53,27 @@ class CampaignCommentTest extends TestCase
             'end_date' => now()->addDays(30),
             'status' => 'approved',
         ]);
+    }
+
+    public function test_existing_campaign_comments_table_without_deleted_at_column_can_be_upgraded(): void
+    {
+        Schema::dropIfExists('campaign_comments');
+
+        Schema::create('campaign_comments', function ($table) {
+            $table->id();
+            $table->unsignedBigInteger('id_campaign');
+            $table->unsignedBigInteger('id_user');
+            $table->text('comment');
+            $table->timestamps();
+
+            $table->foreign('id_campaign')->references('id_campaign')->on('campaigns')->onDelete('cascade');
+            $table->foreign('id_user')->references('id_user')->on('users')->onDelete('cascade');
+        });
+
+        $migration = require database_path('migrations/2026_06_10_000001_add_deleted_at_to_campaign_comments_table.php');
+        $migration->up();
+
+        $this->assertTrue(Schema::hasColumn('campaign_comments', 'deleted_at'));
     }
 
     public function test_user_can_add_comment(): void
