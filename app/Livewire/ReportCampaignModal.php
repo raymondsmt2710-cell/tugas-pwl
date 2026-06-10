@@ -11,6 +11,7 @@ class ReportCampaignModal extends Component
 {
     public Campaign $campaign;
     public bool $showModal = false;
+    public bool $alreadyReported = false;
     public string $reason = '';
     public string $description = '';
 
@@ -24,36 +25,61 @@ class ReportCampaignModal extends Component
         'description' => 'Deskripsi Tambahan',
     ];
 
-    public function mount(Campaign $campaign)
+    public function mount(Campaign $campaign): void
     {
         $this->campaign = $campaign;
+        $this->alreadyReported = Auth::check()
+            && CampaignReport::where('id_campaign', $campaign->id_campaign)
+                             ->where('id_user', Auth::id())
+                             ->exists();
     }
 
-    public function openModal()
+    public function openModal(): void
     {
         if (!Auth::check()) {
-            return $this->redirect(route('login'));
+            $this->redirect(route('login'));
+            return;
         }
+
+        if ($this->alreadyReported) {
+            $this->dispatch('toast', message: 'Anda sudah pernah melaporkan kampanye ini.', type: 'warning');
+            return;
+        }
+
         $this->resetValidation();
         $this->reset(['reason', 'description']);
         $this->showModal = true;
     }
 
-    public function submitReport()
+    public function submitReport(): void
     {
         if (!Auth::check()) {
-            return $this->redirect(route('login'));
+            $this->redirect(route('login'));
+            return;
+        }
+
+        // Guard: pastikan belum pernah report kampanye ini
+        $exists = CampaignReport::where('id_campaign', $this->campaign->id_campaign)
+                                ->where('id_user', Auth::id())
+                                ->exists();
+
+        if ($exists) {
+            $this->alreadyReported = true;
+            $this->showModal = false;
+            $this->dispatch('toast', message: 'Anda sudah pernah melaporkan kampanye ini.', type: 'warning');
+            return;
         }
 
         $this->validate();
 
         CampaignReport::create([
             'id_campaign' => $this->campaign->id_campaign,
-            'id_user' => Auth::id(),
-            'reason' => $this->reason,
+            'id_user'     => Auth::id(),
+            'reason'      => $this->reason,
             'description' => $this->description,
         ]);
 
+        $this->alreadyReported = true;
         $this->showModal = false;
 
         $this->dispatch('toast', message: 'Laporan kampanye berhasil dikirim. Terima kasih atas masukan Anda.', type: 'success');
