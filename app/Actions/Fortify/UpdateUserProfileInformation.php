@@ -25,6 +25,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'cover_photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:2048'],
             'bio' => ['sometimes', 'nullable', 'string', 'max:1000'],
             'location' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'bank_account_number' => ['sometimes', 'nullable', 'string', 'max:50'],
             'social_links' => ['sometimes', 'nullable', 'array'],
             'social_links.twitter' => ['sometimes', 'nullable', 'string', 'max:255'],
             'social_links.facebook' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -51,6 +52,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'email' => $email,
                 'bio' => $input['bio'] ?? $user->bio,
                 'location' => $input['location'] ?? $user->location,
+                'bank_account_number' => $input['bank_account_number'] ?? $user->bank_account_number,
                 'social_links' => array_key_exists('social_links', $input) ? $input['social_links'] : $user->social_links,
             ])->save();
         }
@@ -69,6 +71,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'email_verified_at' => null,
             'bio' => $input['bio'] ?? $user->bio,
             'location' => $input['location'] ?? $user->location,
+            'bank_account_number' => $input['bank_account_number'] ?? $user->bank_account_number,
             'social_links' => array_key_exists('social_links', $input) ? $input['social_links'] : $user->social_links,
         ])->save();
 

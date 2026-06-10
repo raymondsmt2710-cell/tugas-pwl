@@ -16,6 +16,7 @@ class ProfileSettings extends Component
     public string $nik = '';
     public string $address = '';
     public string $bio = '';
+    public string $bank_account_number = '';
     public $avatar = null;
     public $cover_photo = null;
 
@@ -29,6 +30,7 @@ class ProfileSettings extends Component
         $this->nik = $user->nik ?? '';
         $this->address = $user->address ?? '';
         $this->bio = $user->bio ?? '';
+        $this->bank_account_number = $user->bank_account_number ?? '';
     }
 
     public function save(): void
@@ -41,8 +43,11 @@ class ProfileSettings extends Component
             'nik' => 'nullable|numeric|digits:16|unique:users,nik,' . auth()->user()->id_user . ',id_user',
             'address' => 'nullable|string|max:255',
             'bio' => 'nullable|string|min:50|max:500',
+            'bank_account_number' => 'nullable|string|max:30',
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'cover_photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ], [
+            'bank_account_number.max' => 'Nomor rekening tidak boleh lebih dari 30 karakter.',
         ]);
 
         $user = auth()->user();
@@ -52,6 +57,7 @@ class ProfileSettings extends Component
         $user->nik = $this->nik;
         $user->address = $this->address;
         $user->bio = $this->bio;
+        $user->bank_account_number = $this->bank_account_number;
 
         if ($this->email !== $user->email) {
             $user->email = $this->email;
