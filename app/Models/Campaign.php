@@ -37,6 +37,7 @@ class Campaign extends Model
         'goal_reached_at',
         'closed_at',
         'closed_by',
+        'identity_card',
     ];
 
     protected $casts = [
@@ -59,7 +60,7 @@ class Campaign extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id_user', 'id_user');
+        return $this->belongsTo(User::class, 'id_user', 'id_user')->withTrashed();
     }
 
     public function category(): BelongsTo
@@ -83,6 +84,32 @@ class Campaign extends Model
         return $this->hasMany(CampaignDocument::class, 'campaign_id', 'id_campaign');
     }
 
+    public function withdrawals(): HasMany
+    {
+        return $this->hasMany(\App\Models\Withdrawal::class, 'id_campaign', 'id_campaign');
+    }
+
+    public function likes(): HasMany
+    {
+        return $this->hasMany(CampaignLike::class, 'id_campaign', 'id_campaign');
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(CampaignComment::class, 'id_campaign', 'id_campaign');
+    }
+
+    public function reports(): HasMany
+    {
+        return $this->hasMany(CampaignReport::class, 'id_campaign', 'id_campaign');
+    }
+
+    public function isLikedByUser(?int $userId): bool
+    {
+        if (!$userId) return false;
+        return $this->likes()->where('id_user', $userId)->exists();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Accessors
@@ -99,9 +126,15 @@ class Campaign extends Model
         return ($this->collected_amount / $this->target_amount) * 100;
     }
 
-    public function getBannerImageUrlAttribute(): ?string
+    public function getBannerImageUrlAttribute(): string
     {
-        return $this->banner_image ? asset('storage/' . $this->banner_image) : null;
+        if ($this->banner_image) {
+            return str_starts_with($this->banner_image, 'http')
+                ? $this->banner_image
+                : asset('storage/' . $this->banner_image);
+        }
+
+        return 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&h=400&fit=crop';
     }
 
     public function getDaysRemainingAttribute(): int

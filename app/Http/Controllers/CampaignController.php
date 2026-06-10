@@ -59,6 +59,15 @@ class CampaignController extends Controller
     {
         $this->authorize('create', Campaign::class);
 
+        $user = auth()->user();
+
+        // Cek kelengkapan profil sebelum bisa membuat kampanye
+        if (!$user->isProfileComplete()) {
+            $missing = implode(', ', $user->missingProfileFields());
+            return redirect()->route('settings')
+                ->with('error', "Lengkapi profil Anda terlebih dahulu sebelum membuat kampanye. Data yang belum diisi: {$missing}.");
+        }
+
         $categories = Category::all();
 
         return view('campaigns.create', compact('categories'));
@@ -76,7 +85,7 @@ class CampaignController extends Controller
             auth()->user()
         );
 
-        return redirect()->route('campaigns.my')
+        return redirect()->to(url('/dashboard?tab=campaigns'))
             ->with('success', 'Kampanye berhasil dibuat! Silakan ajukan untuk review.');
     }
 
@@ -89,8 +98,8 @@ class CampaignController extends Controller
             ->with(['category', 'user', 'galleries'])
             ->firstOrFail();
 
-        // Check view permission (approved campaigns are public, others need auth)
-        if (!$campaign->isApproved() && !$campaign->isCompleted()) {
+        // Check view permission (approved, goal reached, or completed campaigns are public, others need auth)
+        if (!$campaign->isApproved() && !$campaign->isCompleted() && !$campaign->isGoalReached()) {
             $this->authorize('view', $campaign);
         }
 
@@ -100,7 +109,19 @@ class CampaignController extends Controller
             ->take(10)
             ->get();
 
-        return view('campaigns.show', compact('campaign', 'donations'));
+        $withdrawals = \App\Models\Withdrawal::forCampaign($campaign->id_campaign)
+            ->whereIn('status', ['approved', 'paid'])
+            ->latest()
+            ->get();
+
+        return view('campaigns.show', [
+            'campaign' => $campaign,
+            'donations' => $donations,
+            'withdrawals' => $withdrawals,
+            'comments' => $campaign->comments()->with('user')->latest()->get(),
+            'likesCount' => $campaign->likes()->count(),
+            'isLiked' => auth()->check() && $campaign->isLikedByUser(auth()->id()),
+        ]);
     }
 
     /**
@@ -138,7 +159,7 @@ class CampaignController extends Controller
 
         $this->campaignService->delete($campaign);
 
-        return redirect()->route('campaigns.my')
+        return redirect()->to(url('/dashboard?tab=campaigns'))
             ->with('success', 'Kampanye berhasil dihapus.');
     }
 
@@ -151,7 +172,7 @@ class CampaignController extends Controller
 
         $this->campaignService->submitForReview($campaign);
 
-        return redirect()->route('campaigns.my')
+        return redirect()->to(url('/dashboard?tab=campaigns'))
             ->with('success', 'Kampanye berhasil diajukan untuk review. Menunggu persetujuan admin.');
     }
 
@@ -166,7 +187,15 @@ class CampaignController extends Controller
 
         $this->campaignService->requestClose($campaign);
 
-        return back()->with('success', 'Permintaan penutupan kampanye telah diajukan. Menunggu persetujuan admin.');
+        // If came from campaign show page, go back there; otherwise go to dashboard campaigns tab
+        $referer = request()->headers->get('referer', '');
+        if (str_contains($referer, '/campaigns/') && !str_contains($referer, 'dashboard')) {
+            return redirect()->to(url('/campaigns/' . $campaign->slug))
+                ->with('success', 'Permintaan penutupan kampanye telah diajukan. Menunggu persetujuan admin.');
+        }
+
+        return redirect()->to(url('/dashboard?tab=campaigns'))
+            ->with('success', 'Permintaan penutupan kampanye telah diajukan. Menunggu persetujuan admin.');
     }
 
     /**
@@ -180,6 +209,14 @@ class CampaignController extends Controller
 
         $campaign->update(['campaign_status' => 'active']);
 
-        return back()->with('success', 'Permintaan penutupan dibatalkan.');
+        // If came from campaign show page, go back there; otherwise go to dashboard campaigns tab
+        $referer = request()->headers->get('referer', '');
+        if (str_contains($referer, '/campaigns/') && !str_contains($referer, 'dashboard')) {
+            return redirect()->to(url('/campaigns/' . $campaign->slug))
+                ->with('success', 'Permintaan penutupan dibatalkan.');
+        }
+
+        return redirect()->to(url('/dashboard?tab=campaigns'))
+            ->with('success', 'Permintaan penutupan dibatalkan.');
     }
 }

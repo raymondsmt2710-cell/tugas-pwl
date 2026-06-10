@@ -6,13 +6,6 @@
     <div class="px-6 py-5 space-y-4">
         <label class="flex items-center justify-between py-2">
             <div>
-                <p class="text-sm font-medium text-gray-900">Tampilkan Profil Secara Publik</p>
-                <p class="text-xs text-gray-500">Profil Anda dapat dilihat oleh siapa saja.</p>
-            </div>
-            <input wire:model.live="show_profile_publicly" type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-5 h-5">
-        </label>
-        <label class="flex items-center justify-between py-2 border-t border-gray-50">
-            <div>
                 <p class="text-sm font-medium text-gray-900">Tampilkan Jumlah Pengikut</p>
                 <p class="text-xs text-gray-500">Jumlah followers terlihat di profil publik.</p>
             </div>

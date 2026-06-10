@@ -10,21 +10,21 @@
     @else
         <form wire:submit="send" class="space-y-4">
             <div>
-                <label for="contact-name" class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
+                <label for="contact-name" class="block text-sm font-medium text-gray-700 mb-2">Nama</label>
                 <input wire:model="name" type="text" id="contact-name" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="Nama lengkap">
                 @error('name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
             <div>
-                <label for="contact-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label for="contact-email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                 <input wire:model="email" type="email" id="contact-email" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="email@contoh.com">
                 @error('email') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
             <div>
-                <label for="contact-message" class="block text-sm font-medium text-gray-700 mb-1">Pesan</label>
+                <label for="contact-message" class="block text-sm font-medium text-gray-700 mb-2">Pesan</label>
                 <textarea wire:model="message" id="contact-message" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="Tulis pesan Anda..."></textarea>
                 @error('message') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
-            <button type="submit" class="w-full py-2.5 px-4 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition">
+            <button type="submit" class="w-full py-2.5 px-4 rounded-lg text-white text-sm font-semibold transition" style="background-color: #20bdc4;" onmouseover="this.style.backgroundColor='#179aa0'" onmouseout="this.style.backgroundColor='#20bdc4'">
                 Kirim Pesan
             </button>
         </form>

@@ -4,6 +4,12 @@
 
             {{-- Search Header --}}
             <div class="mb-8">
+                <a href="{{ url('/') }}" onclick="event.preventDefault(); window.history.length > 1 ? window.history.back() : window.location.href='{{ url('/') }}';" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-500 hover:text-brand-700 transition mb-3">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
+                    </svg>
+                    Kembali
+                </a>
                 <h1 class="text-2xl font-bold text-gray-900">Hasil Pencarian</h1>
                 @if($query)
                     <p class="mt-1 text-sm text-gray-500">Menampilkan hasil untuk "<strong>{{ $query }}</strong>"</p>
@@ -45,13 +51,7 @@
                             @foreach($campaigns as $campaign)
                                 <a href="{{ route('campaigns.show', $campaign->slug) }}" class="group block bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md hover:border-gray-300 transition">
                                     <div class="aspect-[16/10] overflow-hidden bg-gray-100">
-                                        @if($campaign->banner_image)
-                                            <img src="{{ asset('storage/' . $campaign->banner_image) }}" alt="{{ $campaign->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                        @else
-                                            <div class="w-full h-full flex items-center justify-center text-gray-300">
-                                                <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909"/></svg>
-                                            </div>
-                                        @endif
+                                            <img src="{{ $campaign->banner_image_url }}" alt="{{ $campaign->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                     </div>
                                     <div class="p-4">
                                         <span class="text-xs font-medium text-indigo-600">{{ $campaign->category->name ?? 'Umum' }}</span>

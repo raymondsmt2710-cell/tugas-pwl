@@ -45,14 +45,15 @@ class WithdrawalService
 
         return DB::transaction(function () use ($campaign, $user, $data) {
             $withdrawal = Withdrawal::create([
-                'id_campaign' => $campaign->id_campaign,
-                'id_user' => $user->id_user,
-                'amount' => $data['amount'],
-                'bank_name' => $data['bank_name'],
+                'id_campaign'    => $campaign->id_campaign,
+                'id_user'        => $user->id_user,
+                'amount'         => $data['amount'],
+                'bank_name'      => $data['bank_name'],
                 'account_number' => $data['account_number'],
                 'account_holder' => $data['account_holder'],
-                'notes' => $data['notes'] ?? null,
-                'status' => 'pending',
+                'purpose'        => $data['purpose'],
+                'notes'          => $data['notes'] ?? null,
+                'status'         => 'pending',
             ]);
 
             Log::info("Withdrawal requested [{$withdrawal->id_withdrawal}]", [
@@ -115,12 +116,13 @@ class WithdrawalService
     /**
      * Mark withdrawal as paid and deduct from campaign balance (admin action).
      */
-    public function markAsPaid(Withdrawal $withdrawal): Withdrawal
+    public function markAsPaid(Withdrawal $withdrawal, ?string $transferProof = null): Withdrawal
     {
-        return DB::transaction(function () use ($withdrawal) {
+        return DB::transaction(function () use ($withdrawal, $transferProof) {
             $withdrawal->update([
                 'status' => 'paid',
                 'paid_at' => now(),
+                'transfer_proof' => $transferProof,
             ]);
 
             // Deduct from campaign balance

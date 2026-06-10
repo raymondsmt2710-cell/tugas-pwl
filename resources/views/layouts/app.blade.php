@@ -4,8 +4,12 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="referrer" content="no-referrer">
 
         <title>{{ $title ?? config('app.name', 'AutoPahala') }}</title>
+
+        <link rel="icon" type="image/jpeg" href="{{ asset('images/favicon.jpeg') }}">
+        <link rel="shortcut icon" type="image/jpeg" href="{{ asset('images/favicon.jpeg') }}">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -17,7 +21,7 @@
     <body class="font-sans antialiased bg-gray-50 text-gray-900">
         <x-banner />
 
-        <div class="min-h-screen">
+        <div class="min-h-screen flex flex-col">
             <x-navbar />
 
             @if (isset($header))
@@ -28,14 +32,21 @@
                 </header>
             @endif
 
-            <main>
+            <main class="flex-1">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <x-flash-alert />
+                </div>
                 @if(isset($slot))
                     {{ $slot }}
                 @else
                     @yield('content')
                 @endif
             </main>
+
+            <x-footer />
         </div>
+
+        <x-confirm-modal />
 
         @stack('modals')
 

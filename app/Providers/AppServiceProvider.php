@@ -24,5 +24,20 @@ class AppServiceProvider extends ServiceProvider
     {
         // Custom mail from for all emails
         \Illuminate\Support\Facades\Mail::alwaysFrom('tubespwlkel999@gmail.com', 'AutoPahala');
+
+        // Dynamically set Livewire asset URL to support subdirectory installations
+        if (!app()->runningInConsole()) {
+            config(['livewire.asset_url' => request()->getBasePath()]);
+        }
+
+        // Share site settings with all views
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('site_settings')) {
+                $siteSetting = \App\Models\SiteSetting::first();
+                view()->share('siteSetting', $siteSetting);
+            }
+        } catch (\Exception $e) {
+            // Ignore database connection failures during build/pre-migration phases
+        }
     }
 }

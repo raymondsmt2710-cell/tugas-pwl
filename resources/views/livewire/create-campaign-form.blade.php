@@ -10,17 +10,17 @@
             <div class="px-6 py-5 space-y-5">
                 {{-- Title --}}
                 <div>
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-1.5">Judul Kampanye <span class="text-red-500">*</span></label>
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Judul Kampanye <span class="text-red-500">*</span></label>
                     <input wire:model.live.debounce.500ms="title" type="text" id="title"
-                           class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                           class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm"
                            placeholder="Contoh: Bantu Korban Banjir Medan">
                     @error('title') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
 
                 {{-- Category --}}
                 <div>
-                    <label for="id_category" class="block text-sm font-medium text-gray-700 mb-1.5">Kategori <span class="text-red-500">*</span></label>
-                    <select wire:model="id_category" id="id_category" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                    <label for="id_category" class="block text-sm font-medium text-gray-700 mb-2">Kategori <span class="text-red-500">*</span></label>
+                    <select wire:model="id_category" id="id_category" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm">
                         <option value="">— Pilih Kategori —</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id_category }}">{{ $category->name }}</option>
@@ -31,18 +31,18 @@
 
                 {{-- Short Description --}}
                 <div>
-                    <label for="short_description" class="block text-sm font-medium text-gray-700 mb-1.5">Deskripsi Singkat <span class="text-red-500">*</span></label>
+                    <label for="short_description" class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Singkat <span class="text-red-500">*</span></label>
                     <textarea wire:model="short_description" id="short_description" rows="2"
-                              class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                              class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm"
                               placeholder="Ringkasan singkat kampanye (maks 500 karakter)"></textarea>
                     @error('short_description') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
 
                 {{-- Description --}}
                 <div>
-                    <label for="description" class="block text-sm font-medium text-gray-700 mb-1.5">Cerita Lengkap <span class="text-red-500">*</span></label>
+                    <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Cerita Lengkap <span class="text-red-500">*</span></label>
                     <textarea wire:model="description" id="description" rows="6"
-                              class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                              class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm"
                               placeholder="Ceritakan secara detail tentang kampanye Anda..."></textarea>
                     <p class="mt-1 text-xs text-gray-400">Minimal 50 karakter</p>
                     @error('description') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
@@ -58,35 +58,36 @@
             <div class="px-6 py-5">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                        <label for="target_amount" class="block text-sm font-medium text-gray-700 mb-1.5">Target Donasi <span class="text-red-500">*</span></label>
-                        <div class="relative">
+                        <label for="target_amount" class="block text-sm font-medium text-gray-700 mb-2">Target Donasi <span class="text-red-500">*</span></label>
+                        <div class="relative" x-data>
                             <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">Rp</span>
-                            <input wire:model="target_amount" type="number" id="target_amount" min="100000" step="1000"
-                                   class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="100000">
+                            <input
+                                type="text" inputmode="numeric" id="target_amount"
+                                x-on:input="$el.value = $el.value.replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.')"
+                                x-on:change="$wire.set('target_amount', $el.value.replace(/\./g,''))"
+                                :value="$wire.target_amount ? Number($wire.target_amount).toLocaleString('id-ID') : ''"
+                                class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm" placeholder="100.000">
                         </div>
                         @error('target_amount') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label for="minimum_donation" class="block text-sm font-medium text-gray-700 mb-1.5">Minimum Donasi</label>
-                        <div class="relative">
+                        <label for="minimum_donation" class="block text-sm font-medium text-gray-700 mb-2">Minimum Donasi</label>
+                        <div class="relative" x-data>
                             <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">Rp</span>
-                            <input wire:model="minimum_donation" type="number" id="minimum_donation" min="1000" step="1000"
-                                   class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="10000">
+                            <input
+                                type="text" inputmode="numeric" id="minimum_donation"
+                                x-on:input="$el.value = $el.value.replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.')"
+                                x-on:change="$wire.set('minimum_donation', $el.value.replace(/\./g,''))"
+                                :value="$wire.minimum_donation ? Number($wire.minimum_donation).toLocaleString('id-ID') : ''"
+                                class="w-full rounded-lg border-gray-300 pl-9 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm" placeholder="10.000">
                         </div>
                         @error('minimum_donation') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label for="end_date" class="block text-sm font-medium text-gray-700 mb-1.5">Tanggal Berakhir <span class="text-red-500">*</span></label>
+                        <label for="end_date" class="block text-sm font-medium text-gray-700 mb-2">Tanggal Berakhir <span class="text-red-500">*</span></label>
                         <input wire:model="end_date" type="date" id="end_date" min="{{ date('Y-m-d', strtotime('+1 day')) }}"
-                               class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                               class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm">
                         @error('end_date') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-                    </div>
-                    <div>
-                        <label for="video_url" class="block text-sm font-medium text-gray-700 mb-1.5">URL Video</label>
-                        <input wire:model="video_url" type="url" id="video_url"
-                               class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
-                               placeholder="https://youtube.com/watch?v=...">
-                        @error('video_url') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
                 </div>
             </div>
@@ -109,13 +110,47 @@
 
                 <div>
                     <input wire:model.live="banner_image" type="file" id="banner_image" accept="image/jpeg,image/png,image/webp"
-                           class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer border border-gray-300 rounded-lg">
-                    <div wire:loading wire:target="banner_image" class="mt-2 flex items-center gap-2 text-sm text-indigo-600">
+                           class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-600 hover:file:bg-brand-100 cursor-pointer border border-gray-300 rounded-lg">
+                    <div wire:loading wire:target="banner_image" class="mt-2 flex items-center gap-2 text-sm text-brand-500">
                         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                         Mengunggah...
                     </div>
                 </div>
                 @error('banner_image') <p class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
+            </div>
+        </div>
+
+        {{-- Card: Kartu Identitas --}}
+        <div class="mt-6 bg-white shadow-sm rounded-2xl border border-gray-100 overflow-hidden">
+            <div class="border-b border-gray-100 px-6 py-4">
+                <h3 class="text-base font-semibold text-gray-900">Kartu Identitas Pembuat Kampanye <span class="text-red-500">*</span></h3>
+                <p class="text-sm text-gray-500 mt-0.5">KTP / Passport / SIM. JPG, PNG, WebP, PDF. Maksimal 2MB.</p>
+            </div>
+            <div class="px-6 py-5">
+                @if($identity_card)
+                    <div class="relative mb-4">
+                        @if(in_array($identity_card->getClientOriginalExtension(), ['pdf']))
+                            <div class="flex items-center gap-2 bg-gray-50 rounded-lg px-4 py-2.5 border border-gray-200">
+                                <svg class="w-8 h-8 text-red-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6l-4-4H9z"/></svg>
+                                <span class="text-sm text-gray-700 truncate">{{ $identity_card->getClientOriginalName() }}</span>
+                            </div>
+                        @else
+                            <img src="{{ $identity_card->temporaryUrl() }}" class="max-h-48 rounded-lg border border-gray-200 object-contain">
+                        @endif
+                        <button type="button" wire:click="removeIdentityCard"
+                                class="absolute top-2 right-2 w-7 h-7 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600 transition">✕</button>
+                    </div>
+                @endif
+
+                <div>
+                    <input wire:model.live="identity_card" type="file" id="identity_card" accept="image/jpeg,image/png,image/webp,application/pdf"
+                           class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-600 hover:file:bg-brand-100 cursor-pointer border border-gray-300 rounded-lg">
+                    <div wire:loading wire:target="identity_card" class="mt-2 flex items-center gap-2 text-sm text-brand-500">
+                        <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                        Mengunggah...
+                    </div>
+                </div>
+                @error('identity_card') <p class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
         </div>
 
@@ -141,7 +176,7 @@
                 @if(count($gallery_images) < 5)
                     <input wire:model.live="gallery_images" type="file" accept="image/jpeg,image/png,image/webp" multiple
                            class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100 cursor-pointer border border-gray-300 rounded-lg">
-                    <div wire:loading wire:target="gallery_images" class="mt-2 flex items-center gap-2 text-sm text-indigo-600">
+                    <div wire:loading wire:target="gallery_images" class="mt-2 flex items-center gap-2 text-sm text-brand-500">
                         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                         Mengunggah...
                     </div>
@@ -181,7 +216,7 @@
                 @if(count($documents) < 5)
                     <input wire:model.live="documents" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple
                            class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-green-50 file:text-green-700 hover:file:bg-green-100 cursor-pointer border border-gray-300 rounded-lg">
-                    <div wire:loading wire:target="documents" class="mt-2 flex items-center gap-2 text-sm text-indigo-600">
+                    <div wire:loading wire:target="documents" class="mt-2 flex items-center gap-2 text-sm text-brand-500">
                         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                         Mengunggah...
                     </div>
@@ -195,11 +230,16 @@
 
         {{-- Actions --}}
         <div class="mt-8 flex items-center justify-between">
-            <a href="{{ url('/my-campaigns') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">← Kembali</a>
+            <a href="{{ url('/dashboard?tab=campaigns') }}" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-500 hover:text-brand-700 transition">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
+                </svg>
+                Kembali
+            </a>
             <button type="submit"
                     wire:loading.attr="disabled"
                     wire:loading.class="opacity-50 cursor-not-allowed"
-                    class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition disabled:opacity-50">
+                    class="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-brand-600 transition disabled:opacity-50">
                 <span wire:loading.remove wire:target="save">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
                 </span>

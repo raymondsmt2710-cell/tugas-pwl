@@ -20,7 +20,7 @@ class WithdrawalController extends Controller
     public function create(Request $request)
     {
         $campaigns = Campaign::ownedBy(auth()->user()->id_user)
-            ->where('status', 'approved')
+            ->whereIn('status', ['approved', 'goal_reached'])
             ->where('available_balance', '>', 0)
             ->get();
 
@@ -47,7 +47,7 @@ class WithdrawalController extends Controller
                 $request->validated()
             );
 
-            return redirect()->route('withdrawals.history')
+            return redirect()->to(url('/dashboard?tab=withdrawals'))
                 ->with('success', 'Permintaan penarikan berhasil diajukan. Menunggu persetujuan admin.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();

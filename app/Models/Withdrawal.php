@@ -17,10 +17,12 @@ class Withdrawal extends Model
         'account_number',
         'account_holder',
         'status',
+        'purpose',
         'notes',
         'admin_notes',
         'reviewed_at',
         'paid_at',
+        'transfer_proof',
     ];
 
     protected $casts = [
@@ -37,12 +39,12 @@ class Withdrawal extends Model
 
     public function campaign(): BelongsTo
     {
-        return $this->belongsTo(Campaign::class, 'id_campaign', 'id_campaign');
+        return $this->belongsTo(Campaign::class, 'id_campaign', 'id_campaign')->withTrashed();
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id_user', 'id_user');
+        return $this->belongsTo(User::class, 'id_user', 'id_user')->withTrashed();
     }
 
     /*

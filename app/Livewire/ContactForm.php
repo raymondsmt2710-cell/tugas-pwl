@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Mail\ContactFormMail;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class ContactForm extends Component
@@ -21,10 +23,25 @@ class ContactForm extends Component
     {
         $this->validate();
 
-        // In production, send email or store in database
-        // For now, just mark as sent
-        $this->sent = true;
-        $this->reset(['name', 'email', 'message']);
+        try {
+            // Kirim email ke email di SiteSetting
+            $destination = \App\Models\SiteSetting::first()->email ?? 'tubespwlkel999@gmail.com';
+            Mail::to($destination)->send(
+                new ContactFormMail(
+                    senderName: $this->name,
+                    senderEmail: $this->email,
+                    messageContent: $this->message
+                )
+            );
+
+            $this->sent = true;
+            $this->reset(['name', 'email', 'message']);
+        } catch (\Exception $e) {
+            // Log error tapi tetap tampilkan success ke user
+            logger()->error('Contact form email failed: ' . $e->getMessage());
+            $this->sent = true;
+            $this->reset(['name', 'email', 'message']);
+        }
     }
 
     public function render()

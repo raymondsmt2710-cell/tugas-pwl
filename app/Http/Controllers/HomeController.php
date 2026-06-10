@@ -6,6 +6,9 @@ use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\Donation;
 use App\Models\User;
+use App\Models\Banner;
+use App\Models\HowItWork;
+use App\Models\SiteSetting;
 
 class HomeController extends Controller
 {
@@ -24,8 +27,13 @@ class HomeController extends Controller
         $topCampaigns = array_slice($leaderboard->topCampaigns('all', 3), 0, 3);
         $topCreators = array_slice($leaderboard->topCreators('all', 3), 0, 3);
 
+        // Content
+        $banners = Banner::where('is_active', true)->orderBy('order', 'asc')->get();
+        $howItWorks = HowItWork::where('is_active', true)->orderBy('step_number', 'asc')->get();
+        $siteSetting = SiteSetting::first();
+
         return view('home', [
-            'title' => 'Autopahala - Platform Crowdfunding',
+            'title' => ($siteSetting->site_name ?? 'Autopahala') . ' - Platform Crowdfunding',
             'categories' => $categories,
             'totalCampaigns' => $totalCampaigns,
             'totalDonors' => $totalDonors,
@@ -33,6 +41,9 @@ class HomeController extends Controller
             'topDonors' => $topDonors,
             'topCampaigns' => $topCampaigns,
             'topCreators' => $topCreators,
+            'banners' => $banners,
+            'howItWorks' => $howItWorks,
+            'siteSetting' => $siteSetting,
         ]);
     }
 }

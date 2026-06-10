@@ -45,7 +45,7 @@
                     <form action="{{ route('withdrawals.verify.submit', $withdrawal) }}" method="POST">
                         @csrf
                         <div class="mb-4">
-                            <label for="otp_code" class="block text-sm font-medium text-gray-700 mb-1.5">Kode OTP</label>
+                            <label for="otp_code" class="block text-sm font-medium text-gray-700 mb-2">Kode OTP</label>
                             <input type="text" name="otp_code" id="otp_code" maxlength="6" pattern="[0-9]{6}"
                                    class="w-full text-center text-2xl tracking-[0.5em] font-mono rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                    placeholder="000000" autofocus required>

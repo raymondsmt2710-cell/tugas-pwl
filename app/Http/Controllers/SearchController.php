@@ -26,6 +26,7 @@ class SearchController extends Controller
                 ->get();
 
             $users = User::where('account_status', 'active')
+                ->whereNotIn('role', ['admin', 'super_admin'])
                 ->where(function ($q) use ($query) {
                     $q->where('full_name', 'like', "%{$query}%")
                       ->orWhere('username', 'like', "%{$query}%");

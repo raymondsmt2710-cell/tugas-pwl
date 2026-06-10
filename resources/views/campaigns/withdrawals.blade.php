@@ -7,7 +7,12 @@
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Campaign Info --}}
             <div class="mb-6 bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-                <a href="{{ route('campaigns.show', $campaign->slug) }}" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">← Kembali ke kampanye</a>
+                <a href="{{ route('campaigns.show', $campaign->slug) }}" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-500 hover:text-brand-700 transition">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
+                    </svg>
+                    Kembali ke Kampanye
+                </a>
                 <h3 class="mt-2 text-lg font-semibold text-gray-900">{{ $campaign->title }}</h3>
                 <div class="mt-3 grid grid-cols-3 gap-4 text-center">
                     <div class="bg-gray-50 rounded-lg p-3">
