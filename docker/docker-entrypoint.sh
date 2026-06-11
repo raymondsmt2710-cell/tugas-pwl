@@ -43,6 +43,9 @@ if [ ! -e "/var/www/html/public/storage" ]; then
     php artisan storage:link --force
 fi
 
+echo "Publishing vendor assets..."
+php artisan vendor:publish --tag=laravel-assets --ansi --force
+
 echo "Optimizing application cache..."
 php artisan config:cache
 php artisan route:cache
