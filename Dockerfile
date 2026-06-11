@@ -1,10 +1,7 @@
-FROM php:8.3-fpm-alpine AS composer-builder
+FROM composer:latest AS composer-builder
 WORKDIR /app
 
-RUN apk add --no-cache git unzip libzip-dev
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY composer.json composer.lock ./
-
 RUN composer install \
     --no-dev \
     --optimize-autoloader \
@@ -12,38 +9,45 @@ RUN composer install \
     --no-progress \
     --no-scripts
 
-FROM php:8.3-fpm-alpine AS production
+FROM alpine:3.20 AS production
 WORKDIR /var/www/html
 
 RUN apk add --no-cache \
     nginx \
     supervisor \
     curl \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
-    libzip-dev \
-    icu-dev \
-    oniguruma-dev \
-    shadow
+    shadow \
+    php83 \
+    php83-fpm \
+    php83-pdo_mysql \
+    php83-zip \
+    php83-opcache \
+    php83-gd \
+    php83-intl \
+    php83-pcntl \
+    php83-exif \
+    php83-bcmath \
+    php83-pecl-redis \
+    php83-openssl \
+    php83-mbstring \
+    php83-xml \
+    php83-session \
+    php83-sockets \
+    php83-curl \
+    php83-tokenizer \
+    php83-xmlwriter \
+    php83-simplexml \
+    php83-dom \
+    php83-fileinfo \
+    php83-phar \
+    php83-iconv
 
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) \
-        pdo_mysql \
-        zip \
-        opcache \
-        gd \
-        intl \
-        pcntl \
-        exif \
-        bcmath
+RUN ln -sf /usr/bin/php83 /usr/bin/php
 
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
-    && pecl install redis \
-    && docker-php-ext-enable redis \
-    && apk del .build-deps
+RUN getent group www-data || addgroup -S -g 82 www-data \
+    && getent passwd www-data || adduser -S -G www-data -u 82 www-data
 
-COPY docker/php.ini $PHP_INI_DIR/conf.d/laravel.ini
+COPY docker/php.ini /etc/php83/conf.d/laravel.ini
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/supervisord.conf /etc/supervisord.conf
 
