@@ -54,7 +54,12 @@ php artisan event:cache
 
 if [ "${RUN_MIGRATIONS:-false}" = "true" ] || [ "${RUN_MIGRATIONS:-false}" = "1" ]; then
     echo "Running database migrations..."
-    php artisan migrate --force
+    if [ "${RUN_SEEDS:-false}" = "true" ] || [ "${RUN_SEEDS:-false}" = "1" ]; then
+        echo "Running database migrations with seeding..."
+        php artisan migrate --seed --force
+    else
+        php artisan migrate --force
+    fi
 fi
 
 echo "Setting runtime permissions..."
