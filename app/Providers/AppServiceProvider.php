@@ -30,8 +30,10 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\Mail::alwaysFrom('tubespwlkel999@gmail.com', 'AutoPahala');
 
         // Dynamically set Livewire asset URL to support subdirectory installations
-        if (!app()->runningInConsole()) {
-            config(['livewire.asset_url' => request()->getBasePath()]);
+        if (app()->environment('production')) {
+            config(['livewire.asset_url' => null]);
+        } elseif (!app()->runningInConsole()) {
+            config(['livewire.asset_url' => request()->getBasePath() ?: null]);
         }
 
         // Share site settings with all views
