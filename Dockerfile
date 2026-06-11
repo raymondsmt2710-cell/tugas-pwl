@@ -2,7 +2,7 @@ FROM node:20-alpine AS node-builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 COPY vite.config.js ./
 COPY tailwind.config.js* ./
