@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         // Custom mail from for all emails
-        \Illuminate\Support\Facades\Mail::alwaysFrom('tubespwlkel999@gmail.com', 'AutoPahala');
+        \Illuminate\Support\Facades\Mail::alwaysFrom(config('mail.from.address', 'tubespwlkel999@gmail.com'), config('mail.from.name', 'AutoPahala'));
 
         // Dynamically set Livewire asset URL to support subdirectory installations
         if (app()->environment('production')) {
