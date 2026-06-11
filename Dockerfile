@@ -27,7 +27,8 @@ RUN composer install \
     --optimize-autoloader \
     --no-interaction \
     --no-progress \
-    --no-scripts
+    --no-scripts \
+    --ignore-platform-reqs
 
 FROM alpine:3.20 AS production
 WORKDIR /var/www/html
