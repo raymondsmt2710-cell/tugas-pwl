@@ -1,16 +1,3 @@
-FROM node:20-alpine AS node-builder
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci --no-audit --no-fund --quiet
-
-COPY vite.config.js ./
-COPY tailwind.config.js* ./
-COPY postcss.config.js* ./
-COPY resources/ ./resources/
-COPY public/ ./public/
-RUN npm run build
-
 FROM php:8.3-fpm-alpine AS composer-builder
 WORKDIR /app
 
@@ -62,7 +49,6 @@ COPY docker/supervisord.conf /etc/supervisord.conf
 
 COPY --chown=www-data:www-data . .
 COPY --from=composer-builder --chown=www-data:www-data /app/vendor/ ./vendor/
-COPY --from=node-builder --chown=www-data:www-data /app/public/build/ ./public/build/
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN composer dump-autoload --optimize --no-dev --classmap-authoritative \

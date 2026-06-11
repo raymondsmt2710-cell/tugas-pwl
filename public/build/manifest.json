@@ -1,0 +1,26 @@
+{
+  "resources/css/admin-tailwind.css": {
+    "file": "assets/admin-tailwind-DG0-OsRe.css",
+    "name": "admin-tailwind",
+    "names": [
+      "admin-tailwind.css"
+    ],
+    "src": "resources/css/admin-tailwind.css",
+    "isEntry": true
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-Cc1FPPJs.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-BvRk9kiK.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}
