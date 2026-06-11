@@ -65,7 +65,6 @@ chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 if [ -n "$PORT" ]; then
     echo "Configuring Nginx to listen on port $PORT..."
     sed -i "s/listen 80;/listen ${PORT};/g" /etc/nginx/nginx.conf
-    sed -i "s/listen \[::\]:80;/listen [::]:${PORT};/g" /etc/nginx/nginx.conf
 fi
 
 echo "Starting Supervisor..."
