@@ -48,7 +48,7 @@ php artisan vendor:publish --tag=laravel-assets --ansi --force
 
 echo "Optimizing application cache..."
 php artisan config:cache
-php artisan route:cache
+php artisan route:clear
 php artisan view:cache
 php artisan event:cache
 
