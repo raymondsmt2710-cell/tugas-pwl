@@ -1,7 +1,27 @@
-FROM composer:latest AS composer-builder
+FROM alpine:3.20 AS composer-builder
 WORKDIR /app
 
+RUN apk add --no-cache \
+    php83 \
+    php83-phar \
+    php83-openssl \
+    php83-zlib \
+    php83-curl \
+    php83-mbstring \
+    php83-xml \
+    php83-tokenizer \
+    php83-xmlwriter \
+    php83-intl \
+    php83-zip \
+    curl \
+    git \
+    unzip
+
+RUN ln -sf /usr/bin/php83 /usr/bin/php
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 COPY composer.json composer.lock ./
+
 RUN composer install \
     --no-dev \
     --optimize-autoloader \
