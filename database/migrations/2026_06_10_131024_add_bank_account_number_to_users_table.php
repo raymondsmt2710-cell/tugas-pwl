@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('bank_account_number', 50)->nullable()->after('nik');
-        });
+        if (!Schema::hasColumn('users', 'bank_account_number')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->string('bank_account_number', 50)->nullable()->after('nik');
+            });
+        }
     }
 
     /**
@@ -21,8 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('bank_account_number');
-        });
+        if (Schema::hasColumn('users', 'bank_account_number')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropColumn('bank_account_number');
+            });
+        }
     }
 };
