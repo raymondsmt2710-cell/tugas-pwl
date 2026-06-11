@@ -21,10 +21,3 @@ docker-compose.override.yml
 npm-debug.log
 yarn-debug.log
 yarn-error.log
-package-lock.json
-package.json
-vite.config.js
-tailwind.config.js
-postcss.config.js
-resources/css/
-resources/js/
