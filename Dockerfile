@@ -75,7 +75,9 @@ RUN getent group www-data || addgroup -S -g 82 www-data \
 
 RUN mkdir -p /var/log/supervisor /var/log/nginx \
     && sed -i 's/^user = nobody/user = www-data/' /etc/php84/php-fpm.d/www.conf \
-    && sed -i 's/^group = nobody/group = www-data/' /etc/php84/php-fpm.d/www.conf
+    && sed -i 's/^group = nobody/group = www-data/' /etc/php84/php-fpm.d/www.conf \
+    && sed -i 's/;clear_env = no/clear_env = no/' /etc/php84/php-fpm.d/www.conf \
+    && adduser nginx www-data
 
 COPY docker/php.ini /etc/php84/conf.d/laravel.ini
 COPY docker/nginx.conf /etc/nginx/nginx.conf
