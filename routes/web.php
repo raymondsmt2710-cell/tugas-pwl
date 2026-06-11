@@ -155,3 +155,13 @@ Route::get('/debug-livewire', function () {
         'update_uri' => app('livewire')->getUpdateUri(),
     ];
 });
+
+Route::get('/debug-logs', function () {
+    $logPath = storage_path('logs/laravel.log');
+    if (!file_exists($logPath)) {
+        return "Log file not found at: " . $logPath;
+    }
+    $lines = file($logPath);
+    $lastLines = array_slice($lines, -150);
+    return response(implode("", $lastLines), 200)->header('Content-Type', 'text/plain');
+});
