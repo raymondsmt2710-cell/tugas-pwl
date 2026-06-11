@@ -19,6 +19,20 @@ Route::post('/midtrans/webhook', [MidtransWebhookController::class, 'handle'])
 
 /*
 |--------------------------------------------------------------------------
+| Suspended Account Route
+|--------------------------------------------------------------------------
+*/
+Route::get('/suspended', function () {
+    $user = auth()->user() ?? auth('web')->user() ?? auth('sanctum')->user();
+    if (!$user || $user->account_status !== 'suspended') {
+        return redirect('/');
+    }
+    return view('auth.suspended');
+})->name('suspended');
+
+
+/*
+|--------------------------------------------------------------------------
 | Authenticated User Routes
 | (Declared BEFORE wildcard public routes to avoid /campaigns/create
 |  being caught by /campaigns/{slug})

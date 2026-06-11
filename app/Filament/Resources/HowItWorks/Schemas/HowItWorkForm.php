@@ -25,10 +25,14 @@ class HowItWorkForm
                                     'galang_dana' => 'Galang Dana',
                                     'donasi' => 'Berdonasi',
                                 ])
+                                ->reactive()
                                 ->required(),
                             TextInput::make('step_number')
                                 ->label('Nomor Langkah')
                                 ->numeric()
+                                ->default(fn (callable $get) => \App\Models\HowItWork::where('type', $get('type'))->max('step_number') + 1)
+                                ->disabled()
+                                ->dehydrated()
                                 ->required(),
                             TextInput::make('title')
                                 ->label('Judul Langkah')

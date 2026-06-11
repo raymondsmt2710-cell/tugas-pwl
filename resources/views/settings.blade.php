@@ -41,7 +41,6 @@
             @livewire('settings.security-settings')
             @livewire('settings.privacy-settings')
             @livewire('settings.notification-settings')
-            @livewire('settings.delete-account')
         </div>
     </div>
 </x-app-layout>
