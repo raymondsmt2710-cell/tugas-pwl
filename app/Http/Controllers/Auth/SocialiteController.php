@@ -66,11 +66,6 @@ class SocialiteController extends Controller
             return $this->findOrCreateUser($socialUser, $provider);
         });
 
-        // Check if account is suspended
-        if ($user->account_status === 'suspended') {
-            return redirect('/login')->with('error', 'Akun Anda telah ditangguhkan. Hubungi administrator.');
-        }
-
         // Login the user
         Auth::login($user, remember: true);
 

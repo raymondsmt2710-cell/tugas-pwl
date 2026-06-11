@@ -55,7 +55,13 @@
                                     <p class="text-sm font-semibold text-gray-900">
                                         {{ $donation->display_name }}
                                     </p>
-                                    <p class="text-xs text-gray-500">{{ $donation->created_at->diffForHumans() }}</p>
+                                    <p class="text-xs text-gray-500">
+                                        @if ($donation->created_at->diffInDays(now()) <= 7)
+                                            {{ $donation->created_at->diffForHumans() }}
+                                        @else
+                                            {{ $donation->created_at->format('d-m-Y') }}
+                                        @endif
+                                    </p>
                                 </div>
                             </div>
 

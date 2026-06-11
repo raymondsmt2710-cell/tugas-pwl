@@ -1,13 +1,22 @@
 <div class="flex items-center gap-4" x-data="{ showReportModal: @entangle('showModal') }">
     {{-- Report Button --}}
-    <button type="button" 
-            wire:click="openModal" 
-            class="flex items-center gap-1.5 text-sm text-gray-400 hover:text-red-600 transition font-medium focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v1.5M3 21v-6m0 0 2.77-.693a9 9 0 0 1 6.208.682l.108.054a9 9 0 0 0 6.086.71l3.114-.732a48.524 48.524 0 0 1-.005-10.485l-3.11.733a9 9 0 0 1-6.088-.71l-.109-.054a9 9 0 0 0-6.208-.682L3 7.5M3 15V7.5" />
-        </svg>
-        <span>Laporkan</span>
-    </button>
+    @if ($alreadyReported)
+        <span class="flex items-center gap-1.5 text-sm text-gray-300 font-medium cursor-not-allowed select-none" title="Anda sudah melaporkan kampanye ini">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v1.5M3 21v-6m0 0 2.77-.693a9 9 0 0 1 6.208.682l.108.054a9 9 0 0 0 6.086.71l3.114-.732a48.524 48.524 0 0 1-.005-10.485l-3.11.733a9 9 0 0 1-6.088-.71l-.109-.054a9 9 0 0 0-6.208-.682L3 7.5M3 15V7.5" />
+            </svg>
+            <span>Sudah Dilaporkan</span>
+        </span>
+    @else
+        <button type="button" 
+                wire:click="openModal" 
+                class="flex items-center gap-1.5 text-sm text-gray-400 hover:text-red-600 transition font-medium focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v1.5M3 21v-6m0 0 2.77-.693a9 9 0 0 1 6.208.682l.108.054a9 9 0 0 0 6.086.71l3.114-.732a48.524 48.524 0 0 1-.005-10.485l-3.11.733a9 9 0 0 1-6.088-.71l-.109-.054a9 9 0 0 0-6.208-.682L3 7.5M3 15V7.5" />
+            </svg>
+            <span>Laporkan</span>
+        </button>
+    @endif
 
     {{-- Report Modal --}}
     <div x-show="showReportModal" 
