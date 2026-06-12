@@ -109,7 +109,7 @@
                 @endif
 
                 <div>
-                    <input wire:model.live="banner_image" type="file" id="banner_image" accept="image/jpeg,image/png,image/webp"
+                    <input wire:model.live="banner_image" type="file" id="banner_image" accept="image/*"
                            class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-600 hover:file:bg-brand-100 cursor-pointer border border-gray-300 rounded-lg">
                     <div wire:loading wire:target="banner_image" class="mt-2 flex items-center gap-2 text-sm text-brand-500">
                         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
@@ -143,7 +143,7 @@
                 @endif
 
                 <div>
-                    <input wire:model.live="identity_card" type="file" id="identity_card" accept="image/jpeg,image/png,image/webp,application/pdf"
+                    <input wire:model.live="identity_card" type="file" id="identity_card" accept="image/*,application/pdf"
                            class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-600 hover:file:bg-brand-100 cursor-pointer border border-gray-300 rounded-lg">
                     <div wire:loading wire:target="identity_card" class="mt-2 flex items-center gap-2 text-sm text-brand-500">
                         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
@@ -174,7 +174,7 @@
                 @endif
 
                 @if(count($gallery_images) < 5)
-                    <input wire:model.live="gallery_images" type="file" accept="image/jpeg,image/png,image/webp" multiple
+                    <input wire:model.live="gallery_images" type="file" accept="image/*" multiple
                            class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100 cursor-pointer border border-gray-300 rounded-lg">
                     <div wire:loading wire:target="gallery_images" class="mt-2 flex items-center gap-2 text-sm text-brand-500">
                         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>

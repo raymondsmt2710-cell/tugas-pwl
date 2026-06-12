@@ -79,7 +79,7 @@
                 @elseif($campaign->banner_image)
                     <img src="{{ $campaign->banner_image_url }}" class="w-full h-40 object-cover rounded-lg border mb-3">
                 @endif
-                <input wire:model.live="banner_image" type="file" accept="image/jpeg,image/png,image/webp"
+                <input wire:model.live="banner_image" type="file" accept="image/*"
                        class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-600 hover:file:bg-brand-100 cursor-pointer border border-gray-300 rounded-lg">
                 <div wire:loading wire:target="banner_image" class="mt-2 text-sm text-brand-500">Mengunggah...</div>
                 <p class="mt-1.5 text-xs text-gray-400">Kosongkan jika tidak ingin mengubah.</p>
@@ -116,7 +116,7 @@
                         @endforeach
                     </div>
                 @endif
-                <input wire:model.live="gallery_images" type="file" accept="image/jpeg,image/png,image/webp" multiple
+                <input wire:model.live="gallery_images" type="file" accept="image/*" multiple
                        class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-50 file:text-gray-700 cursor-pointer border border-gray-300 rounded-lg">
                 <div wire:loading wire:target="gallery_images" class="mt-2 text-sm text-brand-500">Mengunggah...</div>
             </div>

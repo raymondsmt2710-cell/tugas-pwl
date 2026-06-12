@@ -20,7 +20,7 @@
                 <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
                     <span class="text-white font-bold text-sm bg-blue-600 px-4 py-2 rounded-lg">Ganti Sampul</span>
                 </div>
-                <input type="file" class="hidden" wire:model.live="cover_photo" x-ref="cover_input">
+                <input type="file" class="hidden" wire:model.live="cover_photo" x-ref="cover_input" accept="image/*">
             </div>
             <x-input-error for="cover_photo" class="mt-2" />
         </div>
@@ -37,7 +37,7 @@
                 <div class="absolute inset-0 bg-black/10 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
                     <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 </div>
-                <input type="file" class="hidden" wire:model.live="photo" x-ref="photo_input">
+                <input type="file" class="hidden" wire:model.live="photo" x-ref="photo_input" accept="image/*">
             </div>
             <div>
                 <h4 class="font-bold text-gray-900 text-lg">Foto Profil</h4>

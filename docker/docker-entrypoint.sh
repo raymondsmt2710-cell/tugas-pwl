@@ -38,10 +38,12 @@ if [ -n "$DB_HOST" ]; then
     echo "Database is ready!"
 fi
 
-if [ ! -e "/var/www/html/public/storage" ]; then
-    echo "Creating storage link..."
-    php artisan storage:link --force
-fi
+echo "Ensuring storage directories exist..."
+mkdir -p /var/www/html/storage/app/public
+
+echo "Creating storage link..."
+rm -rf /var/www/html/public/storage
+php artisan storage:link --force
 
 echo "Publishing vendor assets..."
 php artisan vendor:publish --tag=laravel-assets --ansi --force
@@ -64,6 +66,7 @@ fi
 
 echo "Setting runtime permissions..."
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+chown -h www-data:www-data /var/www/html/public/storage
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Set Nginx port dynamically based on Railway's PORT env
