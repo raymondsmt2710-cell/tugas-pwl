@@ -115,8 +115,8 @@
                                        class="flex items-center gap-3 px-5 py-3 hover:bg-slate-50 transition">
                                         <img src="{{ $u->profile_photo_url }}" class="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0">
                                         <div class="min-w-0">
-                                            <p class="text-sm font-semibold text-slate-900 truncate">{{ $u->full_name }}</p>
-                                            <p class="text-xs text-slate-400 truncate">@{{ $u->username }}</p>
+                                            <p class="text-sm font-semibold text-slate-900 truncate">{{ $u->full_name ?? $u->name }}</p>
+                                            <p class="text-xs text-slate-400 truncate">{{ '@' . $u->username }}</p>
                                         </div>
                                     </a>
                                 @empty
@@ -145,8 +145,8 @@
                                        class="flex items-center gap-3 px-5 py-3 hover:bg-slate-50 transition">
                                         <img src="{{ $u->profile_photo_url }}" class="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0">
                                         <div class="min-w-0">
-                                            <p class="text-sm font-semibold text-slate-900 truncate">{{ $u->full_name }}</p>
-                                            <p class="text-xs text-slate-400 truncate">@{{ $u->username }}</p>
+                                            <p class="text-sm font-semibold text-slate-900 truncate">{{ $u->full_name ?? $u->name }}</p>
+                                            <p class="text-xs text-slate-400 truncate">{{ '@' . $u->username }}</p>
                                         </div>
                                     </a>
                                 @empty
