@@ -16,7 +16,7 @@
                     <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover rounded-full" />
                 </div>
 
-                <div class="flex items-center gap-2 pb-2">
+                <div class="flex items-center gap-2 pb-0 sm:pb-2">
                     @auth
                         @if(auth()->user()->id_user !== $user->id_user)
                             @livewire('follow-button', ['user' => $user])

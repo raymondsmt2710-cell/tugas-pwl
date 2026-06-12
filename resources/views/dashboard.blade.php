@@ -446,7 +446,8 @@
                         </div>
                     @else
                         <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                            <table class="w-full text-sm">
+                            <div class="overflow-x-auto simple-scrollbar">
+                                <table class="w-full min-w-[700px] text-sm">
                                 <thead class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase">
                                     <tr>
                                         <th class="p-4 text-left">Kampanye</th>
@@ -490,6 +491,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -513,7 +515,8 @@
                         </div>
                     @else
                         <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                            <table class="w-full text-sm">
+                            <div class="overflow-x-auto simple-scrollbar">
+                                <table class="w-full min-w-[800px] text-sm">
                                 <thead class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase">
                                     <tr>
                                         <th class="p-4 text-left">Kampanye</th>
@@ -606,6 +609,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -650,7 +654,8 @@
                         </div>
                     @else
                         <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                            <table class="w-full text-sm">
+                            <div class="overflow-x-auto simple-scrollbar">
+                                <table class="w-full min-w-[700px] text-sm">
                                 <thead class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase">
                                     <tr>
                                         <th class="p-4 text-left">Kampanye</th>
@@ -783,6 +788,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                     @endif
                 </div>
